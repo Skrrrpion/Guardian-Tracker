@@ -8295,7 +8295,14 @@ const _dREW = debounce(renderExoWeapons, 120);
 const _dREA = debounce(renderExoArmor, 120);
 const _dRLA = debounce(renderLegArmor, 120);
 
+function applyMobileClass() {
+  const mobile = window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  document.body.classList.toggle('is-mobile', mobile);
+}
+
 function init() {
+  applyMobileClass();
+  window.addEventListener('resize', applyMobileClass);
   loadUser();
   loadState();
   updateHeader();
