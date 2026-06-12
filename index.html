@@ -8316,8 +8316,11 @@ async function initInventario() {
   if (prompt) prompt.style.display = 'none';
   if (content) content.style.display = 'block';
 
-  // If already loaded, show cached data immediately then refresh in background
-  if (invLoaded) renderInventario();
+  // If already loaded, just re-render from cached data (picks up any perk marker changes instantly)
+  if (invLoaded) {
+    renderInventario();
+    return;
+  }
 
   setInvStatus('Cargando inventario…');
   try {
