@@ -295,7 +295,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .aslothedr{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
 .aslotname{font-family:'Chakra Petch',sans-serif;font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px}
 .archgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:5px}
-.arow{display:flex;align-items:center;gap:2px;padding:2px 3px;background:var(--bg-panel);border:1px solid var(--border);font-size:9px;min-width:0}
+.arow{display:flex;align-items:center;gap:4px;padding:2px 4px;background:var(--bg-panel);border:1px solid var(--border);font-size:9px;min-width:0}
+.astat-icons{display:flex;align-items:center;gap:2px;flex:1}
 .arow.mgod{border-color:var(--marker-god);background:rgba(201,168,76,.06)}
 .arow.msemi{border-color:var(--marker-semi);background:rgba(0,229,204,.04)}
 .amk{width:14px;height:14px;border:none;background:transparent;cursor:pointer;font-size:11px;color:var(--text-muted);padding:0;flex-shrink:0;line-height:1}
@@ -549,7 +550,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   body.is-mobile .wleg .pmk-group{display:flex;gap:2px;justify-content:center}
   body.is-mobile .wleg .pmk-god,body.is-mobile .wleg .pmk-semi{font-size:10px;padding:1px 3px;min-height:unset!important}
   body.is-mobile .wleg .pcol4{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:3px}
-  body.is-mobile .wleg .pcols4{grid-template-columns:repeat(4,1fr);gap:3px}
+  body.is-mobile .wleg .pcols4{grid-template-columns:repeat(4,1fr)!important;gap:3px!important}
   body.is-mobile #weapons-grid > *,
   body.is-mobile #weapons-leg-grid > *,
   body.is-mobile #weapons-exo-grid > *{min-width:0}
@@ -3594,12 +3595,18 @@ function buildArmorSlotCard(set, slotDef) {
   const obtained = as_.obtained;
   const farm = as_.farm || false;
   const stats = as_.stats || {};
+  const _STAT2ID = {Movilidad:'mobility',Resiliencia:'resilience','Recuperación':'recovery',Disciplina:'discipline',Intelecto:'intellect',Fuerza:'strength',Variable:'',Todos:''};
   const combos = ARCHETYPES.map(a => {
     const v = stats[a.id] ? 1 : 0;
-    const _su=(iconMap['stat:'+a.id]?.icon)||'';
-    return `<div class="arow${v?' mgod':''}" id="lgod_${sid}_${a.id}">
-      ${_su?`<img src="${_su}" data-pimg="stat:${a.id}" style="width:16px;height:16px;border-radius:2px;object-fit:cover;flex-shrink:0;vertical-align:middle;" onerror="this.style.display='none'">`:`<span style="font-size:11px;opacity:.6">◈</span>`}
-      <span class="anm">${a.n}</span>
+    const primId = _STAT2ID[a.primary] ?? a.id;
+    const secId  = a.secondary ? (_STAT2ID[a.secondary] ?? '') : '';
+    const ic1 = primId ? (iconMap['stat:'+primId]?.icon||'') : '';
+    const ic2 = secId  ? (iconMap['stat:'+secId ]?.icon||'') : '';
+    const iconHtml = `<span class="astat-icons" title="${a.stat}">
+      ${ic1?`<img src="${ic1}" data-pimg="stat:${primId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;" onerror="this.style.display='none'">`:`<span style="font-size:10px;opacity:.5">◈</span>`}
+      ${ic2?`<img src="${ic2}" data-pimg="stat:${secId}"  style="width:18px;height:18px;border-radius:2px;object-fit:cover;" onerror="this.style.display='none'">`:''}</span>`;
+    return `<div class="arow${v?' mgod':''}" id="lgod_${sid}_${a.id}" title="${a.stat}">
+      ${iconHtml}
       <button class="amk${v?' mgod':''}" onclick="cycleArmorStat('${sid}','${a.id}')" title="${a.stat}">★</button>
     </div>`;
   }).join('');
@@ -3660,9 +3667,20 @@ function buildExoticArmorCard(ea) {
   const obtained = eas.obtained;
   const farm = eas.farm || false;
   const stats = eas.stats || {};
+  const _STAT2ID_E = {Movilidad:'mobility',Resiliencia:'resilience','Recuperación':'recovery',Disciplina:'discipline',Intelecto:'intellect',Fuerza:'strength',Variable:'',Todos:''};
   const combos = ARCHETYPES.map(a => {
     const v = stats[a.id] ? 1 : 0;
-    return `<div class="arow${v?' mgod':''}" id="egod_${ea.id}_${a.id}"><span class="anm">${a.n}</span><button class="amk${v?' mgod':''}" onclick="cycleExoticStat('${ea.id}','${a.id}')" title="${a.stat}">★</button></div>`;
+    const primId = _STAT2ID_E[a.primary] ?? a.id;
+    const secId  = a.secondary ? (_STAT2ID_E[a.secondary] ?? '') : '';
+    const ic1 = primId ? (iconMap['stat:'+primId]?.icon||'') : '';
+    const ic2 = secId  ? (iconMap['stat:'+secId ]?.icon||'') : '';
+    const iconHtml = `<span class="astat-icons" title="${a.stat}">
+      ${ic1?`<img src="${ic1}" data-pimg="stat:${primId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;" onerror="this.style.display='none'">`:`<span style="font-size:10px;opacity:.5">◈</span>`}
+      ${ic2?`<img src="${ic2}" data-pimg="stat:${secId}"  style="width:18px;height:18px;border-radius:2px;object-fit:cover;" onerror="this.style.display='none'">`:''}</span>`;
+    return `<div class="arow${v?' mgod':''}" id="egod_${ea.id}_${a.id}" title="${a.stat}">
+      ${iconHtml}
+      <button class="amk${v?' mgod':''}" onclick="cycleExoticStat('${ea.id}','${a.id}')" title="${a.stat}">★</button>
+    </div>`;
   }).join('');
   return `<div class="eacard ${obtained?'aobt':''}" id="eacard_${ea.id}">
     <div class="whdr">
@@ -8209,7 +8227,7 @@ function init() {
 
 // =========== ICON LOADER (Bungie API) ===========
 const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v10';
+const ICON_CACHE_KEY = 'd2icons.v11';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
 let iconMap = {};
 
