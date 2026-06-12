@@ -2604,19 +2604,21 @@ const WEAPONS = [
 ];
 
 // =========== ARCHETYPES ===========
+// 12 arquetipos reales de Destiny 2 (Armadura 3.0 / Edge of Fate)
+// Stats: Salud, Granada, Clase, Super, Cuerpo, Armas
 const ARCHETYPES = [
-  {id:'resilience', n:'Bastión',     stat:'Resiliencia',           primary:'Resiliencia', secondary:'',           desc:'Resiliencia alta → máxima reducción de daño. Clave para Titanes.'},
-  {id:'mobility',   n:'Corredor',    stat:'Movilidad',             primary:'Movilidad',   secondary:'',           desc:'Movilidad alta → más velocidad y mejor recarga del salto.'},
-  {id:'recovery',   n:'Médico',      stat:'Recuperación',          primary:'Recuperación',secondary:'',           desc:'Recuperación alta → escudo regenera más rápido. Clave para Hechiceros.'},
-  {id:'discipline', n:'Granadero',   stat:'Disciplina',            primary:'Disciplina',  secondary:'',           desc:'Disciplina alta → granadas recargan mucho más rápido.'},
-  {id:'intellect',  n:'Estratega',   stat:'Intelecto',             primary:'Intelecto',   secondary:'',           desc:'Intelecto alto → Superpotencia disponible antes.'},
-  {id:'strength',   n:'Camorrista',  stat:'Fuerza',                primary:'Fuerza',      secondary:'',           desc:'Fuerza alta → cuerpo a cuerpo recarga más rápido.'},
-  {id:'high_mob_disc',n:'Duelista',  stat:'Movilidad + Disciplina',primary:'Movilidad',   secondary:'Disciplina', desc:'Velocidad y granadas frecuentes. Ideal para Cazadores.'},
-  {id:'high_res_int', n:'Paladín',   stat:'Resiliencia + Intelecto',primary:'Resiliencia',secondary:'Intelecto',  desc:'Máxima defensa y superpotencia rápida. Ideal para Titanes.'},
-  {id:'high_rec_str', n:'Asceta',    stat:'Recuperación + Fuerza', primary:'Recuperación',secondary:'Fuerza',     desc:'Recuperación rápida y cuerpo a cuerpo frecuente. Ideal para Hechiceros.'},
-  {id:'triple_disc',  n:'Artillero', stat:'Disciplina × 3',        primary:'Disciplina',  secondary:'Disciplina', desc:'Tres piezas con Disciplina → máxima frecuencia de granadas.'},
-  {id:'stat_spike',   n:'Especialista',stat:'Pico único',          primary:'Variable',    secondary:'',           desc:'Una pieza con stat único muy alto para llegar a 100.'},
-  {id:'balanced',     n:'Versátil',  stat:'Equilibrado',           primary:'Todos',       secondary:'',           desc:'Distribución equilibrada de todos los stats.'},
+  {id:'siegebreaker',   n:'Rompefortalezas', stat:'Salud + Granada',  primary:'Salud',   secondary:'Granada', desc:'Salud primaria con Granada secundaria.'},
+  {id:'bulwark',        n:'Baluarte',        stat:'Salud + Clase',    primary:'Salud',   secondary:'Clase',   desc:'Salud primaria con Clase secundaria.'},
+  {id:'brawler',        n:'Camorrista',      stat:'Cuerpo + Salud',   primary:'Cuerpo',  secondary:'Salud',   desc:'Cuerpo a cuerpo primario con Salud secundaria.'},
+  {id:'skirmisher',     n:'Escaramuza',      stat:'Cuerpo + Armas',   primary:'Cuerpo',  secondary:'Armas',   desc:'Cuerpo a cuerpo primario con Armas secundarias.'},
+  {id:'grenadier',      n:'Granadero',       stat:'Granada + Super',  primary:'Granada', secondary:'Super',   desc:'Granada primaria con Superpoder secundario.'},
+  {id:'demolitionist',  n:'Demoledor',       stat:'Granada + Clase',  primary:'Granada', secondary:'Clase',   desc:'Granada primaria con Clase secundaria.'},
+  {id:'colossus',       n:'Coloso',          stat:'Super + Salud',    primary:'Super',   secondary:'Salud',   desc:'Superpoder primario con Salud secundaria.'},
+  {id:'paragon',        n:'Paladín',         stat:'Super + Cuerpo',   primary:'Super',   secondary:'Cuerpo',  desc:'Superpoder primario con Cuerpo a cuerpo secundario.'},
+  {id:'reaver',         n:'Merodeador',      stat:'Clase + Cuerpo',   primary:'Clase',   secondary:'Cuerpo',  desc:'Clase primaria con Cuerpo a cuerpo secundario.'},
+  {id:'specialist',     n:'Especialista',    stat:'Clase + Armas',    primary:'Clase',   secondary:'Armas',   desc:'Clase primaria con Armas secundarias.'},
+  {id:'gunner',         n:'Artillero',       stat:'Armas + Granada',  primary:'Armas',   secondary:'Granada', desc:'Armas primarias con Granada secundaria.'},
+  {id:'powerhouse',     n:'Potencia',        stat:'Armas + Super',    primary:'Armas',   secondary:'Super',   desc:'Armas primarias con Superpoder secundario.'},
 ];
 
 // =========== ARMOR SETS (LEGENDARY) ===========
@@ -3626,7 +3628,7 @@ function buildArmorSlotCard(set, slotDef) {
   const obtained = as_.obtained;
   const farm = as_.farm || false;
   const stats = as_.stats || {};
-  const _STAT2ID = {Movilidad:'mobility',Resiliencia:'resilience','Recuperación':'recovery',Disciplina:'discipline',Intelecto:'intellect',Fuerza:'strength',Variable:'',Todos:''};
+  const _STAT2ID = {Salud:'health',Granada:'grenade',Clase:'class',Super:'super',Cuerpo:'melee',Armas:'weapons',Variable:'',Todos:''};
   const combos = ARCHETYPES.map(a => {
     const v = stats[a.id] ? 1 : 0;
     const primId = _STAT2ID[a.primary] ?? a.id;
@@ -3698,7 +3700,7 @@ function buildExoticArmorCard(ea) {
   const obtained = eas.obtained;
   const farm = eas.farm || false;
   const stats = eas.stats || {};
-  const _STAT2ID_E = {Movilidad:'mobility',Resiliencia:'resilience','Recuperación':'recovery',Disciplina:'discipline',Intelecto:'intellect',Fuerza:'strength',Variable:'',Todos:''};
+  const _STAT2ID_E = {Salud:'health',Granada:'grenade',Clase:'class',Super:'super',Cuerpo:'melee',Armas:'weapons',Variable:'',Todos:''};
   const combos = ARCHETYPES.map(a => {
     const v = stats[a.id] ? 1 : 0;
     const primId = _STAT2ID_E[a.primary] ?? a.id;
@@ -8258,7 +8260,7 @@ function init() {
 
 // =========== ICON LOADER (Bungie API) ===========
 const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v13';
+const ICON_CACHE_KEY = 'd2icons.v14';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
 let iconMap = {};
 
@@ -8365,53 +8367,38 @@ async function fetchIcons(apiKey) {
       }
     }
 
-    // Stat icons — character armor stats (Mobility, Resilience, etc.)
-    // Strategy 1: direct hash lookup (most reliable, hashes are stable)
-    const STAT_HASHES = {
-      mobility:'2996146975', resilience:'392767087', recovery:'1943323491',
-      discipline:'1735777505', intellect:'144602215', strength:'4244567218'
-    };
+    // Stat icons — Armor 3.0 stats (Health, Grenade, Class, Super, Melee, Weapons)
     const statLookup = {
-      'mobility':'Mobility','resilience':'Resilience','recovery':'Recovery',
-      'discipline':'Discipline','intellect':'Intellect','strength':'Strength'
+      'health':'Health','grenade':'Grenade','class':'Class',
+      'super':'Super','melee':'Melee','weapons':'Weapons'
     };
     if (stat_defs) {
-      // Direct hash lookup first
-      for (const [id, hash] of Object.entries(STAT_HASHES)) {
-        const dp = stat_defs[hash]?.displayProperties;
-        if (dp?.icon) icons['stat:'+id] = { icon: BNET + dp.icon };
-      }
-      // Name-based fallback
+      // Name-based lookup in DestinyStatDefinition
       const statByName = {};
       for (const [hash, s] of Object.entries(stat_defs)) {
         const n = s.displayProperties?.name;
         if (n) statByName[n] = s.displayProperties;
       }
       for (const [id, en] of Object.entries(statLookup)) {
-        if (icons['stat:'+id]) continue;
         const dp = statByName[en];
-        if (dp?.icon) icons['stat:' + id] = { icon: BNET + dp.icon };
+        if (dp?.icon) icons['stat:'+id] = { icon: BNET + dp.icon };
       }
     }
-    // Strategy 2: scan en_items for items that have one of the stat names AND an icon
-    // Some stat icons appear as InventoryItem entries (e.g. stat upgrade items)
+    // Fallback: scan en_items for exact or partial name matches
     const missingStats = Object.entries(statLookup).filter(([id]) => !icons['stat:'+id]).map(([id, en]) => [id, en]);
     if (missingStats.length > 0) {
       const missingByName = Object.fromEntries(missingStats.map(([id, en]) => [en, id]));
-      // Also try partial matches like "Mobility Enhancement" → mobility
       for (const [hash, item] of Object.entries(en_items)) {
         const dp = item.displayProperties;
         if (!dp?.icon || !dp?.name) continue;
-        // Exact match first
         let id = missingByName[dp.name];
         if (!id) {
-          // Check if the item name starts with a stat name (e.g. "Mobility Enhancement")
           for (const [statName, statId] of Object.entries(missingByName)) {
             if (dp.name.startsWith(statName + ' ') || dp.name === statName) { id = statId; break; }
           }
         }
         if (id) {
-          icons['stat:' + id] = { icon: BNET + dp.icon };
+          icons['stat:'+id] = { icon: BNET + dp.icon };
           delete missingByName[dp.name];
           if (Object.keys(missingByName).length === 0) break;
         }
