@@ -8705,8 +8705,9 @@ function updateLoginUIDevice() {
 
 // =========== LOGIN MODAL ===========
 function openLoginModal() {
-  document.getElementById('login-modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('login-modal-input')?.focus(), 100);
+  // Trigger Bungie OAuth directly instead of manual name entry
+  const fakeBtn = { textContent: '', disabled: false };
+  splashDoLogin(fakeBtn);
 }
 
 function closeLoginModal() {
@@ -8841,6 +8842,49 @@ function splashDoLogin(btn) {
 }
 // keep old name as alias just in case
 function splashSelectPlatform(p, b) { splashDoLogin(b); }
+
+async function splashDoConnect() {
+  const input = document.getElementById('splash-input');
+  const errEl = document.getElementById('splash-error');
+  const btn   = document.getElementById('splash-connect-btn');
+  const val   = input ? input.value.trim() : '';
+  if (!val) return;
+  const parts = val.split('#');
+  if (parts.length !== 2 || isNaN(parts[1])) {
+    if (errEl) errEl.textContent = 'Formato: Nombre#1234';
+    return;
+  }
+  const [displayName, code] = parts;
+  if (errEl) errEl.textContent = '';
+  if (btn) btn.disabled = true;
+  showSplashLoading('Buscando guardián…');
+  try {
+    const res = await fetch(BNET + '/Platform/Destiny2/SearchDestinyPlayerByBungieName/-1/', {
+      method: 'POST',
+      headers: { 'X-API-Key': OAUTH_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ displayName, displayNameCode: parseInt(code) })
+    });
+    const data = await res.json();
+    if (!data.Response || !data.Response.length) {
+      showSplashLoading('');
+      if (errEl) errEl.textContent = 'Guardián no encontrado';
+      if (btn) btn.disabled = false;
+      return;
+    }
+    const player = data.Response.find(p => p.crossSaveOverride === p.membershipType) || data.Response[0];
+    currentUser = { membershipId: player.membershipId, membershipType: player.membershipType, displayName: val };
+    localStorage.setItem(AUTH_KEY, JSON.stringify(currentUser));
+    invLoaded = false;
+    loadState(); updateLoginUI(); updateHeader(); renderCurrentTab(); applyAllIcons();
+    showSplashLoading('');
+    const splash = document.getElementById('login-splash');
+    if (splash) { splash.classList.add('hiding'); setTimeout(() => { if (splash) splash.style.display='none'; }, 500); }
+  } catch(e) {
+    showSplashLoading('');
+    if (errEl) errEl.textContent = 'Error de conexión';
+    if (btn) btn.disabled = false;
+  }
+}
 
 // ── Step 2: detect if we were redirected back with ?code= ────────────────────
 async function handleOAuthCallback() {
@@ -8996,4 +9040,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     <div id="splash-platform-select" style="width:100%">
       <button id="splash-login-btn" onclick="splashDoLogin(this)"
         onmouseover="this.style.background='rgba(201,168,76,.22)';this.style.boxShadow='0 0 50px rgba(201,168,76,.25)'"
-        onmouseout="this.style.background='rgba(201,168,76,.12)';this.style.b
+        onmouseout="this.style.background='rgba(201,168,76,.12)';this.style.boxShadow='none'"
+        style="width:100%;font-family:'Chakra Petch',sans-serif;font-size:14px;
+          background:rgba(201,168,76,.12);color:var(--accent-gold);border:1px solid rgba(201,168,76,.4);
+          padding:18px 16px;cursor:pointer;text-transform:uppercase;letter-spacing:3px;font-weight:700;
+          clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);
+          transition:background .2s,box-shadow .2s;">
+        <div style="font-size:22px;margin-bottom:6px">🔐</div>
+        Iniciar sesión con Bungie
+      </button>
+      <div id="splash-loading" style="display:none;font-family:'Chakra Petch',sans-serif;font-size:11px;color:var(--accent-gold);letter-spacing:2px;text-transform:uppercase;margin-top:8px;"></div>
+      <div id="splash-error" style="font-size:11px;color:var(--danger);font-family:'Chakra Petch',sans-serif;min-height:16px;text-align:center;margin-top:4px;"></div>
+    </div>
+
+    <!-- Fallback: manual Bungie name entry (shown if OAuth fails) -->
+    <div id="splash-bungie-form" style="width:100%;display:none;flex-direction:column;gap:12px;align-items:center">
+      <p style="font-family:'Chakra Petch',sans-serif;font-size:11px;color:var(--text-muted);text-align:center;margin:0">
+        Introduce tu nombre de Bungie
+      </p>
+      <input id="splash-input" type="text" placeholder="Guardian#1234" autocomplete="off"
+        onkeydown="if(event.key==='Enter')splashDoConnect()"
+        style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);
+          border-bottom:2px solid var(--accent-gold-dim);color:var(--text-primary);
+          font-size:16px;padding:14px 16px;font-family:'Barlow',sans-serif;outline:none;
+          box-sizing:border-box;text-align:center;letter-spacing:1px;"/>
+      <button id="splash-connect-btn" onclick="splashDoConnect()"
+        style="width:100%;font-family:'Chakra Petch',sans-serif;font-size:13px;
+          background:var(--accent-gold-dim);color:#000;border:none;
+          padding:14px;cursor:pointer;text-transform:uppercase;letter-spacing:3px;font-weight:700;
+          clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);">
+        Conectar
+      </button>
+      <button id="splash-back-btn"
+        onclick="document.getElementById('splash-bungie-form').style.display='none';document.getElementById('splash-platform-select').style.display='block';"
+        style="background:none;border:none;color:var(--text-muted);cursor:pointer;
+          font-family:'Chakra Petch',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;">
+        ← Volver
+      </button>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
