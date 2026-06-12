@@ -1181,6 +1181,15 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   margin-top:8px;
 }
 .splash-skip:hover{color:rgba(255,255,255,.4)}
+/* Mobile splash compact */
+@media(max-width:600px),(max-height:700px){
+  #splash-content{gap:18px;padding:24px 20px}
+  .splash-emblem{width:56px;height:56px;font-size:26px;margin-bottom:10px}
+  #splash-logo h1{font-size:18px;letter-spacing:2px}
+  #splash-logo p{font-size:10px}
+  .splash-divider{width:140px}
+  #splash-login-btn{padding:12px 20px!important;font-size:12px!important}
+}
 /* ════════════════ END SPLASH ════════════════ */
 </style>
 </head>
@@ -8690,19 +8699,27 @@ async function doLogin() {
 
 async function loginByName(nameAndCode) {
   const apiKey = localStorage.getItem('d2apikey') || '550b4880a3864f15babc4ee93ab3133b';
-  const parts = nameAndCode.split('#');
-  if (parts.length !== 2) throw new Error('Formato: Nombre#1234');
-  const displayName = parts[0].trim();
-  const code = parseInt(parts[1].trim());
-  if (isNaN(code)) throw new Error('Código numérico inválido');
-  const res = await fetch('https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayerByBungieName/-1/', {
-    method: 'POST',
-    headers: {'X-API-Key': apiKey, 'Content-Type': 'application/json'},
-    body: JSON.stringify({displayName, displayNameCode: code})
-  });
-  if (!res.ok) throw new Error('Error de red: ' + res.status);
-  const data = await res.json();
-  if (!data.Response || data.Response.length === 0) throw new Error('Guardián no encontrado');
+  const hashIdx = nameAndCode.indexOf('#');
+  if (hashIdx < 1) throw new Error('Formato: Nombre#1234');
+  const displayName = nameAndCode.substring(0, hashIdx).trim();
+  const codePart = nameAndCode.substring(hashIdx + 1).trim();
+  const code = parseInt(codePart, 10);
+  if (isNaN(code) || codePart.length === 0) throw new Error('Código numérico inválido (ej: Guardian#1234)');
+  let res, data;
+  try {
+    res = await fetch('https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayerByBungieName/-1/', {
+      method: 'POST',
+      headers: {'X-API-Key': apiKey, 'Content-Type': 'application/json'},
+      body: JSON.stringify({displayName, displayNameCode: code})
+    });
+  } catch(netErr) {
+    throw new Error('Sin conexión a Bungie. Verifica tu red.');
+  }
+  if (res.status === 401) throw new Error('API key inválida');
+  if (!res.ok) throw new Error('Error Bungie: ' + res.status);
+  try { data = await res.json(); } catch(e) { throw new Error('Respuesta inválida de Bungie'); }
+  if (data.ErrorCode && data.ErrorCode !== 1) throw new Error('Bungie error ' + data.ErrorCode + ': ' + (data.Message || ''));
+  if (!data.Response || data.Response.length === 0) throw new Error('Guardián "' + nameAndCode + '" no encontrado. Comprueba el nombre y código exactos.');
   const profile = data.Response[0];
   currentUser = {
     membershipId: profile.membershipId,
