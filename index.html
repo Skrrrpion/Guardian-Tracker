@@ -8541,7 +8541,7 @@ function applyAllIcons() {
     if (entry?.esDesc && el.textContent !== entry.esDesc) el.textContent = entry.esDesc;
   });
   document.querySelectorAll('[data-pimg]').forEach(img => {
-    const key = img    if (!key) return;
+    const key = img.getAttribute('data-pimg'); if (!key) return;
     const entry = iconMap[key];
     if (!entry) return;
     const url = typeof entry === 'object' ? entry.icon : entry;
