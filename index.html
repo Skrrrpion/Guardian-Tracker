@@ -8731,16 +8731,20 @@ async function handleOAuthCallback() {
     const body = new URLSearchParams({
       grant_type: 'authorization_code',
       code,
-      client_id: OAUTH_CLIENT_ID,
-      redirect_uri: getRedirectUri()
+      client_id: OAUTH_CLIENT_ID
+      // redirect_uri omitted — not required for single registered URI
+      // X-API-Key omitted from headers — causes OriginHeaderDoesNotMatchKey on Bungie public clients
     });
     const tokenRes = await fetch(OAUTH_TOKEN_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-API-Key': OAUTH_API_KEY },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body
     });
     const tokenData = await tokenRes.json();
-    if (!tokenData.access_token) throw new Error('Token inválido de Bungie');
+    if (!tokenData.access_token) {
+      const reason = tokenData.error_description || tokenData.error || tokenData.ErrorStatus || JSON.stringify(tokenData);
+      throw new Error('Error al obtener token: ' + reason);
+    }
 
     showSplashLoading('Obteniendo perfil…');
     const profileRes = await fetch(BNET + '/Platform/User/GetMembershipsForCurrentUser/', {
@@ -8889,4 +8893,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                
