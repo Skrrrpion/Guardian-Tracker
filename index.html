@@ -422,7 +422,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
 /* ─── INVENTORY HOVER TOOLTIP ─── */
 #inv-tooltip{
-  position:fixed;display:none;z-index:9999;pointer-events:none;
+  position:fixed;display:none;z-index:9999;pointer-events:auto;
+  max-height:80vh;overflow-y:auto;
   width:272px;
   background:linear-gradient(160deg,rgba(10,13,20,.97) 0%,rgba(16,20,30,.97) 100%);
   border:1px solid rgba(201,168,76,.3);border-radius:8px;
@@ -8676,12 +8677,7 @@ function buildInvCard(w, cls, roll) {
   card.dataset.invCls = cls;
   card.dataset.wid = w.id;
 
-  // Tooltip events (desktop only)
-  if (roll && !document.body.classList.contains('is-mobile')) {
-    card.addEventListener('mouseenter', e => showInvTooltip(roll, w, cls, e));
-    card.addEventListener('mousemove',  e => positionInvTooltip(e));
-    card.addEventListener('mouseleave', hideInvTooltip);
-  }
+  // Tooltip: click image to toggle (mobile + desktop)
 
   // Image — key by English name (same format as iconMap)
   const img = document.createElement('img');
@@ -8694,6 +8690,18 @@ function buildInvCard(w, cls, roll) {
   if (!_iconUrl) img.style.display = 'none';
   img.onerror = function(){ this.style.display='none'; };
   img.onload = function(){ this.style.display=''; };
+  if (roll) {
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', e => {
+      e.stopPropagation();
+      const tt = document.getElementById('inv-tooltip');
+      if (tt && tt.style.display !== 'none' && tt.dataset.iid === roll.instanceId) {
+        hideInvTooltip();
+      } else {
+        showInvTooltip(roll, w, cls, img);
+      }
+    });
+  }
 
   // Name (2-line clamp, title shows full name)
   const nameEl = document.createElement('div');
@@ -8742,29 +8750,41 @@ function buildInvCard(w, cls, roll) {
 }
 
 // =========== INVENTORY TOOLTIP ===========
-function showInvTooltip(roll, w, cls, e) {
+function showInvTooltip(roll, w, cls, anchor) {
   const tt = document.getElementById('inv-tooltip');
   if (!tt) return;
   tt.innerHTML = buildInvTooltipHTML(roll, w, cls);
+  tt.dataset.iid = roll.instanceId;
   tt.style.display = 'block';
-  positionInvTooltip(e);
+  positionInvTooltip(anchor);
 }
 function hideInvTooltip() {
   const tt = document.getElementById('inv-tooltip');
-  if (tt) tt.style.display = 'none';
+  if (tt) { tt.style.display = 'none'; delete tt.dataset.iid; }
 }
-function positionInvTooltip(e) {
+function positionInvTooltip(anchor) {
   const tt = document.getElementById('inv-tooltip');
   if (!tt || tt.style.display === 'none') return;
   const vpW = window.innerWidth, vpH = window.innerHeight;
   const ttW = tt.offsetWidth, ttH = tt.offsetHeight;
-  let x = e.clientX + 18, y = e.clientY + 14;
-  if (x + ttW > vpW - 10) x = e.clientX - ttW - 12;
-  if (y + ttH > vpH - 10) y = e.clientY - ttH - 8;
-  if (x < 8) x = 8;
-  if (y < 8) y = 8;
-  tt.style.left = x + 'px';
-  tt.style.top  = y + 'px';
+  const isMobile = document.body.classList.contains('is-mobile') || vpW <= 600;
+  if (isMobile) {
+    const x = Math.max(8, (vpW - ttW) / 2);
+    let y = 90;
+    if (y + ttH > vpH - 10) y = Math.max(8, vpH - ttH - 10);
+    tt.style.left = x + 'px';
+    tt.style.top  = y + 'px';
+  } else {
+    const rect = anchor ? anchor.getBoundingClientRect() : {right:100, top:100, left:100};
+    let x = rect.right + 14;
+    let y = rect.top;
+    if (x + ttW > vpW - 10) x = rect.left - ttW - 14;
+    if (y + ttH > vpH - 10) y = vpH - ttH - 10;
+    if (x < 8) x = 8;
+    if (y < 8) y = 8;
+    tt.style.left = x + 'px';
+    tt.style.top  = y + 'px';
+  }
 }
 
 function buildInvTooltipHTML(roll, w, cls) {
@@ -9151,6 +9171,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderCurrentTab();
   applyAllIcons();
   initIcons(); // auto-refresh icons on every page load (uses 24h cache, so mostly instant)
+
+  // Close inv-tooltip when clicking outside the image or tooltip itself
+  document.addEventListener('click', e => {
+    const tt = document.getElementById('inv-tooltip');
+    if (!tt || tt.style.display === 'none') return;
+    if (!e.target.closest('.inv-card-icon') && !e.target.closest('#inv-tooltip')) hideInvTooltip();
+  });
 
   const splash = document.getElementById('login-splash');
   const handled = await handleOAuthCallback();
