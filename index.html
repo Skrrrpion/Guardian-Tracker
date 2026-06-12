@@ -8494,30 +8494,45 @@ async function resolvePlugHashes(hashes, apiKey) {
 }
 
 // =========== GOD ROLL CLASSIFICATION ===========
-// Per-instance: uses actual perk keys on this specific copy when available.
-// Falls back to weapon-level classification if perk data couldn't be loaded.
+// Per-instance god roll classification.
+// God = each trait column (col2, col3) that has ★ perks must contribute at least one match.
+//   Within a column, ANY ★ perk match is enough (they're alternatives for the same slot).
+//   BOTH columns must match when both are configured — prevents a copy with only one ★ perk
+//   (e.g. only col3 match) from being classified as god.
+// Semi = partial god (some columns match but not all), or has ◆ matches.
 function classifyGodRoll(weaponId, instancePerkKeys) {
   const ws = state.weapons[weaponId];
   const w = WEAPONS.find(x => x && !x.exotic && x.id === weaponId);
-  const col23 = w ? [...(w.col2||[]), ...(w.col3||[])] : [];
+  if (!ws || !w) return 'unmarked';
 
-  if (!ws || col23.length === 0) return 'unmarked';
+  // Separate ★ and ◆ markers per column (only col2 = trait1, col3 = trait2)
+  const col2GodPks  = (w.col2||[]).filter(pk => ws.perks?.[pk]?.marker === 1);
+  const col3GodPks  = (w.col3||[]).filter(pk => ws.perks?.[pk]?.marker === 1);
+  const col2SemiPks = (w.col2||[]).filter(pk => ws.perks?.[pk]?.marker === 2);
+  const col3SemiPks = (w.col3||[]).filter(pk => ws.perks?.[pk]?.marker === 2);
 
-  const anyGodMarked  = col23.some(pk => ws.perks?.[pk]?.marker === 1);
-  const anySemiMarked = col23.some(pk => ws.perks?.[pk]?.marker === 2);
+  const anyGodMarked  = col2GodPks.length > 0 || col3GodPks.length > 0;
+  const anySemiMarked = col2SemiPks.length > 0 || col3SemiPks.length > 0;
   if (!anyGodMarked && !anySemiMarked) return 'unmarked';
 
-  // Per-instance check: if perkKeys is an Array (even empty), always use per-instance result
   if (Array.isArray(instancePerkKeys)) {
-    const perkKeySet = new Set(instancePerkKeys);
-    const hasGodPerk  = col23.some(pk => ws.perks?.[pk]?.marker === 1 && perkKeySet.has(pk));
-    const hasSemiPerk = col23.some(pk => ws.perks?.[pk]?.marker === 2 && perkKeySet.has(pk));
-    if (hasGodPerk)  return 'god';
-    if (hasSemiPerk) return 'semi';
-    return 'normal'; // this copy doesn't have the marked perks
+    const S = new Set(instancePerkKeys);
+
+    // God: each configured ★ column must have at least one match (AND across cols, OR within col)
+    const col2GodOK = col2GodPks.length === 0 || col2GodPks.some(pk => S.has(pk));
+    const col3GodOK = col3GodPks.length === 0 || col3GodPks.some(pk => S.has(pk));
+    const hasActualGodMatch = col2GodPks.some(pk => S.has(pk)) || col3GodPks.some(pk => S.has(pk));
+    if (anyGodMarked && col2GodOK && col3GodOK && hasActualGodMatch) return 'god';
+
+    // Semi: at least one ★ match (partial god) OR at least one ◆ match
+    const hasPartialGod = hasActualGodMatch;
+    const hasSemiMatch  = col2SemiPks.some(pk => S.has(pk)) || col3SemiPks.some(pk => S.has(pk));
+    if (hasPartialGod || hasSemiMatch) return 'semi';
+
+    return 'normal';
   }
 
-  // Fallback only when perkKeys is null/undefined (no socket data at all)
+  // Fallback: no per-instance socket data at all
   if (anyGodMarked)  return 'god';
   if (anySemiMarked) return 'semi';
   return 'normal';
@@ -8914,6 +8929,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateHeader();
   renderCurrentTab();
   applyAllIcons();
+  initIcons(); // auto-refresh icons on every page load (uses 24h cache, so mostly instant)
 
   const splash = document.getElementById('login-splash');
   const handled = await handleOAuthCallback();
