@@ -1090,7 +1090,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 <!-- HEADER -->
 <header id="app-header">
   <div id="header-title">Guardian Collector</div>
-  <div id="header-stats"><button onclick="clearIconCache()" title="Actualizar datos de Bungie" style="background:none;border:1px solid rgba(199,169,255,.25);border-radius:4px;color:rgba(199,169,255,.6);font-size:11px;padding:2px 7px;cursor:pointer;font-family:'Chakra Petch',sans-serif;margin-right:4px;">🔄</button><button onclick="exportState()" title="Exportar configuración (God Rolls, progreso)" style="background:none;border:1px solid rgba(0,229,204,.35);border-radius:4px;color:rgba(0,229,204,.7);font-size:11px;padding:2px 7px;cursor:pointer;font-family:'Chakra Petch',sans-serif;margin-right:2px;">⬇ Export</button><button onclick="importState()" title="Importar configuración desde backup" style="background:none;border:1px solid rgba(201,168,76,.35);border-radius:4px;color:rgba(201,168,76,.7);font-size:11px;padding:2px 7px;cursor:pointer;font-family:'Chakra Petch',sans-serif;margin-right:4px;">⬆ Import</button><span id="icon-status" style="font-size:11px;color:rgba(199,169,255,.55);padding:0 8px;font-family:'Chakra Petch',sans-serif;"></span>
+  <div id="header-stats"><button onclick="clearIconCache()" title="Actualizar datos de Bungie" style="background:none;border:1px solid rgba(199,169,255,.25);border-radius:4px;color:rgba(199,169,255,.6);font-size:11px;padding:2px 7px;cursor:pointer;font-family:'Chakra Petch',sans-serif;margin-right:4px;">🔄</button><span id="icon-status" style="font-size:11px;color:rgba(199,169,255,.55);padding:0 8px;font-family:'Chakra Petch',sans-serif;"></span>
     <div class="stat-chip wpurple" title="Armas legendarias obtenidas"><span class="label">⚔ Armas</span><span class="value" id="stat-armas">0</span></div>
     <div class="stat-chip wpurple" title="Piezas de armadura legendaria obtenidas"><span class="label">🛡 Armad.</span><span class="value" id="stat-armor-leg">0</span></div>
     <div class="stat-chip wpurple" title="Sets de armadura legendaria completos"><span class="label">📦 Sets</span><span class="value" id="stat-sets-leg">0</span></div>
@@ -8352,10 +8352,10 @@ async function loadCollectibleMap() {
       if (Date.now() - ts < 24*60*60*1000) {
         invCollectibleMap = map;
         invItemHashToWeaponId = itemHashMap || {};
-        // Also restore perk defs from cache if available
+        // Also load plug hash cache
         try {
-          const pc = localStorage.getItem(PERK_DEF_CACHE_KEY);
-          if (pc) { const {ts:pt, defs} = JSON.parse(pc); if (Date.now()-pt < 24*60*60*1000) invSandboxPerkDefs = defs; }
+          const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY);
+          if (pc) invPlugItemCache = JSON.parse(pc);
         } catch(e2) {}
         return;
       }
@@ -8408,30 +8408,11 @@ async function loadCollectibleMap() {
   invItemHashToWeaponId = itemHashMap;
   try { localStorage.setItem(COLLECTIBLE_CACHE_KEY, JSON.stringify({ts: Date.now(), map, itemHashMap})); } catch(e) {}
 
-  // Fetch DestinySandboxPerkDefinition to enable per-instance god roll detection
+  // Load cached plug hash → perkKey map (built lazily when inventory is fetched)
   try {
-    const perkCached = localStorage.getItem(PERK_DEF_CACHE_KEY);
-    if (perkCached) {
-      const {ts: pts, defs} = JSON.parse(perkCached);
-      if (Date.now() - pts < 24*60*60*1000) {
-        invSandboxPerkDefs = defs;
-        return;
-      }
-    }
-    if (paths?.DestinySandboxPerkDefinition) {
-      const spData = await safeJson(BNET + paths.DestinySandboxPerkDefinition);
-      // Build hash (number) → lowercase display name
-      const defs = {};
-      Object.entries(spData).forEach(([hash, def]) => {
-        const name = def.displayProperties?.name?.trim().toLowerCase();
-        if (name) defs[parseInt(hash)] = name;
-      });
-      invSandboxPerkDefs = defs;
-      try { localStorage.setItem(PERK_DEF_CACHE_KEY, JSON.stringify({ts: Date.now(), defs})); } catch(e) {}
-    }
-  } catch(e) {
-    console.warn('[Inventory] Could not load sandbox perk defs (per-instance god roll unavailable):', e.message);
-  }
+    const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY);
+    if (pc) invPlugItemCache = JSON.parse(pc);
+  } catch(e) {}
 }
 
 // =========== INVENTORY FETCH (components 102, 201, 205 — no sockets needed) ===========
@@ -8442,7 +8423,7 @@ async function fetchUserInventoryWithPerks() {
   const headers = {'X-API-Key': apiKey};
   if (accessToken) headers['Authorization'] = 'Bearer ' + accessToken;
 
-  const profileUrl = `${BNET}/Platform/Destiny2/${membershipType}/Profile/${membershipId}/?components=102,201,205,305`;
+  const profileUrl = `${BNET}/Platform/Destiny2/${membershipType}/Profile/${membershipId}/?components=102,201,205,302`;
   const res = await fetch(profileUrl, { headers });
   if (!res.ok) throw new Error(`Error HTTP ${res.status} al cargar el perfil`);
   const ct = res.headers.get('content-type') || '';
@@ -8459,24 +8440,55 @@ async function fetchUserInventoryWithPerks() {
   Object.values(charInv).forEach(c => (c.items||[]).forEach(item => allItems.push({...item, location:'inventory'})));
   Object.values(charEq).forEach(c  => (c.items||[]).forEach(item => allItems.push({...item, location:'equipped'})));
 
-  // Per-instance perk data (component 305)
-  const itemPerksData = data.Response.itemComponents?.perks?.data || {};
+  // Per-instance socket data (component 302)
+  const socketsData = data.Response.itemComponents?.sockets?.data || {};
+
+  // Collect all unique plug hashes across tracked weapon instances (to batch-resolve names)
+  const plugHashesNeeded = new Set();
+  allItems.forEach(item => {
+    if (!invItemHashToWeaponId[item.itemHash]) return;
+    const sockets = socketsData[item.itemInstanceId]?.sockets || [];
+    sockets.forEach(s => { if (s.plugHash) plugHashesNeeded.add(s.plugHash); });
+  });
+  // Resolve any plug hashes not yet cached
+  const toResolve = [...plugHashesNeeded].filter(h => invPlugItemCache[h] === undefined);
+  if (toResolve.length > 0) {
+    setInvStatus(`Resolviendo ${toResolve.length} perks del manifiesto…`);
+    await resolvePlugHashes(toResolve, apiKey);
+  }
 
   // All matching items — show every copy (user may have duplicates with different rolls)
   invWeaponRolls = [];
   allItems.forEach(item => {
     const weaponId = invItemHashToWeaponId[item.itemHash];
     if (!weaponId) return;
-    // Resolve per-instance perk keys via sandbox perk defs
-    const rawPerks = itemPerksData[item.itemInstanceId]?.perks || [];
-    const perkKeys = rawPerks
-      .map(p => {
-        const name = invSandboxPerkDefs[p.perkHash];
-        return name ? invPerkNameToKey[name] : undefined;
-      })
+    // Build perkKeys from socket plugs for this instance
+    const sockets = socketsData[item.itemInstanceId]?.sockets || [];
+    const perkKeys = sockets
+      .map(s => invPlugItemCache[s.plugHash])
       .filter(Boolean);
     invWeaponRolls.push({weaponId, location: item.location, itemHash: item.itemHash, instanceId: item.itemInstanceId, perkKeys});
   });
+}
+
+// Resolve plug hashes → perkKey by fetching individual manifest definitions
+// Results stored in invPlugItemCache and persisted to localStorage
+async function resolvePlugHashes(hashes, apiKey) {
+  const BATCH = 12; // parallel requests per batch
+  for (let i = 0; i < hashes.length; i += BATCH) {
+    const batch = hashes.slice(i, i + BATCH);
+    await Promise.all(batch.map(async hash => {
+      try {
+        const r = await fetch(`${BNET}/Platform/Destiny2/Manifest/DestinyInventoryItemDefinition/${hash}/`,
+          {headers: {'X-API-Key': apiKey}});
+        if (!r.ok) { invPlugItemCache[hash] = null; return; }
+        const d = await r.json();
+        const name = d.Response?.displayProperties?.name?.trim().toLowerCase();
+        invPlugItemCache[hash] = name ? (invPerkNameToKey[name] ?? null) : null;
+      } catch(e) { invPlugItemCache[hash] = null; }
+    }));
+  }
+  try { localStorage.setItem(PLUG_DEF_CACHE_KEY, JSON.stringify(invPlugItemCache)); } catch(e) {}
 }
 
 // =========== GOD ROLL CLASSIFICATION ===========
