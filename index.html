@@ -8635,7 +8635,7 @@ async function handleOAuthCallback() {
     const tokenRes = await fetch(OAUTH_TOKEN_URL, {
       method: 'POST',
       headers: { 'X-API-Key': OAUTH_API_KEY, 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ grant_type: 'authorization_code', code, client_id: OAUTH_CLIENT_ID, redirect_uri: getRedirectUri() })
+      body: 'grant_type=authorization_code&code=' + encodeURIComponent(code) + '&client_id=' + OAUTH_CLIENT_ID
     });
     if (!tokenRes.ok) throw new Error('Error token: ' + tokenRes.status);
     const tokenData = await tokenRes.json();
