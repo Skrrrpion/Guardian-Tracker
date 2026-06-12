@@ -1186,6 +1186,30 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 </head>
 <body>
 
+<!-- LOGIN SPLASH -->
+<div id="login-splash">
+  <div id="splash-content">
+    <div id="splash-logo">
+      <div class="splash-emblem">⊕</div>
+      <h1>Guardian Collector</h1>
+      <p>Destiny 2 · Collection Tracker</p>
+    </div>
+    <div class="splash-divider"></div>
+    <div id="splash-platform-select" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+      <button id="splash-login-btn" onclick="splashDoLogin(this)" style="font-family:'Chakra Petch',sans-serif;font-size:13px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.4);color:var(--accent-gold);padding:16px 32px;cursor:pointer;text-transform:uppercase;letter-spacing:2px;font-weight:700;width:100%;max-width:320px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:all .2s">🔐 Iniciar Sesión con Bungie</button>
+    </div>
+    <div id="splash-loading" style="display:none;font-family:'Chakra Petch',sans-serif;font-size:12px;color:var(--text-muted);letter-spacing:1px">Conectando…</div>
+    <div id="splash-error" style="font-family:'Chakra Petch',sans-serif;font-size:11px;color:var(--danger);min-height:16px;text-align:center"></div>
+    <div id="splash-bungie-form" style="display:none;flex-direction:column;gap:12px;align-items:center;width:100%">
+      <div class="splash-prompt">Introduce tu nombre de Bungie</div>
+      <input id="splash-input" type="text" placeholder="Guardián#1234" autocomplete="off" onkeydown="if(event.key==='Enter')splashConnect()">
+      <button id="splash-connect-btn" onclick="splashConnect()">Conectar</button>
+      <button id="splash-back-btn" onclick="splashBack()">← Volver</button>
+    </div>
+    <button class="splash-skip" onclick="splashSkip()">Entrar sin sesión →</button>
+  </div>
+</div>
+
 <!-- HEADER -->
 <header id="app-header">
   <div id="header-title">Guardian Collector</div>
@@ -8508,15 +8532,13 @@ function applyAllIcons() {
     if (entry?.esDesc && el.textContent !== entry.esDesc) el.textContent = entry.esDesc;
   });
   document.querySelectorAll('[data-pimg]').forEach(img => {
-    const key = img.dataset.pimg;
-    if (!key) return;
+    const key = img    if (!key) return;
     const entry = iconMap[key];
     if (!entry) return;
     const url = typeof entry === 'object' ? entry.icon : entry;
     if (url && img.getAttribute('src') !== url) {
       img.setAttribute('src', url);
       img.style.display = '';
-      // Hide adjacent fallback text span (used for armor stat icons)
       const next = img.nextElementSibling;
       if (next?.classList.contains('astat-fb')) next.style.display = 'none';
     }
@@ -8558,6 +8580,155 @@ function updateMobileStats() {
   });
 }
 
+// =========== USER / AUTH ===========
+let currentUser = null;
+
+function loadUser() {
+  try {
+    const raw = localStorage.getItem('d2user');
+    if (raw) {
+      currentUser = JSON.parse(raw);
+      showUserBadge();
+      hideSplash();
+    }
+  } catch(e) { currentUser = null; }
+}
+
+function showUserBadge() {
+  const badge = document.getElementById('user-badge');
+  const nameEl = document.getElementById('user-badge-name');
+  const loginBtn = document.getElementById('btn-login-open');
+  if (badge && currentUser) {
+    badge.style.display = 'flex';
+    if (nameEl) nameEl.textContent = currentUser.displayName || '';
+  }
+  if (loginBtn) loginBtn.style.display = currentUser ? 'none' : '';
+}
+
+function hideSplash() {
+  const splash = document.getElementById('login-splash');
+  if (splash) { splash.classList.add('hiding'); setTimeout(() => splash.remove(), 600); }
+}
+
+function splashDoLogin(btn) {
+  const ps = document.getElementById('splash-platform-select');
+  const form = document.getElementById('splash-bungie-form');
+  if (ps) ps.style.display = 'none';
+  if (form) { form.style.display = 'flex'; }
+  const inp = document.getElementById('splash-input');
+  if (inp) inp.focus();
+}
+
+function splashConnect() {
+  const input = document.getElementById('splash-input');
+  if (!input || !input.value.trim()) return;
+  const err = document.getElementById('splash-error');
+  const btn = document.getElementById('splash-connect-btn');
+  const loading = document.getElementById('splash-loading');
+  if (err) err.textContent = '';
+  if (btn) btn.disabled = true;
+  if (loading) loading.style.display = '';
+  loginByName(input.value.trim())
+    .then(() => { hideSplash(); })
+    .catch(e => {
+      if (err) err.textContent = e.message || 'Error al conectar';
+      if (loading) loading.style.display = 'none';
+    })
+    .finally(() => { if (btn) btn.disabled = false; });
+}
+
+function splashBack() {
+  const form = document.getElementById('splash-bungie-form');
+  const ps = document.getElementById('splash-platform-select');
+  if (form) form.style.display = 'none';
+  if (ps) ps.style.display = 'flex';
+  const err = document.getElementById('splash-error');
+  if (err) err.textContent = '';
+}
+
+function splashSkip() {
+  hideSplash();
+}
+
+function openLoginModal() {
+  const overlay = document.getElementById('login-modal-overlay');
+  if (overlay) overlay.classList.add('open');
+  const input = document.getElementById('login-modal-input');
+  setTimeout(() => { if (input) input.focus(); }, 50);
+}
+
+function closeLoginModal() {
+  const overlay = document.getElementById('login-modal-overlay');
+  if (overlay) overlay.classList.remove('open');
+}
+
+async function doLoginModal() {
+  const input = document.getElementById('login-modal-input');
+  const btn = document.getElementById('login-modal-btn');
+  const err = document.getElementById('login-modal-error');
+  if (!input || !input.value.trim()) return;
+  if (btn) btn.disabled = true;
+  if (err) err.textContent = '';
+  try {
+    await loginByName(input.value.trim());
+    closeLoginModal();
+  } catch(e) {
+    if (err) err.textContent = e.message || 'Error al conectar';
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function doLogin() {
+  const input = document.getElementById('login-input');
+  const err = document.getElementById('login-error');
+  if (!input || !input.value.trim()) return;
+  if (err) err.textContent = '';
+  try { await loginByName(input.value.trim()); }
+  catch(e) { if (err) err.textContent = e.message || 'Error'; }
+}
+
+async function loginByName(nameAndCode) {
+  const apiKey = localStorage.getItem('d2apikey') || '550b4880a3864f15babc4ee93ab3133b';
+  const parts = nameAndCode.split('#');
+  if (parts.length !== 2) throw new Error('Formato: Nombre#1234');
+  const displayName = parts[0].trim();
+  const code = parseInt(parts[1].trim());
+  if (isNaN(code)) throw new Error('Código numérico inválido');
+  const res = await fetch('https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayerByBungieName/-1/', {
+    method: 'POST',
+    headers: {'X-API-Key': apiKey, 'Content-Type': 'application/json'},
+    body: JSON.stringify({displayName, displayNameCode: code})
+  });
+  if (!res.ok) throw new Error('Error de red: ' + res.status);
+  const data = await res.json();
+  if (!data.Response || data.Response.length === 0) throw new Error('Guardián no encontrado');
+  const profile = data.Response[0];
+  currentUser = {
+    membershipId: profile.membershipId,
+    membershipType: profile.membershipType,
+    displayName: nameAndCode
+  };
+  localStorage.setItem('d2user', JSON.stringify(currentUser));
+  loadState();
+  updateHeader();
+  renderCurrentTab();
+  showUserBadge();
+}
+
+function doLogout() {
+  if (!confirm('¿Cerrar sesión?')) return;
+  currentUser = null;
+  localStorage.removeItem('d2user');
+  loadState();
+  updateHeader();
+  renderCurrentTab();
+  const badge = document.getElementById('user-badge');
+  const loginBtn = document.getElementById('btn-login-open');
+  if (badge) badge.style.display = 'none';
+  if (loginBtn) loginBtn.style.display = '';
+}
+
 // Isolate bottom-nav horizontal scroll from page vertical scroll
 (function(){
   const nav = document.getElementById('tabs-nav');
@@ -8567,164 +8738,14 @@ function updateMobileStats() {
   }, { passive: true });
 })();
 
+document.addEventListener('DOMContentLoaded', function() {
+  init();
+});
+
 </script>
 </body>
 </html>
-at hash → Spanish label
-const INV_STAT_LABELS = {
-  4284893193:'Cadencia', 1935470627:'Impacto', 1240592695:'Alcance',
-  155624089:'Estabilidad', 943549884:'Manejo', 4188031367:'Vel. de recarga',
-  1345609583:'Apuntado auto.', 3871231066:'Zoom', 2715839340:'Direc. retroceso',
-  1931675084:'Tam. inventario', 925767036:'Munición',
-};
-// Damage type → label
-const INV_DMG_LABELS = {0:'',1:'Cinético ◎',2:'Arco ⚡',3:'Solar ☀',4:'Vacío ◆',5:'',6:'Estasis ❄',7:'Hebra 🌿'};
-// Ammo type from weapon type string
-function invGetAmmoType(t){
-  if(!t)return'';
-  const l=t.toLowerCase();
-  if(l.includes('espada')||l.includes('ametralladora')||l.includes('lanzacohetes')||l.includes('lanzagranadas pesad'))return'🔴 Pesada';
-  if(l.includes('escopeta')||l.includes('francotirador')||l.includes('fusión')||l.includes('ffl')||l.includes('arco de combate')||l.includes('lanzagranadas'))return'🟢 Especial';
-  return'🔵 Primaria';
-}
-
-function loadUser() {
-  try {
-    const raw = localStorage.getItem(AUTH_KEY);
-    if (raw) currentUser = JSON.parse(raw);
-  } catch(e) { currentUser = null; }
-  updateLoginUI();
-}
-
-function updateLoginUI() {
-  const badge = document.getElementById('user-badge');
-  const badgeName = document.getElementById('user-badge-name');
-  if (!badge) return;
-  if (currentUser) {
-    badge.style.display = 'flex';
-    if (badgeName) badgeName.textContent = currentUser.displayName;
-  } else {
-    badge.style.display = 'none';
-  }
-  updateLoginUIDevice();
-}
-
-async function doLogin() {
-  const input = document.getElementById('login-input');
-  const errEl = document.getElementById('login-error');
-  const val = input.value.trim();
-  if (!val) return;
-  errEl.textContent = 'Buscando…';
-
-  const parts = val.split('#');
-  if (parts.length !== 2 || isNaN(parts[1])) {
-    errEl.textContent = 'Formato: Nombre#1234';
-    return;
-  }
-  const [displayName, code] = parts;
-
-  try {
-    const res = await fetch(BNET + '/Platform/Destiny2/SearchDestinyPlayerByBungieName/-1/', {
-      method: 'POST',
-      headers: { 'X-API-Key': localStorage.getItem('d2apikey') || '550b4880a3864f15babc4ee93ab3133b', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ displayName, displayNameCode: parseInt(code) })
-    });
-    const data = await res.json();
-    if (!data.Response || !data.Response.length) {
-      errEl.textContent = 'Guardián no encontrado';
-      return;
-    }
-    // Prefer crossSaveOverride match
-    const player = data.Response.find(p => p.crossSaveOverride === p.membershipType) || data.Response[0];
-    currentUser = {
-      membershipId: player.membershipId,
-      membershipType: player.membershipType,
-      displayName: val
-    };
-    localStorage.setItem(AUTH_KEY, JSON.stringify(currentUser));
-    errEl.textContent = '';
-    input.value = '';
-    updateLoginUI();
-    invLoaded = false;
-    loadState();
-    updateHeader();
-    renderCurrentTab();
-    applyAllIcons();
-  } catch(e) {
-    errEl.textContent = 'Error de conexión';
-  }
-}
-
-function doLogout() {
-  currentUser = null;
-  localStorage.removeItem(AUTH_KEY);
-  invLoaded = false;
-  updateLoginUI();
-  loadState();
-  updateHeader();
-  renderCurrentTab();
-  applyAllIcons();
-}
-
-// =========== INVENTARIO TAB ===========
-async function initInventario() {
-  const prompt = document.getElementById('inv-login-prompt');
-  const content = document.getElementById('inv-content');
-  if (!currentUser) {
-    if (prompt) prompt.style.display = 'block';
-    if (content) content.style.display = 'none';
-    return;
-  }
-  if (prompt) prompt.style.display = 'none';
-  if (content) content.style.display = 'block';
-
-  // If already loaded, just re-render from cached data (picks up any perk marker changes instantly)
-  if (invLoaded) {
-    renderInventario();
-    return;
-  }
-
-  setInvStatus('Cargando inventario…');
-  try {
-    await loadCollectibleMap();
-    setInvStatus('Cargando inventario del guardián…');
-    await fetchUserInventoryWithPerks();
-    renderInventario();
-    setInvStatus('');
-    invLoaded = true;
-  } catch(e) {
-    setInvStatus('Error: ' + e.message);
-    console.error('[Inventario]', e);
-  }
-}
-
-function setInvStatus(msg) {
-  const el = document.getElementById('inv-status');
-  if (!el) return;
-  el.textContent = msg;
-  el.style.display = msg ? 'block' : 'none';
-}
-
-async function loadCollectibleMap() {
-  // Build invPerkNameToKey from static PERK_DEFS (no API needed)
-  invPerkNameToKey = {};
-  Object.entries(PERK_DEFS).forEach(([key, def]) => {
-    if (def.e) invPerkNameToKey[def.e.trim().toLowerCase()] = key;
-  });
-
-  try {
-    const cached = localStorage.getItem(COLLECTIBLE_CACHE_KEY);
-    if (cached) {
-      const {ts, map, itemHashMap} = JSON.parse(cached);
-      if (Date.now() - ts < 24*60*60*1000) {
-        invCollectibleMap = map;
-        invItemHashToWeaponId = itemHashMap || {};
-        // Also load plug hash caches
-        try {
-          const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY);
-          if (pc) invPlugItemCache = JSON.parse(pc);
-        } catch(e2) {}
-        try {
+ try {
           const pn = localStorage.getItem('d2plugnames.v1');
           if (pn) invPlugNameCache = JSON.parse(pn);
         } catch(e3) {}
