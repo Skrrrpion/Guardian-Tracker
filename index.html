@@ -235,7 +235,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .whdr{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;border-bottom:1px solid var(--border)}
 .wtitle{grid-column:1;grid-row:1;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;padding:8px 12px 3px}
 .wname{font-family:'Chakra Petch',sans-serif;font-size:32px;font-weight:700;color:var(--text-primary)}
-.wname-godstar{color:var(--marker-god);font-size:22px;margin-left:6px;vertical-align:middle;text-shadow:0 0 8px rgba(201,168,76,.7);animation:godstar-pulse 2s ease-in-out infinite}
+.wname-godstar{font-size:22px;margin-left:6px;vertical-align:middle;color:rgba(201,168,76,.18);transition:color .3s,text-shadow .3s}
+.wname-godstar.active{color:var(--marker-god);text-shadow:0 0 8px rgba(201,168,76,.7);animation:godstar-pulse 2s ease-in-out infinite}
 @keyframes godstar-pulse{0%,100%{text-shadow:0 0 8px rgba(201,168,76,.7)}50%{text-shadow:0 0 16px rgba(201,168,76,1),0 0 28px rgba(201,168,76,.4)}}
 .wname-exo{color:var(--accent-gold-light)}
 .ename{font-size:11px;color:var(--text-muted);font-style:italic}
@@ -297,7 +298,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .aslothedr{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
 .aslotname{font-family:'Chakra Petch',sans-serif;font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px}
 .archgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:5px}
-.arow{display:flex;align-items:center;gap:6px;padding:5px 7px;background:var(--bg-panel);border:1px solid var(--border);font-size:9px;min-width:0}
+.arow{display:flex;align-items:center;gap:6px;padding:5px 7px;background:var(--bg-panel);border:1px solid var(--border);font-size:9px;min-width:0;cursor:pointer;user-select:none;transition:border-color .15s,background .15s}
+.arow:hover{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.03)}
 .astat-icons{display:flex;align-items:center;gap:3px;flex:1}
 .astat-icons img,.astat-img{width:26px;height:26px;border-radius:3px;object-fit:cover}
 .arow.mgod{border-color:var(--marker-god);background:rgba(201,168,76,.06)}
@@ -485,6 +487,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 #mobile-stats-bar{display:none;gap:0;padding:0;background:var(--bg-panel);border-bottom:1px solid var(--border);overflow-x:hidden;flex-wrap:wrap}
 #mobile-stats-bar .mob-row{display:flex;width:100%;border-bottom:1px solid var(--border)}
 #mobile-stats-bar .mob-row:last-child{border-bottom:none}
+#mobile-stats-bar .mob-row-refresh{justify-content:flex-end;padding:5px 10px;background:rgba(199,169,255,.03)}
+#mobile-stats-bar .mob-refresh-btn{background:none;border:1px solid rgba(199,169,255,.25);border-radius:4px;color:rgba(199,169,255,.7);font-size:11px;padding:4px 12px;cursor:pointer;font-family:'Chakra Petch',sans-serif;letter-spacing:.5px}
 #mobile-stats-bar .stat-chip{flex:1;min-width:0;padding:7px 4px;border-radius:0;border-left:none;border-top:none;border-bottom:none;border-right:1px solid var(--border);clip-path:none;display:flex;flex-direction:column;align-items:center;gap:1px}
 #mobile-stats-bar .stat-chip:last-child{border-right:none}
 #mobile-stats-bar .stat-chip .label{font-size:8px;letter-spacing:.3px;text-align:center;white-space:nowrap;overflow:hidden;max-width:100%;text-overflow:ellipsis}
@@ -538,13 +542,15 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   body.is-mobile .wcard-sub{font-size:12px}
   body.is-mobile .wcard-rarity-bar{width:4px;height:36px}
 
-  /* Perk columns: stack vertically */
+  /* Perk columns: 4-col grid on mobile */
   body.is-mobile .pcols,body.is-mobile .pcols4{grid-template-columns:1fr 1fr!important;gap:4px!important}
   body.is-mobile .perk-col{border-right:none!important;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:4px}
   body.is-mobile .perk-col:last-child{border-bottom:none}
   /* Perk items bigger touch targets */
   body.is-mobile .perk-item{padding:8px 10px;font-size:13px}
   body.is-mobile .perk-check{width:18px;height:18px;flex-shrink:0}
+  /* stat-chk hidden on mobile (barrel/mag stat selector — too small to use) */
+  body.is-mobile .stat-chk{display:none!important}
 
   /* ── Weapon cards: contain overflow ── */
   body.is-mobile .wcard{min-width:0;max-width:100%;box-sizing:border-box;overflow:hidden}
@@ -555,22 +561,33 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   body.is-mobile .wleg .perk-icon{width:32px!important;height:32px!important}
   body.is-mobile .wleg .pmk-group{display:flex;gap:2px;justify-content:center}
   body.is-mobile .wleg .pmk-god,body.is-mobile .wleg .pmk-semi{font-size:10px;padding:1px 3px;min-height:unset!important}
-  body.is-mobile .stat-chk{width:16px;height:16px}
-  body.is-mobile .wleg .pcol4{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:3px}
+  body.is-mobile .wleg .pcol4{display:flex;flex-direction:column;gap:2px}
   body.is-mobile .wleg .pcols4{grid-template-columns:repeat(4,1fr)!important;gap:3px!important}
+  /* Fixed-height perk items so all 4 columns align in rows */
+  body.is-mobile .wleg .pi{height:44px!important;box-sizing:border-box!important;flex-shrink:0}
   body.is-mobile #weapons-grid > *,
   body.is-mobile #weapons-leg-grid > *,
   body.is-mobile #weapons-exo-grid > *{min-width:0}
   body.is-mobile .wcard-name{white-space:normal;word-break:break-word;font-size:13px}
 
-  /* ── Weapon card mobile: name + action area ── */
-  body.is-mobile .wleg .wname,body.is-mobile .wexo .wname{font-size:14px!important;white-space:normal;word-break:break-word;line-height:1.3}
-  body.is-mobile .wleg .wname-exo,body.is-mobile .wexo .wname-exo{font-size:13px!important;white-space:normal;word-break:break-word;line-height:1.3}
-  body.is-mobile .wleg .wact,body.is-mobile .wexo .wact{flex-direction:column!important;gap:4px;padding:6px 8px!important;min-width:72px}
+  /* ── Weapon card mobile: full redesign ── */
+  /* whdr becomes a flex column: title row → tags row → action footer */
+  body.is-mobile .wleg .whdr,body.is-mobile .wexo .whdr{display:flex!important;flex-direction:column!important;grid-template-columns:unset!important}
+  /* Title row: image + big name + godstar */
+  body.is-mobile .wleg .wtitle,body.is-mobile .wexo .wtitle{grid-column:unset!important;grid-row:unset!important;padding:10px 12px 4px;align-items:center;flex-wrap:nowrap}
+  body.is-mobile .wleg .wname,body.is-mobile .wexo .wname{font-size:17px!important;white-space:normal;word-break:break-word;line-height:1.25;flex:1}
+  body.is-mobile .wleg .wname-exo,body.is-mobile .wexo .wname-exo{font-size:15px!important;white-space:normal;word-break:break-word;line-height:1.25;flex:1}
+  body.is-mobile .wname-godstar{font-size:18px!important;margin-left:4px;flex-shrink:0}
+  /* Tags row */
+  body.is-mobile .wleg .wtags,body.is-mobile .wexo .wtags{grid-column:unset!important;grid-row:unset!important;padding:0 12px 8px}
+  /* Action footer: buttons side by side */
+  body.is-mobile .wleg .wact,body.is-mobile .wexo .wact{grid-column:unset!important;grid-row:unset!important;flex-direction:row!important;gap:8px;padding:8px 12px!important;border-top:1px solid var(--border);min-width:unset;align-self:unset;justify-content:stretch}
   body.is-mobile .wact-sep{display:none!important}
-  body.is-mobile .wleg .sbtn,body.is-mobile .wexo .sbtn{font-size:9px!important;padding:3px 6px!important;white-space:nowrap}
-  body.is-mobile .wleg .ownbtn,body.is-mobile .wexo .ownbtn{font-size:10px!important;padding:5px 6px!important;width:100%}
-  body.is-mobile .gbanner{font-size:9px;padding:2px 5px;text-align:center}
+  body.is-mobile .wleg .sug,body.is-mobile .wexo .sug{flex:1;display:flex;flex-direction:column}
+  body.is-mobile .wleg .wact-own,body.is-mobile .wexo .wact-own{flex:1;display:flex!important;flex-direction:column;align-items:stretch!important}
+  body.is-mobile .wleg .sbtn,body.is-mobile .wexo .sbtn{font-size:11px!important;padding:7px 6px!important;white-space:nowrap;width:100%;flex:1}
+  body.is-mobile .wleg .ownbtn,body.is-mobile .wexo .ownbtn{font-size:11px!important;padding:7px 6px!important;width:100%}
+  body.is-mobile .gbanner{font-size:10px;padding:3px 6px;text-align:center;margin-top:2px}
 
   /* ── Exotic armor: 2 columns, compact ── */
   body.is-mobile .eagrid{grid-template-columns:1fr!important;gap:8px!important}
@@ -894,8 +911,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   margin-top:0;padding-top:0;border-top:none;grid-template-columns:repeat(4,1fr);
 }
 /* Legendary: purple active */
-.aslot .arow.mgod{border-color:#a673ff !important;background:rgba(166,115,255,.1) !important}
-.aslot .amk.mgod{color:#c084fc !important}
+.aslot .arow.mgod{border-color:#a673ff !important;background:rgba(166,115,255,.14) !important;box-shadow:0 0 6px rgba(166,115,255,.2) !important}
 /* Exotic base row: gold-tinted border so it fits the gold card bg */
 .eacard .arow{
   border-color:rgba(180,100,20,.3);
@@ -1230,10 +1246,16 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
 <!-- MOBILE STATS BAR -->
 <div id="mobile-stats-bar">
+  <div class="mob-row mob-row-refresh">
+    <button onclick="clearIconCache()" class="mob-refresh-btn" title="Actualizar datos de Bungie">🔄 Actualizar</button>
+  </div>
   <div class="mob-row">
     <div class="stat-chip wpurple"><span class="label">⚔ Armas</span><span class="value" id="mstat-armas">0</span></div>
-    <div class="stat-chip wpurple"><span class="label">🛡 Sets</span><span class="value" id="mstat-armor">0</span></div>
-    <div class="stat-chip wgold"><span class="label">⚔ Exó.</span><span class="value" id="mstat-exo">0</span></div>
+    <div class="stat-chip wpurple"><span class="label">🛡 Arm. Leg.</span><span class="value" id="mstat-armor-leg">0</span></div>
+    <div class="stat-chip wpurple"><span class="label">📦 Sets</span><span class="value" id="mstat-armor">0</span></div>
+  </div>
+  <div class="mob-row">
+    <div class="stat-chip wgold"><span class="label">⚔ Exó. Armas</span><span class="value" id="mstat-exo">0</span></div>
     <div class="stat-chip wgold"><span class="label">✨ Exó. Arm.</span><span class="value" id="mstat-armor-exo">0</span></div>
   </div>
   <div class="mob-row">
@@ -1315,11 +1337,13 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         <option value="exótico">Exótico</option>
       </select>
     </div>
-    <div id="f-wleg-missing" class="filter-toggle" onclick="toggleWLegMissing(this)">
-      <span class="dot"></span>Solo me falta
-    </div>
-    <div id="f-wleg-craft" class="filter-toggle craft-toggle" onclick="toggleWLegCraft(this)">
-      <span class="dot"></span>⚒ Fabricables
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <div id="f-wleg-missing" class="filter-toggle" onclick="toggleWLegMissing(this)">
+        <span class="dot"></span>Solo me falta
+      </div>
+      <div id="f-wleg-craft" class="filter-toggle craft-toggle" onclick="toggleWLegCraft(this)">
+        <span class="dot"></span>⚒ Fabricables
+      </div>
     </div>
   <span id="wleg-count" class="results-count"></span>
   </div>
@@ -3491,7 +3515,7 @@ function buildWeaponCard(w) {
     <div class="whdr">
       <div class="wtitle">
         ${(()=>{const _e=(w.e||w.n).toLowerCase();const _u=(iconMap[_e]?.icon)||'';return _u?`<img class="wimg" src="${_u}" data-wimg="${_e}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`:`<img class="wimg" data-wimg="${_e}" src="" style="display:none;width:52px;height:52px;" onerror="this.style.display='none'">`;})()}
-        <span class="wname ${exotic?'wname-exo':''}" data-wkey="${(w.e||w.n).toLowerCase()}">${w.n}${(()=>{const g2=(w.col2||[]).some(pk=>ws.perks[pk]?.marker===1);const g3=(w.col3||[]).some(pk=>ws.perks[pk]?.marker===1);return g2&&g3?'<span class="wname-godstar" title="God Roll configurado en ambos rasgos">★</span>':''})()}</span>
+        <span class="wname ${exotic?'wname-exo':''}" data-wkey="${(w.e||w.n).toLowerCase()}">${w.n}${(()=>{const g2=(w.col2||[]).some(pk=>ws.perks[pk]?.marker===1);const g3=(w.col3||[]).some(pk=>ws.perks[pk]?.marker===1);return `<span class="wname-godstar${g2&&g3?' active':''}" title="God Roll configurado en ambos rasgos">★</span>`;})()}</span>
 
       </div>
       <div class="wtags">
@@ -3506,7 +3530,7 @@ function buildWeaponCard(w) {
       <div class="wact">
         ${sugHTML}
         <div class="wact-sep"></div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div class="wact-own" style="display:flex;flex-direction:column;align-items:center;gap:6px">
           <button class="ownbtn ${owned?'on':''}" onclick="toggleOwned('${w.id}')">${owned?'✓ Obtenido':'Obtenido'}</button>
           ${godBanner}
         </div>
@@ -3638,9 +3662,9 @@ function buildArmorSlotCard(set, slotDef) {
     const iconHtml = `<span class="astat-icons" title="${a.stat}">
       ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" class="astat-img" style="${ic1?'':'display:none'}" onerror="this.style.display='none';var f=this.nextElementSibling;if(f)f.style.display=''"><span class="astat-fb" style="${ic1?'display:none':''}">◈</span>`:''}
       ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" class="astat-img" style="${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>`;
-    return `<div class="arow${v?' mgod':''}" id="lgod_${sid}_${a.id}" title="${a.stat}">
+    return `<div class="arow${v?' mgod':''}" id="lgod_${sid}_${a.id}" title="${a.stat}" onclick="cycleArmorStat('${sid}','${a.id}')">
       ${iconHtml}
-      <button class="amk${v?' mgod':''}" onclick="cycleArmorStat('${sid}','${a.id}')" title="${a.stat}">★</button>
+      <span class="anm">${a.n}</span>
     </div>`;
   }).join('');
   const pieceName = slotDef.n || `${slotDef.slot} de ${set.n}`;
@@ -3710,9 +3734,9 @@ function buildExoticArmorCard(ea) {
     const iconHtml = `<span class="astat-icons" title="${a.stat}">
       ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" class="astat-img" style="${ic1?'':'display:none'}" onerror="this.style.display='none';var f=this.nextElementSibling;if(f)f.style.display=''"><span class="astat-fb" style="${ic1?'display:none':''}">◈</span>`:''}
       ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" class="astat-img" style="${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>`;
-    return `<div class="arow${v?' mgod':''}" id="egod_${ea.id}_${a.id}" title="${a.stat}">
+    return `<div class="arow${v?' mgod':''}" id="egod_${ea.id}_${a.id}" title="${a.stat}" onclick="cycleExoticStat('${ea.id}','${a.id}')">
       ${iconHtml}
-      <button class="amk${v?' mgod':''}" onclick="cycleExoticStat('${ea.id}','${a.id}')" title="${a.stat}">★</button>
+      <span class="anm">${a.n}</span>
     </div>`;
   }).join('');
   return `<div class="eacard ${obtained?'aobt':''}" id="eacard_${ea.id}">
@@ -3745,9 +3769,7 @@ function cycleExoticStat(eid, archId) {
   saveState();
   const v = state.exoticArmor[eid].stats[archId];
   const row = document.getElementById('egod_'+eid+'_'+archId);
-  if (row) { row.className = 'arow' + (v ? ' mgod' : ''); }
-  const btn = row && row.querySelector('.amk');
-  if (btn) btn.className = 'amk' + (v ? ' mgod' : '');
+  if (row) row.className = 'arow' + (v ? ' mgod' : '');
 }
 
 function cycleArmorStat(sid, archId) {
@@ -3757,9 +3779,7 @@ function cycleArmorStat(sid, archId) {
   saveState();
   const v = state.armor[sid].stats[archId];
   const row = document.getElementById('lgod_'+sid+'_'+archId);
-  if (row) { row.className = 'arow' + (v ? ' mgod' : ''); }
-  const btn = row && row.querySelector('.amk');
-  if (btn) btn.className = 'amk' + (v ? ' mgod' : '');
+  if (row) row.className = 'arow' + (v ? ' mgod' : '');
 }
 
 function toggleArmorFarm(sid) {
@@ -8515,29 +8535,42 @@ function saveApiKey() {
 function clearIconCache() {
   localStorage.removeItem(ICON_CACHE_KEY);
   iconMap = {};
+  const s = document.getElementById('icon-status');
+  if (s) s.textContent = 'Recargando iconos…';
   initIcons();
 }
 
+function updateMobileStats() {
+  const map = {
+    'mstat-armas':     'stat-armas',
+    'mstat-armor-leg': 'stat-armor-leg',
+    'mstat-armor':     'stat-sets-leg',
+    'mstat-exo':       'stat-exoarmas',
+    'mstat-armor-exo': 'stat-armor-exo',
+    'mstat-titan':     'stat-titan',
+    'mstat-hunter':    'stat-hunter',
+    'mstat-warlock':   'stat-warlock'
+  };
+  Object.entries(map).forEach(([mob, desk]) => {
+    const m = document.getElementById(mob);
+    const d = document.getElementById(desk);
+    if (m && d) m.textContent = d.textContent;
+  });
+}
 
-// =========== BUNGIE LOGIN ===========
-const AUTH_KEY = 'd2auth.v1';
-const CLIENT_ID = '52718';
-const COLLECTIBLE_CACHE_KEY = 'd2coll.v7'; // v7: + sandbox perk defs for per-instance god roll
-const PERK_DEF_CACHE_KEY = 'd2perkdefs.v1';
-const PLUG_DEF_CACHE_KEY = 'd2plugdefs.v1';
-let currentUser = null;
-let invCollectibles = {};
-let invCollectibleMap = {};
-let invItemHashToWeaponId = {};   // itemDefinitionHash → weaponId
-let invPerkNameToKey = {};        // englishPerkName.toLowerCase() → perkKey
-let invSandboxPerkDefs = {};      // sandboxPerkHash → name
-let invPlugItemCache = {};        // plugItemHash → perkKey (or null)
-let invPlugNameCache = {};        // plugItemHash → raw display name (English from manifest)
-let invInstanceStats = {};        // instanceId → {statHash: value}
-let invWeaponRolls = [];          // [{weaponId, perkKeys, socketHashes, location, itemHash, instanceId}]
-let invLoaded = false;
+// Isolate bottom-nav horizontal scroll from page vertical scroll
+(function(){
+  const nav = document.getElementById('tabs-nav');
+  if (!nav) return;
+  nav.addEventListener('touchmove', function(e) {
+    e.stopPropagation();
+  }, { passive: true });
+})();
 
-// Stat hash → Spanish label
+</script>
+</body>
+</html>
+at hash → Spanish label
 const INV_STAT_LABELS = {
   4284893193:'Cadencia', 1935470627:'Impacto', 1240592695:'Alcance',
   155624089:'Estabilidad', 943549884:'Manejo', 4188031367:'Vel. de recarga',
@@ -9243,13 +9276,14 @@ async function doLoginModal() {
 // =========== MOBILE STATS BAR ===========
 function updateMobileStats() {
   const map = {
-    'mstat-armas':   'stat-armas',
-    'mstat-armor':   'stat-sets-leg',
-    'mstat-exo':     'stat-exoarmas',
-    'mstat-armor-exo':'stat-armor-exo',
-    'mstat-titan':   'stat-titan',
-    'mstat-hunter':  'stat-hunter',
-    'mstat-warlock': 'stat-warlock'
+    'mstat-armas':     'stat-armas',
+    'mstat-armor-leg': 'stat-armor-leg',
+    'mstat-armor':     'stat-sets-leg',
+    'mstat-exo':       'stat-exoarmas',
+    'mstat-armor-exo': 'stat-armor-exo',
+    'mstat-titan':     'stat-titan',
+    'mstat-hunter':    'stat-hunter',
+    'mstat-warlock':   'stat-warlock'
   };
   Object.entries(map).forEach(([mob, desk]) => {
     const m = document.getElementById(mob);
