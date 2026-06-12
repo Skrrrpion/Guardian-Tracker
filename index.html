@@ -64,6 +64,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .filter-group{display:flex;align-items:center;gap:4px}
 .filter-group label{font-family:'Chakra Petch',sans-serif;font-size:10px;color:var(--text-muted);text-transform:uppercase;white-space:nowrap}
 .filter-input,.filter-select{background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);font-family:'Barlow',sans-serif;font-size:12px;padding:5px 8px;outline:none;transition:border-color .2s}
+#tab-armor-exo .filter-input,#tab-armor-exo .filter-select{font-size:14px;padding:6px 10px}
+#tab-armor-exo .filter-group label{font-size:12px}
 .filter-input:focus,.filter-select:focus{border-color:var(--accent-gold-dim)}
 .filter-select option{background:var(--bg-panel)}
 .filter-toggle{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border);padding:5px 10px;cursor:pointer;font-family:'Chakra Petch',sans-serif;font-size:10px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;transition:all .2s;user-select:none}
@@ -659,7 +661,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 /* ── STATS PANEL (leg weapons) ── */
 .wbody-inner{display:flex;gap:14px;align-items:flex-start}
 .wperks-wrap{flex:1;min-width:0}
-.wstat-panel{width:320px;flex-shrink:0;background:rgba(0,0,0,.35);border:1px solid rgba(124,58,237,.25);border-radius:6px;padding:16px 16px 14px;margin-top:0}
+.wstat-panel{width:400px;flex-shrink:0;background:rgba(0,0,0,.35);border:1px solid rgba(124,58,237,.25);border-radius:6px;padding:16px 16px 14px;margin-top:0}
 .wstat-title{font-family:'Chakra Petch',sans-serif;font-size:10px;color:rgba(196,132,252,.7);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
 .wstat-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
 .wstat-lbl{font-family:'Chakra Petch',sans-serif;font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;width:96px;flex-shrink:0;white-space:nowrap}
@@ -725,13 +727,13 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .aslot.aobt{border-color:var(--accent-gold) !important}
 .eacard.aobt{border-color:var(--accent-gold) !important}
 
-/* ── 3-COLUMN PERK LAYOUT ── */
-.pcols4{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:8px}
-.pcol4{display:flex;flex-direction:column;gap:2px;min-width:0;align-items:flex-start}
+/* ── 4-COLUMN PERK LAYOUT ── */
+.pcols4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.pcol4{display:flex;flex-direction:column;gap:2px;min-width:0;align-items:stretch}
 .pcolh{font-family:'Chakra Petch',sans-serif;font-size:11px;color:#c084fc;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;padding-left:2px}
 
 /* ── PERK ITEM (no checkbox, 2 markers) ── */
-.pi{display:flex;align-items:center;gap:5px;padding:3px 6px;background:var(--bg-panel);border:1px solid var(--border);min-width:0;transition:border-color .15s;cursor:default}
+.pi{display:flex;align-items:center;gap:5px;padding:3px 6px;background:var(--bg-panel);border:1px solid var(--border);min-width:0;width:100%;box-sizing:border-box;transition:border-color .15s;cursor:default}
 .pi:hover{border-color:rgba(124,58,237,.4)}
 .pi.mgod{border-color:#7c3aed;background:rgba(124,58,237,.08)}
 .pi.msemi{border-color:var(--marker-semi);background:rgba(0,229,204,.04)}
@@ -795,7 +797,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
 /* Exótica → dorado */
 .eacard{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.35);border-left:4px solid var(--accent-gold);clip-path:none}
-.eacard .wname-exo{font-size:18px !important;color:var(--accent-gold-light) !important;line-height:1.2}
+.eacard .wname-exo{font-size:28px !important;color:var(--accent-gold-light) !important;line-height:1.2}
 .eacard.aobt{border-color:var(--accent-gold) !important;background:rgba(201,168,76,.12) !important}
 .eacard .ownbtn.on{background:rgba(201,168,76,.25) !important;border-color:var(--accent-gold) !important;color:var(--accent-gold-light) !important}
 .eacard .pdesc{font-size:14px !important;line-height:1.65}
@@ -3622,8 +3624,8 @@ function buildArmorSlotCard(set, slotDef) {
     const ic1 = primId ? (iconMap['stat:'+primId]?.icon||'') : '';
     const ic2 = secId  ? (iconMap['stat:'+secId ]?.icon||'') : '';
     const iconHtml = `<span class="astat-icons" title="${a.stat}">
-      ${ic1?`<img src="${ic1}" data-pimg="stat:${primId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;" onerror="this.style.display='none'">`:`<span style="font-size:10px;opacity:.5">◈</span>`}
-      ${ic2?`<img src="${ic2}" data-pimg="stat:${secId}"  style="width:18px;height:18px;border-radius:2px;object-fit:cover;" onerror="this.style.display='none'">`:''}</span>`;
+      ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;${ic1?'':'display:none'}" onerror="this.style.display='none';var f=this.nextElementSibling;if(f)f.style.display=''"><span class="astat-fb" style="font-size:11px;opacity:.55;${ic1?'display:none':''}">◈</span>`:''}
+      ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>`;
     return `<div class="arow${v?' mgod':''}" id="lgod_${sid}_${a.id}" title="${a.stat}">
       ${iconHtml}
       <button class="amk${v?' mgod':''}" onclick="cycleArmorStat('${sid}','${a.id}')" title="${a.stat}">★</button>
@@ -3694,8 +3696,8 @@ function buildExoticArmorCard(ea) {
     const ic1 = primId ? (iconMap['stat:'+primId]?.icon||'') : '';
     const ic2 = secId  ? (iconMap['stat:'+secId ]?.icon||'') : '';
     const iconHtml = `<span class="astat-icons" title="${a.stat}">
-      ${ic1?`<img src="${ic1}" data-pimg="stat:${primId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;" onerror="this.style.display='none'">`:`<span style="font-size:10px;opacity:.5">◈</span>`}
-      ${ic2?`<img src="${ic2}" data-pimg="stat:${secId}"  style="width:18px;height:18px;border-radius:2px;object-fit:cover;" onerror="this.style.display='none'">`:''}</span>`;
+      ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;${ic1?'':'display:none'}" onerror="this.style.display='none';var f=this.nextElementSibling;if(f)f.style.display=''"><span class="astat-fb" style="font-size:11px;opacity:.55;${ic1?'display:none':''}">◈</span>`:''}
+      ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>`;
     return `<div class="arow${v?' mgod':''}" id="egod_${ea.id}_${a.id}" title="${a.stat}">
       ${iconHtml}
       <button class="amk${v?' mgod':''}" onclick="cycleExoticStat('${ea.id}','${a.id}')" title="${a.stat}">★</button>
@@ -8461,6 +8463,9 @@ function applyAllIcons() {
     if (url && img.getAttribute('src') !== url) {
       img.setAttribute('src', url);
       img.style.display = '';
+      // Hide adjacent fallback text span (used for armor stat icons)
+      const next = img.nextElementSibling;
+      if (next?.classList.contains('astat-fb')) next.style.display = 'none';
     }
   });
 }
