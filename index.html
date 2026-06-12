@@ -1245,19 +1245,13 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   </div>
 
   <div id="login-area">
-    <!-- Desktop inline form -->
-    <div id="login-form" class="desktop-only">
-      <input id="login-input" type="text" placeholder="Guardián#1234" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
-      <button class="btn-login" onclick="doLogin()">Conectar</button>
-    </div>
-    <!-- Always visible: open modal button (shown when not logged in) -->
+    <!-- Open modal button (shown when not logged in) -->
     <button id="btn-login-open" onclick="openLoginModal()" title="Iniciar sesión con Bungie">🔐 Login</button>
     <!-- Logged-in badge -->
     <div id="user-badge" style="display:none">
       <span class="guardian-name" id="user-badge-name"></span>
       <button class="btn-login logout" onclick="doLogout()" style="padding:3px 10px;clip-path:none;font-size:10px">✕</button>
     </div>
-    <span id="login-error" class="desktop-only"></span>
   </div>
 
 </header>
