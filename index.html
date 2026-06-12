@@ -8313,11 +8313,13 @@ async function initInventario() {
     if (content) content.style.display = 'none';
     return;
   }
-  if (invLoaded) { renderInventario(); return; }
   if (prompt) prompt.style.display = 'none';
   if (content) content.style.display = 'block';
 
-  setInvStatus('Cargando manifiesto de Bungie…');
+  // If already loaded, show cached data immediately then refresh in background
+  if (invLoaded) renderInventario();
+
+  setInvStatus('Cargando inventario…');
   try {
     await loadCollectibleMap();
     setInvStatus('Cargando inventario del guardián…');
@@ -8423,7 +8425,7 @@ async function fetchUserInventoryWithPerks() {
   const headers = {'X-API-Key': apiKey};
   if (accessToken) headers['Authorization'] = 'Bearer ' + accessToken;
 
-  const profileUrl = `${BNET}/Platform/Destiny2/${membershipType}/Profile/${membershipId}/?components=102,201,205,302`;
+  const profileUrl = `${BNET}/Platform/Destiny2/${membershipType}/Profile/${membershipId}/?components=102,201,205,305`;
   const res = await fetch(profileUrl, { headers });
   if (!res.ok) throw new Error(`Error HTTP ${res.status} al cargar el perfil`);
   const ct = res.headers.get('content-type') || '';
@@ -8505,17 +8507,17 @@ function classifyGodRoll(weaponId, instancePerkKeys) {
   const anySemiMarked = col23.some(pk => ws.perks?.[pk]?.marker === 2);
   if (!anyGodMarked && !anySemiMarked) return 'unmarked';
 
-  // Per-instance check: does this specific copy have the marked perks?
-  if (instancePerkKeys && instancePerkKeys.length > 0) {
+  // Per-instance check: if perkKeys is an Array (even empty), always use per-instance result
+  if (Array.isArray(instancePerkKeys)) {
     const perkKeySet = new Set(instancePerkKeys);
     const hasGodPerk  = col23.some(pk => ws.perks?.[pk]?.marker === 1 && perkKeySet.has(pk));
     const hasSemiPerk = col23.some(pk => ws.perks?.[pk]?.marker === 2 && perkKeySet.has(pk));
     if (hasGodPerk)  return 'god';
     if (hasSemiPerk) return 'semi';
-    return 'normal'; // has markers on weapon type but this copy didn't roll them
+    return 'normal'; // this copy doesn't have the marked perks
   }
 
-  // Fallback (perk defs not loaded): weapon-level classification
+  // Fallback only when perkKeys is null/undefined (no socket data at all)
   if (anyGodMarked)  return 'god';
   if (anySemiMarked) return 'semi';
   return 'normal';
