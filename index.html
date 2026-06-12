@@ -1816,6 +1816,44 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   </div>
 </div>
 
+<div id="tab-inventario" class="tab-panel">
+  <div class="inv-header">
+    <h2>Inventario</h2>
+    <span id="inv-status" class="inv-status" style="display:none"></span>
+  </div>
+  <div id="inv-login-prompt" class="inv-login-prompt" style="display:none">
+    <p>Inicia sesión con Bungie para ver tu inventario</p>
+    <small>Se requiere una cuenta de Bungie vinculada</small>
+  </div>
+  <div id="inv-content" style="display:none">
+    <div class="inv-filters">
+      <select id="inv-filter-type" onchange="filterInventario()" style="font-size:12px;padding:5px 8px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);border-radius:4px">
+        <option value="">Todas las clasificaciones</option>
+        <option value="god">God Rolls ★</option>
+        <option value="semi">Semi God ◆</option>
+        <option value="normal">Normal</option>
+        <option value="unmarked">Sin clasificar</option>
+      </select>
+      <span class="inv-count">Total: <span id="inv-total-count">0</span> &nbsp;·&nbsp; <span class="rc-god">★ <span id="inv-god-count">0</span></span> &nbsp;·&nbsp; <span class="rc-semi">◆ <span id="inv-semi-count">0</span></span> &nbsp;·&nbsp; <span class="rc-normal"><span id="inv-normal-count">0</span> normales</span></span>
+    </div>
+    <div id="inv-sec-god">
+      <div class="inv-section-title">★ God Rolls</div>
+      <div class="inv-grid" id="inv-grid-god"></div>
+    </div>
+    <div id="inv-sec-semi">
+      <div class="inv-section-title">◆ Semi God Rolls</div>
+      <div class="inv-grid" id="inv-grid-semi"></div>
+    </div>
+    <div id="inv-sec-normal">
+      <div class="inv-section-title">Normales</div>
+      <div class="inv-grid" id="inv-grid-normal"></div>
+    </div>
+    <div id="inv-sec-unmarked">
+      <div class="inv-section-title">Sin clasificar</div>
+      <div class="inv-grid" id="inv-grid-unmarked"></div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════
@@ -8748,7 +8786,6 @@ async function doLogin() {
 
 async function loginByName(nameAndCode) {
   const hashIdx = nameAndCode.indexOf('#');
-  if (hashIdx < 1) throw new Error('Formato: Nombre#1234');
   const displayName = nameAndCode.substring(0, hashIdx).trim();
   const codePart = nameAndCode.substring(hashIdx + 1).trim();
   const code = parseInt(codePart, 10);
@@ -8775,6 +8812,7 @@ function doLogout() {
   if (!confirm('¿Cerrar sesión?')) return;
   currentUser = null;
   localStorage.removeItem('d2user');
+  invLoaded = false;
   loadState(); updateHeader(); renderCurrentTab();
   const badge = document.getElementById('user-badge');
   const loginBtn = document.getElementById('btn-login-open');
@@ -8790,6 +8828,316 @@ function doLogout() {
     e.stopPropagation();
   }, { passive: true });
 })();
+
+// ═══════════════════════════════════════════
+// INVENTARIO — variables & functions
+// ═══════════════════════════════════════════
+const COLLECTIBLE_CACHE_KEY = 'd2coll.v7';
+const PLUG_DEF_CACHE_KEY    = 'd2plugdefs.v1';
+let invCollectibles       = {};
+let invCollectibleMap     = {};
+let invItemHashToWeaponId = {};
+let invPerkNameToKey      = {};
+let invSandboxPerkDefs    = {};
+let invPlugItemCache      = {};
+let invWeaponRolls        = [];
+let invLoaded             = false;
+
+async function initInventario() {
+  const prompt  = document.getElementById('inv-login-prompt');
+  const content = document.getElementById('inv-content');
+  if (!currentUser) {
+    if (prompt)  prompt.style.display  = 'block';
+    if (content) content.style.display = 'none';
+    return;
+  }
+  if (invLoaded) { renderInventario(); return; }
+  if (prompt)  prompt.style.display  = 'none';
+  if (content) content.style.display = 'block';
+
+  setInvStatus('Cargando manifiesto de Bungie…');
+  try {
+    await loadCollectibleMap();
+    setInvStatus('Cargando inventario del guardián…');
+    await fetchUserInventoryWithPerks();
+    renderInventario();
+    setInvStatus('');
+    invLoaded = true;
+  } catch(e) {
+    setInvStatus('Error: ' + e.message);
+    console.error('[Inventario]', e);
+  }
+}
+
+function setInvStatus(msg) {
+  const el = document.getElementById('inv-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+async function loadCollectibleMap() {
+  invPerkNameToKey = {};
+  Object.entries(PERK_DEFS).forEach(([key, def]) => {
+    if (def.e) invPerkNameToKey[def.e.trim().toLowerCase()] = key;
+  });
+
+  try {
+    const cached = localStorage.getItem(COLLECTIBLE_CACHE_KEY);
+    if (cached) {
+      const {ts, map, itemHashMap} = JSON.parse(cached);
+      if (Date.now() - ts < 24*60*60*1000) {
+        invCollectibleMap = map;
+        invItemHashToWeaponId = itemHashMap || {};
+        try { const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY); if (pc) invPlugItemCache = JSON.parse(pc); } catch(e2) {}
+        return;
+      }
+    }
+  } catch(e) {}
+
+  const apiKey = OAUTH_API_KEY;
+  const safeJson = async (url, hdrs) => {
+    const r = await fetch(url, hdrs ? {headers: hdrs} : undefined);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const ct = r.headers.get('content-type') || '';
+    if (!ct.includes('json') && !ct.includes('octet-stream'))
+      throw new Error('La URL devolvio HTML en lugar de JSON.');
+    return r.json();
+  };
+
+  const mData = await safeJson(BNET + '/Platform/Destiny2/Manifest/', {'X-API-Key': apiKey});
+  if (!mData.Response) throw new Error('Manifiesto no disponible (ErrorStatus: ' + (mData.ErrorStatus || '?') + ')');
+  const paths = mData.Response.jsonWorldComponentContentPaths.en;
+  if (!paths || !paths.DestinyCollectibleDefinition) throw new Error('Path de coleccionables no encontrado');
+
+  const cData = await safeJson(BNET + paths.DestinyCollectibleDefinition);
+
+  const weaponByName = {};
+  WEAPONS.forEach(function(w) { if (w && !w.exotic && w.e) weaponByName[w.e.trim().toLowerCase()] = w.id; });
+  if (typeof ARMOR_SETS !== 'undefined') {
+    ARMOR_SETS.forEach(function(set) {
+      (set.slots || []).forEach(function(slot) { if (slot.n) weaponByName[slot.n.trim().toLowerCase()] = slot.id; });
+    });
+  }
+
+  const map = {}, itemHashMap = {};
+  Object.entries(cData).forEach(function([hash, def]) {
+    const name = def.displayProperties && def.displayProperties.name ? def.displayProperties.name.trim().toLowerCase() : '';
+    if (!name) return;
+    map[name] = parseInt(hash);
+    if (def.itemHash && weaponByName[name]) itemHashMap[def.itemHash] = weaponByName[name];
+  });
+
+  invCollectibleMap = map;
+  invItemHashToWeaponId = itemHashMap;
+  try { localStorage.setItem(COLLECTIBLE_CACHE_KEY, JSON.stringify({ts: Date.now(), map: map, itemHashMap: itemHashMap})); } catch(e) {}
+  try { const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY); if (pc) invPlugItemCache = JSON.parse(pc); } catch(e) {}
+}
+
+async function fetchUserInventoryWithPerks() {
+  const membershipType = currentUser.membershipType;
+  const membershipId   = currentUser.membershipId;
+  const accessToken    = currentUser.accessToken;
+  if (!membershipType || !membershipId) throw new Error('Sesion incompleta — vuelve a iniciar sesion.');
+  const apiKey = OAUTH_API_KEY;
+  const headers = {'X-API-Key': apiKey};
+  if (accessToken) headers['Authorization'] = 'Bearer ' + accessToken;
+
+  const profileUrl = BNET + '/Platform/Destiny2/' + membershipType + '/Profile/' + membershipId + '/?components=102,201,205,302';
+  const res = await fetch(profileUrl, {headers: headers});
+  if (!res.ok) throw new Error('Error HTTP ' + res.status + ' al cargar el perfil');
+  const ct = res.headers.get('content-type') || '';
+  if (!ct.includes('json')) throw new Error('El perfil devolvio HTML. Vuelve a iniciar sesion.');
+  const data = await res.json();
+  if (!data.Response) throw new Error('Perfil privado o token caducado (ErrorStatus: ' + (data.ErrorStatus || '?') + ').');
+
+  const allItems = [];
+  const vaultItems = (data.Response.profileInventory && data.Response.profileInventory.data && data.Response.profileInventory.data.items) ? data.Response.profileInventory.data.items : [];
+  vaultItems.forEach(function(item) { allItems.push(Object.assign({}, item, {location:'vault'})); });
+  const charInv = (data.Response.characterInventories && data.Response.characterInventories.data) ? data.Response.characterInventories.data : {};
+  const charEq  = (data.Response.characterEquipment  && data.Response.characterEquipment.data)  ? data.Response.characterEquipment.data  : {};
+  Object.values(charInv).forEach(function(c) { (c.items||[]).forEach(function(item) { allItems.push(Object.assign({}, item, {location:'inventory'})); }); });
+  Object.values(charEq).forEach(function(c)  { (c.items||[]).forEach(function(item) { allItems.push(Object.assign({}, item, {location:'equipped'})); }); });
+
+  const socketsData = (data.Response.itemComponents && data.Response.itemComponents.sockets && data.Response.itemComponents.sockets.data) ? data.Response.itemComponents.sockets.data : {};
+
+  const plugHashesNeeded = new Set();
+  allItems.forEach(function(item) {
+    if (!invItemHashToWeaponId[item.itemHash]) return;
+    const socks = socketsData[item.itemInstanceId] ? socketsData[item.itemInstanceId].sockets || [] : [];
+    socks.forEach(function(s) { if (s.plugHash) plugHashesNeeded.add(s.plugHash); });
+  });
+  const toResolve = Array.from(plugHashesNeeded).filter(function(h) { return invPlugItemCache[h] === undefined; });
+  if (toResolve.length > 0) {
+    setInvStatus('Resolviendo ' + toResolve.length + ' perks del manifiesto…');
+    await resolvePlugHashes(toResolve, apiKey);
+  }
+
+  invWeaponRolls = [];
+  allItems.forEach(function(item) {
+    const weaponId = invItemHashToWeaponId[item.itemHash];
+    if (!weaponId) return;
+    const socks = socketsData[item.itemInstanceId] ? socketsData[item.itemInstanceId].sockets || [] : [];
+    const perkKeys = socks.map(function(s) { return invPlugItemCache[s.plugHash]; }).filter(Boolean);
+    invWeaponRolls.push({weaponId: weaponId, location: item.location, itemHash: item.itemHash, instanceId: item.itemInstanceId, perkKeys: perkKeys});
+  });
+}
+
+async function resolvePlugHashes(hashes, apiKey) {
+  const BATCH = 12;
+  for (let i = 0; i < hashes.length; i += BATCH) {
+    const batch = hashes.slice(i, i + BATCH);
+    await Promise.all(batch.map(async function(hash) {
+      try {
+        const r = await fetch(BNET + '/Platform/Destiny2/Manifest/DestinyInventoryItemDefinition/' + hash + '/', {headers: {'X-API-Key': apiKey}});
+        if (!r.ok) { invPlugItemCache[hash] = null; return; }
+        const d = await r.json();
+        const name = d.Response && d.Response.displayProperties && d.Response.displayProperties.name ? d.Response.displayProperties.name.trim().toLowerCase() : '';
+        invPlugItemCache[hash] = name ? (invPerkNameToKey[name] !== undefined ? invPerkNameToKey[name] : null) : null;
+      } catch(e) { invPlugItemCache[hash] = null; }
+    }));
+  }
+  try { localStorage.setItem(PLUG_DEF_CACHE_KEY, JSON.stringify(invPlugItemCache)); } catch(e) {}
+}
+
+function classifyGodRoll(weaponId, instancePerkKeys) {
+  const ws    = state.weapons[weaponId];
+  const w     = WEAPONS.find(function(x) { return x && !x.exotic && x.id === weaponId; });
+  const col23 = w ? (w.col2||[]).concat(w.col3||[]) : [];
+  if (!ws || col23.length === 0) return 'unmarked';
+  const anyGod  = col23.some(function(pk) { return ws.perks && ws.perks[pk] && ws.perks[pk].marker === 1; });
+  const anySemi = col23.some(function(pk) { return ws.perks && ws.perks[pk] && ws.perks[pk].marker === 2; });
+  if (!anyGod && !anySemi) return 'unmarked';
+  if (instancePerkKeys && instancePerkKeys.length > 0) {
+    const pks = new Set(instancePerkKeys);
+    if (col23.some(function(pk) { return ws.perks && ws.perks[pk] && ws.perks[pk].marker === 1 && pks.has(pk); })) return 'god';
+    if (col23.some(function(pk) { return ws.perks && ws.perks[pk] && ws.perks[pk].marker === 2 && pks.has(pk); })) return 'semi';
+    return 'normal';
+  }
+  if (anyGod)  return 'god';
+  if (anySemi) return 'semi';
+  return 'normal';
+}
+
+function renderInventario() {
+  const godGrid      = document.getElementById('inv-grid-god');
+  const semiGrid     = document.getElementById('inv-grid-semi');
+  const normalGrid   = document.getElementById('inv-grid-normal');
+  const unmarkedGrid = document.getElementById('inv-grid-unmarked');
+  if (!godGrid) return;
+
+  godGrid.innerHTML = semiGrid.innerHTML = normalGrid.innerHTML = unmarkedGrid.innerHTML = '';
+  let godCount = 0, semiCount = 0, normalCount = 0, unmarkedCount = 0;
+
+  invWeaponRolls.forEach(function(roll) {
+    let w = WEAPONS.find(function(x) { return x && !x.exotic && x.id === roll.weaponId; });
+    if (!w && typeof ARMOR_SETS !== 'undefined') {
+      for (let si = 0; si < ARMOR_SETS.length; si++) {
+        const slot = (ARMOR_SETS[si].slots||[]).find(function(sl) { return sl.id === roll.weaponId; });
+        if (slot) { w = {id: slot.id, n: slot.n, e: slot.n, type: slot.slot+' - '+ARMOR_SETS[si].n, frame:'', col2:[], col3:[]}; break; }
+      }
+    }
+    if (!w) return;
+    const cls  = classifyGodRoll(roll.weaponId, roll.perkKeys);
+    const card = buildInvCard(w, cls);
+    if      (cls === 'god')    { godCount++;      godGrid.appendChild(card); }
+    else if (cls === 'semi')   { semiCount++;     semiGrid.appendChild(card); }
+    else if (cls === 'normal') { normalCount++;   normalGrid.appendChild(card); }
+    else                       { unmarkedCount++; unmarkedGrid.appendChild(card); }
+  });
+
+  const total = godCount + semiCount + normalCount + unmarkedCount;
+  const elById = function(id) { return document.getElementById(id); };
+  if (elById('inv-total-count'))  elById('inv-total-count').textContent  = total;
+  if (elById('inv-god-count'))    elById('inv-god-count').textContent    = godCount;
+  if (elById('inv-semi-count'))   elById('inv-semi-count').textContent   = semiCount;
+  if (elById('inv-normal-count')) elById('inv-normal-count').textContent = normalCount;
+
+  var sections = [
+    {sec:'inv-sec-god',     grid:'inv-grid-god',     count:godCount},
+    {sec:'inv-sec-semi',    grid:'inv-grid-semi',    count:semiCount},
+    {sec:'inv-sec-normal',  grid:'inv-grid-normal',  count:normalCount},
+    {sec:'inv-sec-unmarked',grid:'inv-grid-unmarked',count:unmarkedCount}
+  ];
+  sections.forEach(function(item) {
+    const d  = item.count > 0 ? '' : 'none';
+    const sEl = document.getElementById(item.sec);
+    const gEl = document.getElementById(item.grid);
+    if (sEl) sEl.style.display = d;
+    if (gEl) gEl.style.display = d;
+  });
+
+  applyAllIcons();
+  filterInventario();
+}
+
+function buildInvCard(w, cls) {
+  const ws       = state.weapons[w.id];
+  const obtained = ws && ws.obtained ? true : false;
+
+  const card = document.createElement('div');
+  card.className      = 'inv-card ' + cls + (obtained ? ' inv-obtained' : '');
+  card.dataset.invCls = cls;
+  card.dataset.wid    = w.id;
+
+  const img = document.createElement('img');
+  img.className = 'inv-card-icon';
+  const imgKey  = (w.e || w.n || '').toLowerCase();
+  img.setAttribute('data-wimg', imgKey);
+  const iconEntry = iconMap[imgKey];
+  const iconUrl   = iconEntry ? (typeof iconEntry === 'object' ? iconEntry.icon : iconEntry) : '';
+  img.src = iconUrl || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  if (!iconUrl) img.style.display = 'none';
+  img.onerror = function(){ this.style.display='none'; };
+  img.onload  = function(){ this.style.display=''; };
+
+  const nameEl = document.createElement('div');
+  nameEl.className   = 'inv-card-name';
+  nameEl.title       = w.e || w.n;
+  nameEl.textContent = w.n;
+
+  const bottom = document.createElement('div');
+  bottom.className = 'inv-card-bottom';
+
+  const star = document.createElement('span');
+  star.className   = 'inv-card-star' + (cls==='god' ? ' active' : cls==='semi' ? ' semi-active' : '');
+  star.textContent = String.fromCharCode(9733);
+
+  const chkWrap = document.createElement('label');
+  chkWrap.className = 'inv-obtained-label' + (obtained ? ' checked' : '');
+  chkWrap.title     = obtained ? 'Obtenida' : 'Marcar como obtenida';
+  const chk = document.createElement('input');
+  chk.type      = 'checkbox';
+  chk.className = 'inv-obtained-chk';
+  if (obtained) chk.checked = true;
+  const chkText = document.createElement('span');
+  chkText.textContent = obtained ? String.fromCharCode(10003) : 'Obtener';
+  chkWrap.appendChild(chk);
+  chkWrap.appendChild(chkText);
+
+  chk.addEventListener('change', function() {
+    if (!state.weapons[w.id]) state.weapons[w.id] = {perks:{}, obtained:false};
+    state.weapons[w.id].obtained = this.checked;
+    saveState();
+    card.classList.toggle('inv-obtained', this.checked);
+    chkWrap.classList.toggle('checked', this.checked);
+    chkText.textContent = this.checked ? String.fromCharCode(10003) : 'Obtener';
+  });
+
+  bottom.appendChild(star);
+  bottom.appendChild(chkWrap);
+  card.appendChild(img);
+  card.appendChild(nameEl);
+  card.appendChild(bottom);
+  return card;
+}
+
+function filterInventario() {
+  const val = document.getElementById('inv-filter-type') ? document.getElementById('inv-filter-type').value : '';
+  document.querySelectorAll('#inv-content .inv-card').forEach(function(card) {
+    card.style.display = (!val || card.dataset.invCls === val) ? '' : 'none';
+  });
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   init();
