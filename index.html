@@ -549,7 +549,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   body.is-mobile .wleg .pmk-group{display:flex;gap:2px;justify-content:center}
   body.is-mobile .wleg .pmk-god,body.is-mobile .wleg .pmk-semi{font-size:10px;padding:1px 3px;min-height:unset!important}
   body.is-mobile .wleg .pcol4{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:3px}
-  body.is-mobile .wleg .pcols4{grid-template-columns:1fr;gap:5px}
+  body.is-mobile .wleg .pcols4{grid-template-columns:repeat(4,1fr);gap:3px}
   body.is-mobile #weapons-grid > *,
   body.is-mobile #weapons-leg-grid > *,
   body.is-mobile #weapons-exo-grid > *{min-width:0}
@@ -1753,6 +1753,18 @@ const PERK_DEFS = {
   honed:{n:'Filo afilado',e:'Honed Edge',t:'cañón',d:'Un filo afilado para mayor control.',sb:{reload:10}},
   hungry:{n:'Filo hambriento',e:'Hungry Edge',t:'cañón',d:'Arma muy ligera. Gran mejora de la velocidad.',sb:{reload:15,impact:-5}},
   burst:{n:'Filo en ráfaga',e:'Burst Guard',t:'cañón',d:'Reduce el daño recibido durante el bloqueo.',sb:{stability:10}},
+  // Sword guards (MAGS_SWORD col1)
+  jEdge:{n:'Guardia dentada',e:'Jagged Guard',t:'guardia',d:'Guardia agresiva. Mayor estabilidad al bloquear pero recarga más lenta.',sb:{stability:5,reload:-10}},
+  tEdge:{n:'Guardia templada',e:'Tempered Guard',t:'guardia',d:'Guardia equilibrada con mejora moderada de recarga y estabilidad.',sb:{stability:5,reload:5}},
+  hEdge:{n:'Guardia afilada',e:'Honed Guard',t:'guardia',d:'Guardia ligera optimizada para la velocidad de recarga.',sb:{reload:10}},
+  bGuard:{n:'Guardia en ráfaga',e:'Burst Guard',t:'guardia',d:'Guardia táctica. Mayor resistencia al bloqueo de proyectiles.',sb:{stability:10}},
+  bsGuard:{n:'Guardia equilibrada',e:'Balanced Guard',t:'guardia',d:'Guardia versátil con mejoras moderadas en todas las áreas.',sb:{stability:5,reload:5,handling:5}},
+  // Bow strings (BARRELS_BOW col0)
+  flexible:{n:'Cuerda flexible',e:'Flexible String',t:'cuerda',d:'Cuerda ligeramente más lenta. Mayor estabilidad.',sb:{stability:5,handling:-5}},
+  compact:{n:'Cuerda compacta',e:'Compact String',t:'cuerda',d:'Cuerda pequeña y manejable. Aumenta el manejo y la estabilidad.',sb:{handling:5,stability:5}},
+  natural:{n:'Cuerda natural',e:'Natural String',t:'cuerda',d:'Cuerda natural sin modificar. Sin ventajas ni penalizaciones.',sb:{}},
+  lightweight:{n:'Cuerda ligera',e:'Lightweight String',t:'cuerda',d:'Cuerda ultraligera. Gran mejora del manejo.',sb:{handling:10,stability:-5}},
+  fiberglass:{n:'Cuerda de fibra',e:'Fiberglass String',t:'cuerda',d:'Cuerda rígida de fibra. Aumenta la estabilidad notablemente.',sb:{stability:10,handling:-5}},
   // MAGAZINES (col 1 - shared)
   ricochet:{n:'Balas ricochete',e:'Ricochet Rounds',t:'cargador',d:'Las balas rebotan en las superficies. Aumenta la estabilidad y el alcance.',sb:{stability:5,range:5}},
   accurized:{n:'Munición precisada',e:'Accurized Rounds',t:'cargador',d:'Optimizada para la precisión. Aumenta el alcance.',sb:{range:10}},
@@ -2986,6 +2998,12 @@ const FRAME_STATS = {
   'Lanzacohetes|default':   {rpm:25, impact:90,range:50,stability:52,handling:40,reload:40,aim:46,zoom:13},
   'FFL|default':            {rpm:7,  impact:55,range:34,stability:56,handling:50,reload:52,aim:64,zoom:15},
   'Arco de combate|default':{rpm:80, impact:68,range:56,stability:60,handling:52,reload:58,aim:64,zoom:14},
+  'Arco|default':                    {rpm:60, impact:68,range:64,stability:46,handling:48,reload:44,aim:62,zoom:15},
+  'Arco|High-Impact Longbow':        {rpm:55, impact:76,range:68,stability:44,handling:44,reload:40,aim:58,zoom:16},
+  'Arco|Lightweight Longbow':        {rpm:76, impact:60,range:58,stability:54,handling:58,reload:52,aim:66,zoom:14},
+  'Arco|Precision Longbow':          {rpm:60, impact:70,range:66,stability:46,handling:46,reload:42,aim:60,zoom:15},
+  'Ballesta|default':                {rpm:85, impact:72,range:60,stability:52,handling:50,reload:48,aim:58,zoom:15},
+  'Ballesta|High-Impact Crossbow':   {rpm:80, impact:78,range:64,stability:50,handling:46,reload:44,aim:56,zoom:16},
 };
 function getWeaponBaseStats(w) {
   const key = `${w.type}|${w.frame||'default'}`;
@@ -3032,7 +3050,10 @@ function buildWeaponStatBarsHTML(w, ws) {
   const rpm = base.rpm;
   if (rpm > 0) html += `<div class="wstat-rpm">⚡ ${rpm} RPM · ${w.frame||''}</div>`;
   const hasBarrel = !!(w.col0?.length), hasMag = !!(w.col1?.length);
-  if (hasBarrel || hasMag) html += `<div class="wstat-hint">Selecciona ${[hasBarrel?'cañón':'',hasMag?'cargador':''].filter(Boolean).join(' / ')} para ver efecto</div>`;
+  const _isSword = w.type==='Espada', _isBow = w.type==='Arco'||w.type==='Ballesta'||w.type==='Arco de combate';
+  const _c0lbl = _isSword?'hoja':_isBow?'cuerda':'cañón';
+  const _c1lbl = _isSword?'guardia':_isBow?'flecha':'cargador';
+  if (hasBarrel || hasMag) html += `<div class="wstat-hint">Selecciona ${[hasBarrel?_c0lbl:'',hasMag?_c1lbl:''].filter(Boolean).join(' / ')} para ver efecto</div>`;
   html += '</div>';
   return html;
 }
@@ -3381,9 +3402,13 @@ function buildWeaponCard(w) {
   let perksHTML = '';
   let statPanelHTML = '';
   if (!exotic) {
+    const isSword = w.type === 'Espada';
+    const isBow   = w.type === 'Arco' || w.type === 'Ballesta' || w.type === 'Arco de combate';
+    const col0h   = isSword ? '⚔ Hoja'    : isBow ? '🎯 Cuerda'  : '⊕ Cañón';
+    const col1h   = isSword ? '🛡 Guardia' : isBow ? '◈ Flecha'  : '▣ Cargador';
     const colData = [
-      {h:'⊕ Cañón',     perks: w.col0||[], idx:0},
-      {h:'▣ Cargador',  perks: w.col1||[], idx:1},
+      {h: col0h,        perks: w.col0||[], idx:0},
+      {h: col1h,        perks: w.col1||[], idx:1},
       {h:'◈ Rasgo 1',   perks: w.col2||[], idx:2},
       {h:'◈ Rasgo 2',   perks: w.col3||[], idx:3},
     ];
