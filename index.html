@@ -696,7 +696,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .wexo .pi:hover{border-color:rgba(201,168,76,.4) !important}
 .wexo .pi.mgod{border-color:var(--accent-gold) !important;background:rgba(201,168,76,.12) !important}
 .wexo .pi.mgod .piicon{color:var(--accent-gold-light) !important}
-.perk-icon{display:none;width:28px;height:28px;border-radius:4px;object-fit:cover;flex-shrink:0;vertical-align:middle}
+.perk-icon{display:none;width:20px;height:20px;border-radius:3px;object-fit:cover;flex-shrink:0;vertical-align:middle}
 .perk-icon[src]:not([src=""]):not([src="undefined"]){display:inline-block !important}
 .perk-icon[src]:not([src=""]):not([src="undefined"]) ~ .piicon-txt{display:none !important}
 .piicon-txt{color:var(--accent-gold-light)}
@@ -721,16 +721,16 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .pcolh{font-family:'Chakra Petch',sans-serif;font-size:11px;color:#c084fc;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;padding-left:2px}
 
 /* ── PERK ITEM (no checkbox, 2 markers) ── */
-.pi{display:flex;align-items:center;gap:4px;padding:2px 5px;background:var(--bg-panel);border:1px solid var(--border);min-width:0;transition:border-color .15s;cursor:default}
+.pi{display:flex;align-items:center;gap:3px;padding:1px 4px;background:var(--bg-panel);border:1px solid var(--border);min-width:0;transition:border-color .15s;cursor:default}
 .pi:hover{border-color:rgba(124,58,237,.4)}
 .pi.mgod{border-color:#7c3aed;background:rgba(124,58,237,.08)}
 .pi.msemi{border-color:var(--marker-semi);background:rgba(0,229,204,.04)}
-.piicon{font-size:10px;color:var(--text-muted);flex-shrink:0;width:12px;text-align:center}
+.piicon{font-size:9px;color:var(--text-muted);flex-shrink:0;width:10px;text-align:center}
 .pi.mgod .piicon{color:#c084fc}
 .pi.msemi .piicon{color:var(--accent-turquoise)}
 .pinm{flex:0 1 auto;font-size:12px;color:var(--text-primary);line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pmk-group{display:flex;gap:1px;flex-shrink:0;align-items:center;margin-left:3px}
-.pmk-god,.pmk-semi{font-size:11px;padding:1px 3px;cursor:pointer;border:1px solid transparent;background:transparent;border-radius:2px;transition:all .15s;line-height:1;opacity:.35}
+.pmk-god,.pmk-semi{font-size:10px;padding:0 2px;cursor:pointer;border:1px solid transparent;background:transparent;border-radius:2px;transition:all .15s;line-height:1;opacity:.35}
 .pmk-god:hover{opacity:1;color:#f0d060;border-color:rgba(201,168,76,.4)}
 .pmk-semi:hover{opacity:1;color:#7bcfff;border-color:rgba(100,180,255,.4)}
 .pmk-god.active{opacity:1;color:#f0d060;border-color:rgba(201,168,76,.6);background:rgba(201,168,76,.12)}
@@ -3358,8 +3358,8 @@ function buildPerkItem(wid, pid, colIdx) {
   const statClick = isStatCol ? ` onclick="event.stopPropagation();setStatPerk('${wid}',${colIdx},'${pid}')"` : '';
   return `<div class="pi ${mc}${statSelCls}" title="${pd.n}: ${pd.d}${sbStr}"${statAttrs}${statClick}>
     ${_pe
-      ? `<img class="piicon perk-icon" data-pimg="${pkey}" src="${_pe}" style="width:28px;height:28px;border-radius:4px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
-      : `<img class="piicon perk-icon" data-pimg="${pkey}" src="" style="display:none;width:28px;height:28px;border-radius:4px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`}
+      ? `<img class="piicon perk-icon" data-pimg="${pkey}" src="${_pe}" style="width:20px;height:20px;border-radius:3px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
+      : `<img class="piicon perk-icon" data-pimg="${pkey}" src="" style="display:none;width:20px;height:20px;border-radius:3px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`}
     <span class="piicon piicon-txt" style="${_pe ? 'display:none' : ''}">${icon}</span>
     <span class="pinm">${pd.n}</span>
     <div class="pmk-group">
