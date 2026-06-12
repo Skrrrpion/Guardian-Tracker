@@ -8248,7 +8248,7 @@ function init() {
 
 // =========== ICON LOADER (Bungie API) ===========
 const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v11';
+const ICON_CACHE_KEY = 'd2icons.v12';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
 let iconMap = {};
 
@@ -8356,11 +8356,11 @@ async function fetchIcons(apiKey) {
     }
 
     // Stat icons from DestinyStatDefinition
+    const statLookup = {
+      'mobility':'Mobility','resilience':'Resilience','recovery':'Recovery',
+      'discipline':'Discipline','intellect':'Intellect','strength':'Strength'
+    };
     if (stat_defs) {
-      const statLookup = {
-        'mobility':'Mobility','resilience':'Resilience','recovery':'Recovery',
-        'discipline':'Discipline','intellect':'Intellect','strength':'Strength'
-      };
       const statByName = {};
       for (const [hash, s] of Object.entries(stat_defs)) {
         const n = s.displayProperties?.name;
@@ -8369,6 +8369,21 @@ async function fetchIcons(apiKey) {
       for (const [id, en] of Object.entries(statLookup)) {
         const dp = statByName[en];
         if (dp?.icon) icons['stat:' + id] = { icon: BNET + dp.icon };
+      }
+    }
+    // Fallback: scan en_items for items whose name exactly matches a stat name (covers cases where DestinyStatDefinition has no icon)
+    const missingStats = Object.entries(statLookup).filter(([id]) => !icons['stat:'+id]).map(([id, en]) => [id, en]);
+    if (missingStats.length > 0) {
+      const missingByName = Object.fromEntries(missingStats.map(([id, en]) => [en, id]));
+      for (const [hash, item] of Object.entries(en_items)) {
+        const dp = item.displayProperties;
+        if (!dp?.icon || !dp?.name) continue;
+        const id = missingByName[dp.name];
+        if (id) {
+          icons['stat:' + id] = { icon: BNET + dp.icon };
+          delete missingByName[dp.name];
+          if (Object.keys(missingByName).length === 0) break;
+        }
       }
     }
 
