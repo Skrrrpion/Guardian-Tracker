@@ -73,7 +73,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .filter-input[type=search]{width:200px}
 /* ── WEAPONS GRID ── */
 #weapons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-#weapons-leg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+#weapons-leg-grid{display:grid;grid-template-columns:1fr;gap:10px}
 #weapons-exo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .wexo .wcard-name{font-size:20px !important;letter-spacing:.5px}
 .wexo .tag{font-size:13px !important;padding:4px 11px !important}
@@ -636,6 +636,29 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .wleg .wname{color:#e9d5ff}
 .wleg.wown{background:rgba(124,58,237,.1) !important}
 .wleg.wown .whdr{background:rgba(124,58,237,.14)}
+/* ── STATS PANEL (leg weapons) ── */
+.wbody-inner{display:flex;gap:14px;align-items:flex-start}
+.wperks-wrap{flex:1;min-width:0}
+.wstat-panel{width:220px;flex-shrink:0;background:rgba(0,0,0,.35);border:1px solid rgba(124,58,237,.25);border-radius:6px;padding:12px 12px 10px;margin-top:0}
+.wstat-title{font-family:'Chakra Petch',sans-serif;font-size:9px;color:rgba(196,132,252,.7);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.wstat-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.wstat-lbl{font-family:'Chakra Petch',sans-serif;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;width:78px;flex-shrink:0;white-space:nowrap}
+.wstat-track{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:visible;position:relative}
+.wstat-base-fill{height:100%;border-radius:2px;background:rgba(196,132,252,.45);position:absolute;left:0;top:0;transition:width .25s}
+.wstat-bonus-fill{height:100%;border-radius:0 2px 2px 0;position:absolute;top:0;transition:width .25s .02s,left .25s}
+.wstat-val{font-family:'Chakra Petch',sans-serif;font-size:10px;color:var(--text-primary);font-weight:700;width:22px;text-align:right;flex-shrink:0}
+.wstat-delta{font-family:'Chakra Petch',sans-serif;font-size:9px;width:26px;flex-shrink:0;text-align:left}
+.wstat-delta.pos{color:#7fffb0}
+.wstat-delta.neg{color:#ff7070}
+.wstat-rpm{font-family:'Chakra Petch',sans-serif;font-size:10px;color:rgba(196,132,252,.8);margin-top:8px;padding-top:7px;border-top:1px solid rgba(124,58,237,.15);letter-spacing:.5px;text-align:center}
+.wstat-hint{font-size:9px;color:var(--text-muted);text-align:center;margin-top:7px;opacity:.6;line-height:1.4}
+/* active stat perk highlight */
+.pi.stat-sel{box-shadow:0 0 0 1px rgba(196,132,252,.6) !important;background:rgba(124,58,237,.16) !important}
+.pi.stat-sel .pinm{color:#d4b8ff !important}
+@media(max-width:768px){
+  .wbody-inner{flex-direction:column}
+  .wstat-panel{width:100%;box-sizing:border-box}
+}
 .wleg .ownbtn.on{background:rgba(124,58,237,.22) !important;border-color:#9d5eff !important;color:#d4b8ff !important;box-shadow:0 0 14px rgba(124,58,237,.4),inset 0 0 8px rgba(124,58,237,.1) !important;text-shadow:0 0 8px rgba(196,132,252,.6) !important}
 .wleg .ownbtn:not(.on):hover{border-color:#7c3aed;color:#c084fc;box-shadow:0 0 6px rgba(124,58,237,.25)}
 /* Exotic: gold tinted 2-palette card */
@@ -1708,20 +1731,26 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 // ═══════════════════════════════════════════
 const PERK_DEFS = {
   // BARRELS (col 0 - shared)
-  arrowhead:{n:'Freno de flecha',e:'Arrowhead Brake',t:'cañón',d:'Reduce el retroceso drásticamente. Mejora el control de retroceso.'},
-  polygonal:{n:'Cañón poligonal',e:'Polygonal Rifling',t:'cañón',d:'Forma de barrera redondeada. Aumenta la estabilidad.'},
-  fluted:{n:'Cañón estriado',e:'Fluted Barrel',t:'cañón',d:'Ultra ligero. Aumenta la velocidad de manejo significativamente.'},
-  hammer:{n:'Cañón de martillo',e:'Hammer-Forged Rifling',t:'cañón',d:'Cañón duradero forjado a martillo. Aumenta el alcance.'},
-  corkscrew:{n:'Cañón helicoidal',e:'Corkscrew Rifling',t:'cañón',d:'Ligeramente aumenta el alcance, la estabilidad y la velocidad de manejo.'},
-  smallBore:{n:'Cañón de pequeño calibre',e:'Small-Bore',t:'cañón',d:'Cañón estrecho y ligero. Aumenta el alcance. Reduce ligeramente la estabilidad.'},
-  fullBore:{n:'Cañón de calibre completo',e:'Full Bore',t:'cañón',d:'Longitud de cañón máxima. Aumenta el alcance notablemente. Reduce la estabilidad y la velocidad de manejo.'},
+  arrowhead:{n:'Freno de flecha',e:'Arrowhead Brake',t:'cañón',d:'Reduce el retroceso drásticamente. Mejora el control de retroceso.',sb:{handling:-5}},
+  polygonal:{n:'Cañón poligonal',e:'Polygonal Rifling',t:'cañón',d:'Forma de barrera redondeada. Aumenta la estabilidad.',sb:{stability:8}},
+  fluted:{n:'Cañón estriado',e:'Fluted Barrel',t:'cañón',d:'Ultra ligero. Aumenta la velocidad de manejo significativamente.',sb:{handling:15,stability:-5}},
+  hammer:{n:'Cañón de martillo',e:'Hammer-Forged Rifling',t:'cañón',d:'Cañón duradero forjado a martillo. Aumenta el alcance.',sb:{range:10,stability:-5,handling:-5}},
+  corkscrew:{n:'Cañón helicoidal',e:'Corkscrew Rifling',t:'cañón',d:'Ligeramente aumenta el alcance, la estabilidad y la velocidad de manejo.',sb:{range:5,stability:5,handling:5}},
+  smallBore:{n:'Cañón de pequeño calibre',e:'Small-Bore',t:'cañón',d:'Cañón estrecho y ligero. Aumenta el alcance. Reduce ligeramente la estabilidad.',sb:{range:7,stability:-5}},
+  fullBore:{n:'Cañón de calibre completo',e:'Full Bore',t:'cañón',d:'Longitud de cañón máxima. Aumenta el alcance notablemente. Reduce la estabilidad y la velocidad de manejo.',sb:{range:15,stability:-10,handling:-10}},
+  // Sword barrels
+  jagged:{n:'Filo dentado',e:'Jagged Edge',t:'cañón',d:'Un filo afilado y dentado. Aumenta el daño pero reduce la velocidad.',sb:{impact:3,reload:-10}},
+  tempered:{n:'Filo templado',e:'Tempered Edge',t:'cañón',d:'Filo bien templado. Aumenta ligeramente el daño y la velocidad.',sb:{impact:2,reload:5}},
+  honed:{n:'Filo afilado',e:'Honed Edge',t:'cañón',d:'Un filo afilado para mayor control.',sb:{reload:10}},
+  hungry:{n:'Filo hambriento',e:'Hungry Edge',t:'cañón',d:'Arma muy ligera. Gran mejora de la velocidad.',sb:{reload:15,impact:-5}},
+  burst:{n:'Filo en ráfaga',e:'Burst Guard',t:'cañón',d:'Reduce el daño recibido durante el bloqueo.',sb:{stability:10}},
   // MAGAZINES (col 1 - shared)
-  ricochet:{n:'Balas ricochete',e:'Ricochet Rounds',t:'cargador',d:'Las balas rebotan en las superficies. Aumenta la estabilidad y el alcance.'},
-  accurized:{n:'Munición precisada',e:'Accurized Rounds',t:'cargador',d:'Optimizada para la precisión. Aumenta el alcance.'},
-  tactical:{n:'Cargador táctico',e:'Tactical Mag',t:'cargador',d:'Múltiples mejoras de campo. Aumenta ligeramente la estabilidad, la recarga y el tamaño del cargador.'},
-  extendedMag:{n:'Cargador extendido',e:'Extended Mag',t:'cargador',d:'Este arma tiene un cargador notablemente ampliado. Reduce la velocidad de recarga.'},
-  appendedMag:{n:'Cargador ampliado',e:'Appended Mag',t:'cargador',d:'Ligero aumento del tamaño del cargador.'},
-  flaredMag:{n:'Cargador abocinado',e:'Flared Magwell',t:'cargador',d:'Optimizado para recarga rápida. Aumenta la estabilidad y la velocidad de recarga.'},
+  ricochet:{n:'Balas ricochete',e:'Ricochet Rounds',t:'cargador',d:'Las balas rebotan en las superficies. Aumenta la estabilidad y el alcance.',sb:{stability:5,range:5}},
+  accurized:{n:'Munición precisada',e:'Accurized Rounds',t:'cargador',d:'Optimizada para la precisión. Aumenta el alcance.',sb:{range:10}},
+  tactical:{n:'Cargador táctico',e:'Tactical Mag',t:'cargador',d:'Múltiples mejoras de campo. Aumenta ligeramente la estabilidad, la recarga y el tamaño del cargador.',sb:{stability:5,reload:5}},
+  extendedMag:{n:'Cargador extendido',e:'Extended Mag',t:'cargador',d:'Este arma tiene un cargador notablemente ampliado. Reduce la velocidad de recarga.',sb:{reload:-10}},
+  appendedMag:{n:'Cargador ampliado',e:'Appended Mag',t:'cargador',d:'Ligero aumento del tamaño del cargador.',sb:{}},
+  flaredMag:{n:'Cargador abocinado',e:'Flared Magwell',t:'cargador',d:'Optimizado para recarga rápida. Aumenta la estabilidad y la velocidad de recarga.',sb:{stability:5,reload:15}},
   // TRAITS
   outlaw:{n:'Forajido',e:'Outlaw',t:'rasgo',d:'Las eliminaciones de precisión aumentan drásticamente la velocidad de recarga.'},
   feedingFrenzy:{n:'Frenesí alimenticio',e:'Feeding Frenzy',t:'rasgo',d:'Cada eliminación con esta arma aumenta la velocidad de recarga durante un breve tiempo.'},
@@ -2889,6 +2918,137 @@ const ELEM_ICON  = {Solar:'☀',Arco:'⚡',Vacío:'◆',Estasis:'❄',Hebra:'�
 const ELEM_CLASS = {Solar:'solar',Arco:'arc',Vacío:'void',Estasis:'stasis',Hebra:'strand',Cinético:'kinetic'};
 const CLASS_ICON = {Titán:'🛡',Cazador:'🏹',Hechicero:'🔮'};
 
+// =========== FRAME BASE STATS ===========
+// key: 'type|frame'  (or 'type|default' as fallback)
+// stats: rpm, impact, range, stability, handling, reload, aim, zoom
+const FRAME_STATS = {
+  'Cañón de mano|default':        {rpm:140,impact:78,range:46,stability:54,handling:46,reload:50,aim:78,zoom:14},
+  'Cañón de mano|Heavy Burst':    {rpm:110,impact:84,range:40,stability:41,handling:46,reload:46,aim:73,zoom:14},
+  'Cañón de mano|Precision Frame':{rpm:180,impact:68,range:46,stability:60,handling:46,reload:50,aim:78,zoom:14},
+  'Cañón de mano|Adaptive Frame': {rpm:140,impact:78,range:46,stability:54,handling:46,reload:50,aim:78,zoom:14},
+  'Cañón de mano|Spread Shot':    {rpm:110,impact:80,range:35,stability:55,handling:50,reload:52,aim:80,zoom:13},
+  'Rifle automático|default':           {rpm:600,impact:17,range:42,stability:58,handling:50,reload:52,aim:55,zoom:16},
+  'Rifle automático|Rapid-Fire Frame':  {rpm:720,impact:13,range:40,stability:62,handling:52,reload:55,aim:58,zoom:16},
+  'Rifle automático|Adaptive Frame':    {rpm:600,impact:17,range:46,stability:54,handling:47,reload:50,aim:52,zoom:16},
+  'Rifle automático|High-Impact Frame': {rpm:450,impact:21,range:50,stability:40,handling:40,reload:42,aim:46,zoom:17},
+  'Rifle automático|Precision Frame':   {rpm:540,impact:18,range:44,stability:56,handling:48,reload:52,aim:52,zoom:16},
+  'Fusil de pulsos|default':            {rpm:390,impact:29,range:46,stability:56,handling:39,reload:43,aim:54,zoom:17},
+  'Fusil de pulsos|Adaptive Frame':     {rpm:390,impact:29,range:46,stability:56,handling:39,reload:43,aim:54,zoom:17},
+  'Fusil de pulsos|Rapid-Fire Frame':   {rpm:450,impact:22,range:40,stability:65,handling:47,reload:52,aim:58,zoom:17},
+  'Fusil de pulsos|High-Impact Frame':  {rpm:340,impact:36,range:52,stability:40,handling:35,reload:38,aim:48,zoom:19},
+  'Fusil de pulsos|Lightweight Frame':  {rpm:450,impact:22,range:40,stability:62,handling:55,reload:55,aim:62,zoom:17},
+  'Fusil de pulsos|Aggressive Burst':   {rpm:450,impact:40,range:48,stability:42,handling:38,reload:44,aim:50,zoom:17},
+  'Escopeta|default':             {rpm:65, impact:80,range:24,stability:50,handling:50,reload:52,aim:62,zoom:12},
+  'Escopeta|Precision Frame':     {rpm:65, impact:80,range:28,stability:55,handling:52,reload:55,aim:65,zoom:13},
+  'Escopeta|Rapid-Fire Frame':    {rpm:80, impact:65,range:22,stability:58,handling:55,reload:60,aim:68,zoom:12},
+  'Escopeta|Rapid-Fire Slug':     {rpm:80, impact:70,range:30,stability:52,handling:52,reload:58,aim:62,zoom:13},
+  'Escopeta|Aggressive Frame':    {rpm:55, impact:84,range:18,stability:42,handling:44,reload:46,aim:55,zoom:12},
+  'Fusil de exploración|default':           {rpm:90, impact:62,range:60,stability:46,handling:46,reload:50,aim:52,zoom:40},
+  'Fusil de exploración|High-Impact Frame': {rpm:72, impact:70,range:66,stability:40,handling:40,reload:44,aim:46,zoom:42},
+  'Fusil de exploración|Adaptive Frame':    {rpm:90, impact:62,range:60,stability:46,handling:46,reload:50,aim:52,zoom:40},
+  'Fusil de exploración|Rapid-Fire Frame':  {rpm:120,impact:50,range:54,stability:52,handling:52,reload:58,aim:58,zoom:38},
+  'Ametralladora|default':          {rpm:360,impact:41,range:40,stability:46,handling:35,reload:38,aim:46,zoom:18},
+  'Ametralladora|Aggressive Frame': {rpm:360,impact:41,range:40,stability:46,handling:35,reload:38,aim:46,zoom:18},
+  'Ametralladora|Adaptive Frame':   {rpm:450,impact:30,range:42,stability:52,handling:40,reload:44,aim:52,zoom:17},
+  'Ametralladora|Precision Frame':  {rpm:360,impact:38,range:44,stability:50,handling:38,reload:42,aim:50,zoom:18},
+  'Ametralladora|High-Impact Frame':{rpm:300,impact:50,range:48,stability:38,handling:30,reload:34,aim:40,zoom:20},
+  'Subfusil|default':           {rpm:600,impact:15,range:30,stability:58,handling:58,reload:62,aim:68,zoom:13},
+  'Subfusil|Adaptive Frame':    {rpm:600,impact:15,range:30,stability:58,handling:58,reload:62,aim:68,zoom:13},
+  'Subfusil|Lightweight Frame': {rpm:720,impact:12,range:28,stability:62,handling:64,reload:66,aim:72,zoom:13},
+  'Subfusil|Aggressive Frame':  {rpm:900,impact:10,range:26,stability:52,handling:52,reload:56,aim:62,zoom:12},
+  'Subfusil|Precision Frame':   {rpm:491,impact:21,range:35,stability:60,handling:56,reload:60,aim:65,zoom:13},
+  'Fusil de francotirador|default':           {rpm:72, impact:70,range:60,stability:46,handling:40,reload:44,aim:52,zoom:50},
+  'Fusil de francotirador|Adaptive Frame':    {rpm:72, impact:70,range:60,stability:46,handling:40,reload:44,aim:52,zoom:50},
+  'Fusil de francotirador|Rapid-Fire Frame':  {rpm:90, impact:60,range:54,stability:52,handling:46,reload:50,aim:58,zoom:45},
+  'Fusil de francotirador|Aggressive Frame':  {rpm:55, impact:78,range:64,stability:40,handling:35,reload:38,aim:46,zoom:55},
+  'Fusil de francotirador|Precision Frame':   {rpm:72, impact:68,range:62,stability:48,handling:42,reload:46,aim:54,zoom:50},
+  'Fusil de fusión|default':          {rpm:6, impact:70,range:32,stability:50,handling:48,reload:50,aim:58,zoom:15},
+  'Fusil de fusión|Adaptive Frame':   {rpm:6, impact:70,range:32,stability:50,handling:48,reload:50,aim:58,zoom:15},
+  'Fusil de fusión|Aggressive Frame': {rpm:5, impact:78,range:28,stability:44,handling:42,reload:44,aim:52,zoom:15},
+  'Fusil de fusión|Precision Frame':  {rpm:7, impact:64,range:36,stability:56,handling:52,reload:55,aim:62,zoom:15},
+  'Fusil de rastreo|default':          {rpm:220,impact:30,range:36,stability:52,handling:52,reload:56,aim:70,zoom:13},
+  'Fusil de rastreo|Adaptive Frame':   {rpm:220,impact:30,range:36,stability:52,handling:52,reload:56,aim:70,zoom:13},
+  'Fusil de rastreo|Lightweight Frame':{rpm:260,impact:25,range:32,stability:58,handling:60,reload:62,aim:74,zoom:12},
+  'Espada|default':         {rpm:0,impact:60,range:35,stability:52,handling:46,reload:50,aim:0,zoom:0},
+  'Espada|Wave Frame':      {rpm:0,impact:60,range:35,stability:52,handling:46,reload:50,aim:0,zoom:0},
+  'Espada|Caster Frame':    {rpm:0,impact:65,range:40,stability:48,handling:42,reload:46,aim:0,zoom:0},
+  'Espada|Adaptive Frame':  {rpm:0,impact:58,range:33,stability:55,handling:48,reload:52,aim:0,zoom:0},
+  'Lanzagranadas|default':  {rpm:72, impact:74,range:54,stability:60,handling:52,reload:54,aim:62,zoom:12},
+  'Lanzacohetes|default':   {rpm:25, impact:90,range:50,stability:52,handling:40,reload:40,aim:46,zoom:13},
+  'FFL|default':            {rpm:7,  impact:55,range:34,stability:56,handling:50,reload:52,aim:64,zoom:15},
+  'Arco de combate|default':{rpm:80, impact:68,range:56,stability:60,handling:52,reload:58,aim:64,zoom:14},
+};
+function getWeaponBaseStats(w) {
+  const key = `${w.type}|${w.frame||'default'}`;
+  const fallback = `${w.type}|default`;
+  return FRAME_STATS[key] || FRAME_STATS[fallback] || {rpm:0,impact:50,range:50,stability:50,handling:50,reload:50,aim:50,zoom:16};
+}
+function getWeaponEffectiveStats(w, ws) {
+  const base = getWeaponBaseStats(w);
+  const sb0 = ws.statBarrel ? (PERK_DEFS[ws.statBarrel]?.sb || {}) : {};
+  const sb1 = ws.statMag    ? (PERK_DEFS[ws.statMag]?.sb    || {}) : {};
+  const delta = {};
+  for (const k of Object.keys({...sb0,...sb1})) delta[k] = (sb0[k]||0) + (sb1[k]||0);
+  const out = {...base};
+  for (const k of Object.keys(delta)) out[k] = (out[k]||0) + delta[k];
+  return {stats:out, base, delta};
+}
+function buildWeaponStatBarsHTML(w, ws) {
+  const {stats, base, delta} = getWeaponEffectiveStats(w, ws);
+  const STAT_KEYS = ['impact','range','stability','handling','reload','aim','zoom'];
+  const STAT_LABELS = {impact:'Impacto',range:'Alcance',stability:'Estabilidad',handling:'Manejo',reload:'Recarga',aim:'Apuntado',zoom:'Zoom'};
+  let html = `<div class="wstat-panel" id="wstatp_${w.id}">`;
+  html += `<div class="wstat-title">Estadísticas</div>`;
+  STAT_KEYS.forEach(k => {
+    const bv = base[k]; if (bv === 0 && k === 'aim') return;
+    if (bv === 0 && (k === 'zoom') && base.rpm === 0) return;
+    const d = delta[k] || 0;
+    const total = Math.max(0, Math.min(100, stats[k]||0));
+    const baseW = Math.min(100, bv||0);
+    const bonusW = Math.abs(d);
+    const isPos = d > 0, isNeg = d < 0;
+    const bonusColor = isPos ? 'rgba(127,255,176,.7)' : 'rgba(255,100,100,.7)';
+    const bonusLeft = isNeg ? Math.max(0, baseW+d) : baseW;
+    const barBase = Math.max(0, isNeg ? baseW+d : baseW);
+    html += `<div class="wstat-row">
+      <span class="wstat-lbl">${STAT_LABELS[k]||k}</span>
+      <div class="wstat-track">
+        <div class="wstat-base-fill" style="width:${barBase}%"></div>
+        ${d !== 0 ? `<div class="wstat-bonus-fill" style="left:${bonusLeft}%;width:${bonusW}%;background:${bonusColor}"></div>` : ''}
+      </div>
+      <span class="wstat-val">${total}</span>
+      <span class="wstat-delta ${isPos?'pos':isNeg?'neg':''}">${d>0?'+'+d:d<0?d:''}</span>
+    </div>`;
+  });
+  const rpm = base.rpm;
+  if (rpm > 0) html += `<div class="wstat-rpm">⚡ ${rpm} RPM · ${w.frame||''}</div>`;
+  const hasBarrel = !!(w.col0?.length), hasMag = !!(w.col1?.length);
+  if (hasBarrel || hasMag) html += `<div class="wstat-hint">Selecciona ${[hasBarrel?'cañón':'',hasMag?'cargador':''].filter(Boolean).join(' / ')} para ver efecto</div>`;
+  html += '</div>';
+  return html;
+}
+function setStatPerk(wid, col, pid) {
+  const ws = state.weapons[wid];
+  if (!ws) return;
+  if (col === 0) {
+    ws.statBarrel = ws.statBarrel === pid ? null : pid;
+  } else {
+    ws.statMag = ws.statMag === pid ? null : pid;
+  }
+  // Update stat panel in-place
+  const w = WEAPONS.find(x => x.id === wid);
+  if (!w) return;
+  const panel = document.getElementById('wstatp_'+wid);
+  if (panel) panel.outerHTML = buildWeaponStatBarsHTML(w, ws);
+  // Update perk highlights for that column
+  const card = document.getElementById('wcard_'+wid);
+  if (!card) return;
+  const colClass = col === 0 ? 'stat-col0' : 'stat-col1';
+  card.querySelectorAll('.pi[data-statcol="'+col+'"]').forEach(el => {
+    el.classList.toggle('stat-sel', el.dataset.statpid === pid && (col===0?ws.statBarrel:ws.statMag) === pid);
+  });
+}
+
 // =========== STATE ===========
 const SAVE_KEY_BASE = 'd2tracker.v1';
 function getSaveKey(){ return currentUser ? SAVE_KEY_BASE+'.'+currentUser.membershipId : SAVE_KEY_BASE; }
@@ -2901,7 +3061,7 @@ function defaultState() {
     [...(w.col0||[]),...(w.col1||[]),...(w.col2||[]),...(w.col3||[])].forEach(pid => {
       perks[pid] = {checked:false, marker:0};
     });
-    s.weapons[w.id] = {owned:false, perks, intrinsicChecked:false, catalystChecked:false};
+    s.weapons[w.id] = {owned:false, perks, intrinsicChecked:false, catalystChecked:false, statBarrel:null, statMag:null};
   });
   ARMOR_SETS.forEach(set => {
     set.slots.forEach(slot => {
@@ -2925,7 +3085,9 @@ function loadState() {
       Object.assign(state.weapons[id], {
         owned: !!saved.weapons[id].owned,
         intrinsicChecked: !!saved.weapons[id].intrinsicChecked,
-        catalystChecked: !!saved.weapons[id].catalystChecked
+        catalystChecked: !!saved.weapons[id].catalystChecked,
+        statBarrel: saved.weapons[id].statBarrel || null,
+        statMag:    saved.weapons[id].statMag    || null,
       });
       if (saved.weapons[id].perks) Object.keys(saved.weapons[id].perks).forEach(pid => {
         if (state.weapons[id].perks[pid]) state.weapons[id].perks[pid] = saved.weapons[id].perks[pid];
@@ -3141,7 +3303,7 @@ function translateFrame(f) {
     .replace('Exotic','Exótico')
     .replace(' Frame','').replace('Frame','');
 }
-function buildPerkItem(wid, pid) {
+function buildPerkItem(wid, pid, colIdx) {
   const pd = PERK_DEFS[pid];
   if (!pd) return '';
   const ws = state.weapons[wid];
@@ -3152,15 +3314,26 @@ function buildPerkItem(wid, pid) {
   const semiActive = ps.marker===2 ? 'active' : '';
   const pkey = pd.e ? pd.e.toLowerCase() : '';
   const _pe = pkey && iconMap[pkey] ? iconMap[pkey].icon || iconMap[pkey] : '';
-  return `<div class="pi ${mc}" title="${pd.n}: ${pd.d}">
+  // Stat-select for col0 (barrel) and col1 (magazine)
+  const isStatCol = colIdx === 0 || colIdx === 1;
+  const statActive = isStatCol && ((colIdx===0 ? ws.statBarrel : ws.statMag) === pid);
+  const statAttrs = isStatCol ? ` data-statcol="${colIdx}" data-statpid="${pid}"` : '';
+  const statSelCls = statActive ? ' stat-sel' : '';
+  // Show stat bonus preview on title
+  const sbStr = pd.sb && Object.keys(pd.sb).length
+    ? ' · ' + Object.entries(pd.sb).map(([k,v])=>`${v>0?'+':''}${v} ${({range:'Alcance',stability:'Estabilidad',handling:'Manejo',reload:'Recarga',impact:'Impacto',aim:'Apuntado',reload:'Recarga'}[k]||k)}`).join(' ')
+    : '';
+  // Stat-select click (only for barrel/mag)
+  const statClick = isStatCol ? ` onclick="event.stopPropagation();setStatPerk('${wid}',${colIdx},'${pid}')"` : '';
+  return `<div class="pi ${mc}${statSelCls}" title="${pd.n}: ${pd.d}${sbStr}"${statAttrs}${statClick}>
     ${_pe
       ? `<img class="piicon perk-icon" data-pimg="${pkey}" src="${_pe}" style="width:28px;height:28px;border-radius:4px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
       : `<img class="piicon perk-icon" data-pimg="${pkey}" src="" style="display:none;width:28px;height:28px;border-radius:4px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`}
     <span class="piicon piicon-txt" style="${_pe ? 'display:none' : ''}">${icon}</span>
     <span class="pinm">${pd.n}</span>
     <div class="pmk-group">
-      <button class="pmk-god ${godActive}" onclick="setPerkMarker('${wid}','${pid}',1)" title="God Roll ★">★</button>
-      <button class="pmk-semi ${semiActive}" onclick="setPerkMarker('${wid}','${pid}',2)" title="Semi-God ◆">◆</button>
+      <button class="pmk-god ${godActive}" onclick="event.stopPropagation();setPerkMarker('${wid}','${pid}',1)" title="God Roll ★">★</button>
+      <button class="pmk-semi ${semiActive}" onclick="event.stopPropagation();setPerkMarker('${wid}','${pid}',2)" title="Semi-God ◆">◆</button>
     </div>
   </div>`;
 }
@@ -3197,20 +3370,22 @@ function buildWeaponCard(w) {
 
   // Perks grid: solo para armas legendarias. Exóticas no muestran columnas de perks.
   let perksHTML = '';
+  let statPanelHTML = '';
   if (!exotic) {
     const colData = [
-      {h:'⊕ Cañón',     perks: w.col0||[]},
-      {h:'▣ Cargador',  perks: w.col1||[]},
-      {h:'◈ Rasgo 1',   perks: w.col2||[]},
-      {h:'◈ Rasgo 2',   perks: w.col3||[]},
+      {h:'⊕ Cañón',     perks: w.col0||[], idx:0},
+      {h:'▣ Cargador',  perks: w.col1||[], idx:1},
+      {h:'◈ Rasgo 1',   perks: w.col2||[], idx:2},
+      {h:'◈ Rasgo 2',   perks: w.col3||[], idx:3},
     ];
     perksHTML = '<div class="pcols4">';
     colData.forEach(col => {
       perksHTML += `<div class="pcol4"><div class="pcolh">${col.h}</div>`;
-      col.perks.forEach(pid => { perksHTML += buildPerkItem(w.id, pid); });
+      col.perks.forEach(pid => { perksHTML += buildPerkItem(w.id, pid, col.idx); });
       perksHTML += '</div>';
     });
     perksHTML += '</div>';
+    statPanelHTML = buildWeaponStatBarsHTML(w, ws);
   }
 
   let exoticHTML = '';
@@ -3271,7 +3446,7 @@ function buildWeaponCard(w) {
     </div>
     <div class="wbody">
       ${exoticHTML}
-      ${perksHTML}
+      ${exotic ? perksHTML : `<div class="wbody-inner"><div class="wperks-wrap">${perksHTML}</div>${statPanelHTML}</div>`}
     </div>
   </div>`;
 }
