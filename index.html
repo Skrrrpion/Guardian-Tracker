@@ -420,6 +420,30 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .inv-card.inv-obtained{opacity:1;filter:brightness(.75)}
 .inv-card.inv-obtained .inv-card-name{text-decoration:line-through;opacity:.6}
 
+/* ─── INVENTORY HOVER TOOLTIP ─── */
+#inv-tooltip{
+  position:fixed;display:none;z-index:9999;pointer-events:none;
+  width:272px;
+  background:linear-gradient(160deg,rgba(10,13,20,.97) 0%,rgba(16,20,30,.97) 100%);
+  border:1px solid rgba(201,168,76,.3);border-radius:8px;
+  padding:14px 14px 12px;
+  box-shadow:0 12px 40px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.04);
+}
+.inv-tt-name{font-family:'Chakra Petch',sans-serif;font-size:14px;color:var(--accent-gold);font-weight:700;letter-spacing:.5px;line-height:1.2;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inv-tt-meta{font-family:'Chakra Petch',sans-serif;font-size:10px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;line-height:1.5}
+.inv-tt-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.2),transparent);margin:9px 0}
+.inv-tt-section-label{font-family:'Chakra Petch',sans-serif;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.inv-tt-stat{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.inv-tt-stat-name{font-family:'Chakra Petch',sans-serif;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;width:88px;flex-shrink:0}
+.inv-tt-bar{flex:1;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.inv-tt-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,rgba(201,168,76,.5),var(--accent-gold))}
+.inv-tt-stat-val{font-family:'Chakra Petch',sans-serif;font-size:10px;color:var(--text-primary);font-weight:700;width:22px;text-align:right;flex-shrink:0}
+.inv-tt-perks{display:flex;flex-direction:column;gap:3px}
+.inv-tt-perk{font-size:11px;font-family:'Barlow',sans-serif;padding:3px 7px;background:rgba(255,255,255,.03);border-left:2px solid rgba(255,255,255,.12);border-radius:0 3px 3px 0;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inv-tt-perk.tt-god{color:var(--accent-gold);border-left-color:var(--accent-gold);background:rgba(201,168,76,.06)}
+.inv-tt-perk.tt-semi{color:var(--marker-semi);border-left-color:var(--marker-semi);background:rgba(0,229,204,.04)}
+.inv-tt-location{font-family:'Chakra Petch',sans-serif;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:8px;text-align:right;opacity:.6}
+
 
 /* ══════════════════════════════════════════════
    RESPONSIVE / MOBILE — v2
@@ -8222,9 +8246,29 @@ let invCollectibleMap = {};
 let invItemHashToWeaponId = {};   // itemDefinitionHash → weaponId
 let invPerkNameToKey = {};        // englishPerkName.toLowerCase() → perkKey
 let invSandboxPerkDefs = {};      // sandboxPerkHash → name
-let invPlugItemCache = {};        // plugItemHash → perkKeys[]
-let invWeaponRolls = [];          // [{weaponId, perkKeysSet, location}]
+let invPlugItemCache = {};        // plugItemHash → perkKey (or null)
+let invPlugNameCache = {};        // plugItemHash → raw display name (English from manifest)
+let invInstanceStats = {};        // instanceId → {statHash: value}
+let invWeaponRolls = [];          // [{weaponId, perkKeys, socketHashes, location, itemHash, instanceId}]
 let invLoaded = false;
+
+// Stat hash → Spanish label
+const INV_STAT_LABELS = {
+  4284893193:'Cadencia', 1935470627:'Impacto', 1240592695:'Alcance',
+  155624089:'Estabilidad', 943549884:'Manejo', 4188031367:'Vel. de recarga',
+  1345609583:'Apuntado auto.', 3871231066:'Zoom', 2715839340:'Direc. retroceso',
+  1931675084:'Tam. inventario', 925767036:'Munición',
+};
+// Damage type → label
+const INV_DMG_LABELS = {0:'',1:'Cinético ◎',2:'Arco ⚡',3:'Solar ☀',4:'Vacío ◆',5:'',6:'Estasis ❄',7:'Hebra 🌿'};
+// Ammo type from weapon type string
+function invGetAmmoType(t){
+  if(!t)return'';
+  const l=t.toLowerCase();
+  if(l.includes('espada')||l.includes('ametralladora')||l.includes('lanzacohetes')||l.includes('lanzagranadas pesad'))return'🔴 Pesada';
+  if(l.includes('escopeta')||l.includes('francotirador')||l.includes('fusión')||l.includes('ffl')||l.includes('arco de combate')||l.includes('lanzagranadas'))return'🟢 Especial';
+  return'🔵 Primaria';
+}
 
 function loadUser() {
   try {
@@ -8357,11 +8401,15 @@ async function loadCollectibleMap() {
       if (Date.now() - ts < 24*60*60*1000) {
         invCollectibleMap = map;
         invItemHashToWeaponId = itemHashMap || {};
-        // Also load plug hash cache
+        // Also load plug hash caches
         try {
           const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY);
           if (pc) invPlugItemCache = JSON.parse(pc);
         } catch(e2) {}
+        try {
+          const pn = localStorage.getItem('d2plugnames.v1');
+          if (pn) invPlugNameCache = JSON.parse(pn);
+        } catch(e3) {}
         return;
       }
     }
@@ -8418,6 +8466,10 @@ async function loadCollectibleMap() {
     const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY);
     if (pc) invPlugItemCache = JSON.parse(pc);
   } catch(e) {}
+  try {
+    const pn = localStorage.getItem('d2plugnames.v1');
+    if (pn) invPlugNameCache = JSON.parse(pn);
+  } catch(e) {}
 }
 
 // =========== INVENTORY FETCH (components 102, 201, 205 — no sockets needed) ===========
@@ -8428,7 +8480,7 @@ async function fetchUserInventoryWithPerks() {
   const headers = {'X-API-Key': apiKey};
   if (accessToken) headers['Authorization'] = 'Bearer ' + accessToken;
 
-  const profileUrl = `${BNET}/Platform/Destiny2/${membershipType}/Profile/${membershipId}/?components=102,201,205,305`;
+  const profileUrl = `${BNET}/Platform/Destiny2/${membershipType}/Profile/${membershipId}/?components=102,201,205,304,305`;
   const res = await fetch(profileUrl, { headers });
   if (!res.ok) throw new Error(`Error HTTP ${res.status} al cargar el perfil`);
   const ct = res.headers.get('content-type') || '';
@@ -8445,8 +8497,17 @@ async function fetchUserInventoryWithPerks() {
   Object.values(charInv).forEach(c => (c.items||[]).forEach(item => allItems.push({...item, location:'inventory'})));
   Object.values(charEq).forEach(c  => (c.items||[]).forEach(item => allItems.push({...item, location:'equipped'})));
 
-  // Per-instance socket data (component 302)
+  // Per-instance socket data (component 305) and stats (component 304)
   const socketsData = data.Response.itemComponents?.sockets?.data || {};
+  const statsData   = data.Response.itemComponents?.stats?.data   || {};
+
+  // Cache per-instance stats
+  invInstanceStats = {};
+  Object.entries(statsData).forEach(([iid, d]) => {
+    const map = {};
+    Object.values(d.stats || {}).forEach(s => { map[s.statHash] = s.value; });
+    invInstanceStats[iid] = map;
+  });
 
   // Collect all unique plug hashes across tracked weapon instances (to batch-resolve names)
   const plugHashesNeeded = new Set();
@@ -8467,19 +8528,19 @@ async function fetchUserInventoryWithPerks() {
   allItems.forEach(item => {
     const weaponId = invItemHashToWeaponId[item.itemHash];
     if (!weaponId) return;
-    // Build perkKeys from socket plugs for this instance
     const sockets = socketsData[item.itemInstanceId]?.sockets || [];
-    const perkKeys = sockets
-      .map(s => invPlugItemCache[s.plugHash])
-      .filter(Boolean);
-    invWeaponRolls.push({weaponId, location: item.location, itemHash: item.itemHash, instanceId: item.itemInstanceId, perkKeys});
+    // Tracked perk keys (for god-roll classification)
+    const perkKeys = sockets.map(s => invPlugItemCache[s.plugHash]).filter(Boolean);
+    // Raw socket hashes (for tooltip display)
+    const socketHashes = sockets.map(s => s.plugHash).filter(Boolean);
+    invWeaponRolls.push({weaponId, location: item.location, itemHash: item.itemHash, instanceId: item.itemInstanceId, perkKeys, socketHashes});
   });
 }
 
 // Resolve plug hashes → perkKey by fetching individual manifest definitions
 // Results stored in invPlugItemCache and persisted to localStorage
 async function resolvePlugHashes(hashes, apiKey) {
-  const BATCH = 12; // parallel requests per batch
+  const BATCH = 12;
   for (let i = 0; i < hashes.length; i += BATCH) {
     const batch = hashes.slice(i, i + BATCH);
     await Promise.all(batch.map(async hash => {
@@ -8488,12 +8549,18 @@ async function resolvePlugHashes(hashes, apiKey) {
           {headers: {'X-API-Key': apiKey}});
         if (!r.ok) { invPlugItemCache[hash] = null; return; }
         const d = await r.json();
-        const name = d.Response?.displayProperties?.name?.trim().toLowerCase();
-        invPlugItemCache[hash] = name ? (invPerkNameToKey[name] ?? null) : null;
+        const rawName = d.Response?.displayProperties?.name?.trim() || '';
+        const nameLow = rawName.toLowerCase();
+        invPlugItemCache[hash] = nameLow ? (invPerkNameToKey[nameLow] ?? null) : null;
+        // Store raw English name for tooltip display
+        if (rawName) invPlugNameCache[hash] = rawName;
       } catch(e) { invPlugItemCache[hash] = null; }
     }));
   }
-  try { localStorage.setItem(PLUG_DEF_CACHE_KEY, JSON.stringify(invPlugItemCache)); } catch(e) {}
+  try {
+    localStorage.setItem(PLUG_DEF_CACHE_KEY, JSON.stringify(invPlugItemCache));
+    localStorage.setItem('d2plugnames.v1', JSON.stringify(invPlugNameCache));
+  } catch(e) {}
 }
 
 // =========== GOD ROLL CLASSIFICATION ===========
@@ -8567,7 +8634,7 @@ function renderInventario() {
     }
     if (!w) return;
     const cls = classifyGodRoll(roll.weaponId, roll.perkKeys);
-    const card = buildInvCard(w, cls);
+    const card = buildInvCard(w, cls, roll);
     if (cls === 'god')          { godCount++;      godGrid.appendChild(card); }
     else if (cls === 'semi')    { semiCount++;     semiGrid.appendChild(card); }
     else if (cls === 'normal')  { normalCount++;   normalGrid.appendChild(card); }
@@ -8600,7 +8667,7 @@ function renderInventario() {
   filterInventario();
 }
 
-function buildInvCard(w, cls) {
+function buildInvCard(w, cls, roll) {
   const ws = state.weapons[w.id];
   const obtained = ws?.obtained || false;
 
@@ -8608,6 +8675,13 @@ function buildInvCard(w, cls) {
   card.className = 'inv-card ' + cls + (obtained ? ' inv-obtained' : '');
   card.dataset.invCls = cls;
   card.dataset.wid = w.id;
+
+  // Tooltip events (desktop only)
+  if (roll && !document.body.classList.contains('is-mobile')) {
+    card.addEventListener('mouseenter', e => showInvTooltip(roll, w, cls, e));
+    card.addEventListener('mousemove',  e => positionInvTooltip(e));
+    card.addEventListener('mouseleave', hideInvTooltip);
+  }
 
   // Image — key by English name (same format as iconMap)
   const img = document.createElement('img');
@@ -8665,6 +8739,106 @@ function buildInvCard(w, cls) {
   card.appendChild(nameEl);
   card.appendChild(bottom);
   return card;
+}
+
+// =========== INVENTORY TOOLTIP ===========
+function showInvTooltip(roll, w, cls, e) {
+  const tt = document.getElementById('inv-tooltip');
+  if (!tt) return;
+  tt.innerHTML = buildInvTooltipHTML(roll, w, cls);
+  tt.style.display = 'block';
+  positionInvTooltip(e);
+}
+function hideInvTooltip() {
+  const tt = document.getElementById('inv-tooltip');
+  if (tt) tt.style.display = 'none';
+}
+function positionInvTooltip(e) {
+  const tt = document.getElementById('inv-tooltip');
+  if (!tt || tt.style.display === 'none') return;
+  const vpW = window.innerWidth, vpH = window.innerHeight;
+  const ttW = tt.offsetWidth, ttH = tt.offsetHeight;
+  let x = e.clientX + 18, y = e.clientY + 14;
+  if (x + ttW > vpW - 10) x = e.clientX - ttW - 12;
+  if (y + ttH > vpH - 10) y = e.clientY - ttH - 8;
+  if (x < 8) x = 8;
+  if (y < 8) y = 8;
+  tt.style.left = x + 'px';
+  tt.style.top  = y + 'px';
+}
+
+function buildInvTooltipHTML(roll, w, cls) {
+  const ws = state.weapons[w.id];
+  const ammo = invGetAmmoType(w.type);
+  const elem = w.elem || '';
+
+  // ── Header ──
+  let html = `<div class="inv-tt-name">${w.n}</div>`;
+  html += `<div class="inv-tt-meta">${w.type}${elem ? ' · ' + elem : ''}${ammo ? ' · ' + ammo : ''}</div>`;
+
+  // ── Stats (from component 304) ──
+  const stats = invInstanceStats[roll.instanceId];
+  const ORDERED_STATS = [4284893193,1935470627,1240592695,155624089,943549884,4188031367,1345609583,3871231066,2715839340,925767036];
+  const statEntries = ORDERED_STATS.map(h => ({h, v: stats?.[h]})).filter(x => x.v !== undefined && x.v > 0);
+
+  if (statEntries.length > 0) {
+    html += `<div class="inv-tt-divider"></div>`;
+    html += `<div class="inv-tt-section-label">Estadísticas</div>`;
+    statEntries.forEach(({h, v}) => {
+      const label = INV_STAT_LABELS[h] || h;
+      const barW = Math.min(100, Math.round((v / 100) * 100));
+      html += `<div class="inv-tt-stat">
+        <span class="inv-tt-stat-name">${label}</span>
+        <div class="inv-tt-bar"><div class="inv-tt-bar-fill" style="width:${barW}%"></div></div>
+        <span class="inv-tt-stat-val">${v}</span>
+      </div>`;
+    });
+  }
+
+  // ── Perks ──
+  const perkEntries = [];
+  const seen = new Set();
+  // Skip these generic/cosmetic socket names
+  const SKIP_WORDS = ['tracker','masterwork','ornament','shader','catalyst complete','default','empty','transmat'];
+  (roll.socketHashes || []).slice(0, 8).forEach(hash => {
+    if (seen.has(hash)) return;
+    seen.add(hash);
+    // Prefer Spanish name from PERK_DEFS
+    const perkKey = invPlugItemCache[hash];
+    let name = '';
+    if (perkKey && PERK_DEFS[perkKey]) {
+      name = PERK_DEFS[perkKey].n || PERK_DEFS[perkKey].e || '';
+    } else {
+      name = invPlugNameCache[hash] || '';
+    }
+    if (!name) return;
+    const lower = name.toLowerCase();
+    if (SKIP_WORDS.some(w => lower.includes(w))) return;
+    // Determine if this perk is a god/semi roll perk for this weapon
+    let perkCls = '';
+    if (ws && perkKey) {
+      const marker = ws.perks?.[perkKey]?.marker;
+      if (marker === 1) perkCls = 'tt-god';
+      else if (marker === 2) perkCls = 'tt-semi';
+    }
+    perkEntries.push({name, perkCls});
+  });
+
+  if (perkEntries.length > 0) {
+    html += `<div class="inv-tt-divider"></div>`;
+    html += `<div class="inv-tt-section-label">Perks</div>`;
+    html += `<div class="inv-tt-perks">`;
+    perkEntries.forEach(({name, perkCls}) => {
+      html += `<div class="inv-tt-perk ${perkCls}">${name}</div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── Location ──
+  const locLabel = {vault:'Bóveda', inventory:'Inventario', equipped:'Equipada'}[roll.location] || roll.location;
+  html += `<div class="inv-tt-location">📍 ${locLabel}</div>`;
+
+  return html;
 }
 
 function filterInventario() {
@@ -8989,6 +9163,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 </script>
 
+
+<!-- ════════ INVENTORY TOOLTIP ════════ -->
+<div id="inv-tooltip"></div>
 
 <!-- ════════ INVENTARIO TAB ════════ -->
 <div id="tab-inventario" class="tab-panel">
