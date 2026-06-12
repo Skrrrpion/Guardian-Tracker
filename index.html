@@ -296,12 +296,13 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .aslot.aobt{border-color:var(--accent-gold-dim)}
 .aslothedr{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
 .aslotname{font-family:'Chakra Petch',sans-serif;font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px}
-.archgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:5px}
-.arow{display:flex;align-items:center;gap:4px;padding:2px 4px;background:var(--bg-panel);border:1px solid var(--border);font-size:9px;min-width:0}
-.astat-icons{display:flex;align-items:center;gap:2px;flex:1}
+.archgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:5px}
+.arow{display:flex;align-items:center;gap:6px;padding:5px 7px;background:var(--bg-panel);border:1px solid var(--border);font-size:9px;min-width:0}
+.astat-icons{display:flex;align-items:center;gap:3px;flex:1}
+.astat-icons img,.astat-img{width:26px;height:26px;border-radius:3px;object-fit:cover}
 .arow.mgod{border-color:var(--marker-god);background:rgba(201,168,76,.06)}
 .arow.msemi{border-color:var(--marker-semi);background:rgba(0,229,204,.04)}
-.amk{width:14px;height:14px;border:none;background:transparent;cursor:pointer;font-size:11px;color:var(--text-muted);padding:0;flex-shrink:0;line-height:1}
+.amk{width:16px;height:16px;border:none;background:transparent;cursor:pointer;font-size:13px;color:var(--text-muted);padding:0;flex-shrink:0;line-height:1}
 .amk.mgod{color:var(--marker-god)}
 .amk.msemi{color:var(--marker-semi)}
 .anm{flex:1;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -365,8 +366,11 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .champ-overload{color:#f5c518;border-color:rgba(245,197,24,.5);background:rgba(245,197,24,.1)}
 .champ-barrier{color:#5b9cf6;border-color:rgba(91,156,246,.5);background:rgba(91,156,246,.12)}
 
-.ea-stats .arow{padding:6px 8px !important;gap:6px !important}
+.ea-stats .arow{padding:8px 10px !important;gap:8px !important}
 .ea-stats .anm{font-size:14px !important;font-weight:600 !important;white-space:normal !important}
+.ea-stats .astat-icons img{width:28px !important;height:28px !important}
+.ea-stats .astat-fb{font-size:18px !important}
+.ea-stats .amk{width:20px !important;height:20px !important;font-size:16px !important}
 
 /* ── LOGIN BUNGIE ── */
 #login-area{display:flex;align-items:center;gap:8px;margin-left:auto}
@@ -578,7 +582,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   body.is-mobile .eacard .ebadge{font-size:9px}
   body.is-mobile .eacard .tag{font-size:9px;padding:2px 4px}
   body.is-mobile .eacard .ownbtn{font-size:10px;padding:4px 6px}
-  body.is-mobile .armor-arch-grid{grid-template-columns:repeat(6,1fr)!important}
+  body.is-mobile .armor-arch-grid{grid-template-columns:repeat(4,1fr)!important}
   body.is-mobile .eacard .arow .anm{font-size:11px!important}
 
   /* ── Tab panels no horizontal overflow ── */
@@ -801,8 +805,14 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .eacard.aobt{border-color:var(--accent-gold) !important;background:rgba(201,168,76,.12) !important}
 .eacard .ownbtn.on{background:rgba(201,168,76,.25) !important;border-color:var(--accent-gold) !important;color:var(--accent-gold-light) !important}
 .eacard .pdesc{font-size:14px !important;line-height:1.65}
-.eacard .whdr{padding:12px 16px}
+/* Exotic card header: flex column, no side button column */
+.eacard .whdr{padding:12px 16px;display:flex;flex-direction:column;gap:0}
+.eacard .wtitle{display:flex;align-items:flex-start;gap:10px;padding:0 0 6px 0;flex-wrap:nowrap}
+.eacard .wtags{padding:0 0 8px 0}
 .eacard .wbody{padding:10px 16px;background:rgba(201,168,76,.04);border-bottom:1px solid rgba(201,168,76,.18)}
+/* Obtenido button at bottom of exotic card */
+.eacard .ea-footer{padding:10px 16px;display:flex;align-items:center;justify-content:flex-end;border-top:1px solid rgba(201,168,76,.18);background:rgba(201,168,76,.03)}
+.tclass{background:rgba(142,103,216,.15) !important;border-color:rgba(142,103,216,.4) !important;color:#d4b8ff !important}
 .aclssec{margin-bottom:18px}
 .aclstitle{font-family:'Chakra Petch',sans-serif;font-size:14px !important;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent-gold-light) !important;margin-bottom:8px;border-bottom:1px solid rgba(201,168,76,.35);padding-bottom:5px}
 .eagrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
@@ -874,14 +884,14 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   background:rgba(120,60,10,.1);
 }
 
-/* ── ARMOR ARCHETYPE GRID (12 combos, 2 columns) ── */
+/* ── ARMOR ARCHETYPE GRID (12 combos) ── */
 .armor-arch-grid{
-  display:grid;grid-template-columns:repeat(6,1fr);gap:2px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
   margin-top:9px;padding-top:9px;
   border-top:1px solid rgba(142,103,216,.18);
 }
 .ea-stats .armor-arch-grid{
-  margin-top:0;padding-top:0;border-top:none;grid-template-columns:repeat(6,1fr);
+  margin-top:0;padding-top:0;border-top:none;grid-template-columns:repeat(4,1fr);
 }
 /* Legendary: purple active */
 .aslot .arow.mgod{border-color:#a673ff !important;background:rgba(166,115,255,.1) !important}
@@ -3624,8 +3634,8 @@ function buildArmorSlotCard(set, slotDef) {
     const ic1 = primId ? (iconMap['stat:'+primId]?.icon||'') : '';
     const ic2 = secId  ? (iconMap['stat:'+secId ]?.icon||'') : '';
     const iconHtml = `<span class="astat-icons" title="${a.stat}">
-      ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;${ic1?'':'display:none'}" onerror="this.style.display='none';var f=this.nextElementSibling;if(f)f.style.display=''"><span class="astat-fb" style="font-size:11px;opacity:.55;${ic1?'display:none':''}">◈</span>`:''}
-      ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>`;
+      ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" class="astat-img" style="${ic1?'':'display:none'}" onerror="this.style.display='none';var f=this.nextElementSibling;if(f)f.style.display=''"><span class="astat-fb" style="${ic1?'display:none':''}">◈</span>`:''}
+      ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" class="astat-img" style="${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>`;
     return `<div class="arow${v?' mgod':''}" id="lgod_${sid}_${a.id}" title="${a.stat}">
       ${iconHtml}
       <button class="amk${v?' mgod':''}" onclick="cycleArmorStat('${sid}','${a.id}')" title="${a.stat}">★</button>
@@ -3696,8 +3706,8 @@ function buildExoticArmorCard(ea) {
     const ic1 = primId ? (iconMap['stat:'+primId]?.icon||'') : '';
     const ic2 = secId  ? (iconMap['stat:'+secId ]?.icon||'') : '';
     const iconHtml = `<span class="astat-icons" title="${a.stat}">
-      ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;${ic1?'':'display:none'}" onerror="this.style.display='none';var f=this.nextElementSibling;if(f)f.style.display=''"><span class="astat-fb" style="font-size:11px;opacity:.55;${ic1?'display:none':''}">◈</span>`:''}
-      ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" style="width:18px;height:18px;border-radius:2px;object-fit:cover;${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>`;
+      ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" class="astat-img" style="${ic1?'':'display:none'}" onerror="this.style.display='none';var f=this.nextElementSibling;if(f)f.style.display=''"><span class="astat-fb" style="${ic1?'display:none':''}">◈</span>`:''}
+      ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" class="astat-img" style="${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>`;
     return `<div class="arow${v?' mgod':''}" id="egod_${ea.id}_${a.id}" title="${a.stat}">
       ${iconHtml}
       <button class="amk${v?' mgod':''}" onclick="cycleExoticStat('${ea.id}','${a.id}')" title="${a.stat}">★</button>
@@ -3707,22 +3717,22 @@ function buildExoticArmorCard(ea) {
     <div class="whdr">
       <div class="wtitle">
         ${iconMap[(ea.e||ea.n).toLowerCase()]?.icon
-          ? `<img class="wimg" data-wimg="${(ea.e||ea.n).toLowerCase()}" src="${iconMap[(ea.e||ea.n).toLowerCase()].icon}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;vertical-align:middle;margin-right:8px;" onerror="this.style.display='none'">`
-          : `<img class="wimg" data-wimg="${(ea.e||ea.n).toLowerCase()}" src="" style="display:none;width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;vertical-align:middle;margin-right:8px;" onerror="this.style.display='none'">`}
+          ? `<img class="wimg" data-wimg="${(ea.e||ea.n).toLowerCase()}" src="${iconMap[(ea.e||ea.n).toLowerCase()].icon}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
+          : `<img class="wimg" data-wimg="${(ea.e||ea.n).toLowerCase()}" src="" style="display:none;width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`}
         <span class="wname wname-exo" data-wkey="${(ea.e||ea.n).toLowerCase()}">${ea.n}</span>
-        <span class="ebadge">${CLASS_ICON[ea.class]||''} ${ea.class}</span>
       </div>
       <div class="wtags">
         <span class="tag">${ea.slot}</span>
+        <span class="tag tclass">${CLASS_ICON[ea.class]||''} ${ea.class}</span>
         <span class="tag tseas">${ea.season}</span>
         <span class="tag tsrc">${ea.src}</span>
-      </div>
-      <div class="btn-group">
-        <button class="ownbtn ${obtained?'on':''}" onclick="toggleExoticArmor('${ea.id}')">${obtained?'✓ Obtenido':'Obtenido'}</button>
       </div>
     </div>
     <div class="wbody"><p class="pdesc" data-ea-perk="${(()=>{ const pn=ea.perk?.split(':')[0]?.trim()?.toLowerCase()||''; return pn; })()}">${ea.perk}</p></div>
     <div class="ea-stats"><div class="armor-arch-grid">${combos}</div></div>
+    <div class="ea-footer">
+      <button class="ownbtn ${obtained?'on':''}" onclick="toggleExoticArmor('${ea.id}')">${obtained?'✓ Obtenido':'Obtenido'}</button>
+    </div>
   </div>`;
 }
 
@@ -8248,7 +8258,7 @@ function init() {
 
 // =========== ICON LOADER (Bungie API) ===========
 const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v12';
+const ICON_CACHE_KEY = 'd2icons.v13';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
 let iconMap = {};
 
@@ -8355,30 +8365,51 @@ async function fetchIcons(apiKey) {
       }
     }
 
-    // Stat icons from DestinyStatDefinition
+    // Stat icons — character armor stats (Mobility, Resilience, etc.)
+    // Strategy 1: direct hash lookup (most reliable, hashes are stable)
+    const STAT_HASHES = {
+      mobility:'2996146975', resilience:'392767087', recovery:'1943323491',
+      discipline:'1735777505', intellect:'144602215', strength:'4244567218'
+    };
     const statLookup = {
       'mobility':'Mobility','resilience':'Resilience','recovery':'Recovery',
       'discipline':'Discipline','intellect':'Intellect','strength':'Strength'
     };
     if (stat_defs) {
+      // Direct hash lookup first
+      for (const [id, hash] of Object.entries(STAT_HASHES)) {
+        const dp = stat_defs[hash]?.displayProperties;
+        if (dp?.icon) icons['stat:'+id] = { icon: BNET + dp.icon };
+      }
+      // Name-based fallback
       const statByName = {};
       for (const [hash, s] of Object.entries(stat_defs)) {
         const n = s.displayProperties?.name;
         if (n) statByName[n] = s.displayProperties;
       }
       for (const [id, en] of Object.entries(statLookup)) {
+        if (icons['stat:'+id]) continue;
         const dp = statByName[en];
         if (dp?.icon) icons['stat:' + id] = { icon: BNET + dp.icon };
       }
     }
-    // Fallback: scan en_items for items whose name exactly matches a stat name (covers cases where DestinyStatDefinition has no icon)
+    // Strategy 2: scan en_items for items that have one of the stat names AND an icon
+    // Some stat icons appear as InventoryItem entries (e.g. stat upgrade items)
     const missingStats = Object.entries(statLookup).filter(([id]) => !icons['stat:'+id]).map(([id, en]) => [id, en]);
     if (missingStats.length > 0) {
       const missingByName = Object.fromEntries(missingStats.map(([id, en]) => [en, id]));
+      // Also try partial matches like "Mobility Enhancement" → mobility
       for (const [hash, item] of Object.entries(en_items)) {
         const dp = item.displayProperties;
         if (!dp?.icon || !dp?.name) continue;
-        const id = missingByName[dp.name];
+        // Exact match first
+        let id = missingByName[dp.name];
+        if (!id) {
+          // Check if the item name starts with a stat name (e.g. "Mobility Enhancement")
+          for (const [statName, statId] of Object.entries(missingByName)) {
+            if (dp.name.startsWith(statName + ' ') || dp.name === statName) { id = statId; break; }
+          }
+        }
         if (id) {
           icons['stat:' + id] = { icon: BNET + dp.icon };
           delete missingByName[dp.name];
