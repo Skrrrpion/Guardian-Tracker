@@ -38,9 +38,13 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 #app-header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,#0a0f18 0%,var(--bg-panel) 100%);border-bottom:1px solid var(--border-bright);padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 #header-title{font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:2px;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);padding-right:16px}
 #progress-ring-wrap{display:flex;align-items:center;gap:8px}
-#progress-ring{width:44px;height:44px;flex-shrink:0}
-#progress-ring circle.bg{fill:none;stroke:var(--bg-card);stroke-width:4}
-#progress-ring circle.fg{fill:none;stroke:var(--accent-gold);stroke-width:4;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .4s ease}
+#progress-ring-donut{position:relative;width:66px;height:66px;flex-shrink:0}
+#progress-ring{width:66px;height:66px;display:block}
+#progress-ring circle.bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:5}
+#progress-ring circle.fg{fill:none;stroke:var(--accent-gold);stroke-width:5;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .4s ease}
+#ring-label-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+#pct-label{font-family:'Chakra Petch',sans-serif;font-size:14px;font-weight:700;color:var(--accent-gold-light);line-height:1}
+#ring-total-label{font-family:'Chakra Petch',sans-serif;font-size:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
 #btn-refresh-api{background:none;border:1px solid rgba(199,169,255,.25);border-radius:4px;color:rgba(199,169,255,.75);font-size:17px;padding:3px 8px;cursor:pointer;font-family:'Chakra Petch',sans-serif;transition:opacity .2s,transform .3s;opacity:.7}
 #btn-refresh-api:hover{opacity:1;transform:rotate(180deg)}
 #header-stats{display:flex;gap:10px;flex-wrap:wrap;align-items:center;flex:1;justify-content:center}
@@ -661,11 +665,12 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .stat-chip.warlock-chip .value{color:#b985e6}
 .stat-chip .label{font-family:'Chakra Petch',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;opacity:.9}
 .stat-chip .value{font-family:'Chakra Petch',sans-serif;font-size:15px;font-weight:700;line-height:1}
-#progress-ring-wrap{display:flex;flex-direction:row;align-items:center;gap:10px;flex-shrink:0}
-#progress-ring{width:44px;height:44px}
-#ring-label-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
-#pct-label{font-family:'Chakra Petch',sans-serif;font-size:28px;font-weight:700;color:var(--accent-gold-light);letter-spacing:1px;line-height:1}
-#ring-total-label{font-family:'Chakra Petch',sans-serif;font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px}
+#progress-ring-wrap{display:flex;flex-direction:row;align-items:center;gap:0;flex-shrink:0}
+#progress-ring-donut{width:66px;height:66px}
+#progress-ring{width:66px;height:66px}
+#ring-label-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#pct-label{font-size:14px;font-weight:700;letter-spacing:.5px;line-height:1}
+#ring-total-label{font-size:6px;letter-spacing:1px;margin-top:2px}
 
 /* ── WEAPON COLORS: PURPLE (legendary) / GOLD (exotic) ── */
 /* Legendary: purple tinted 2-palette card */
@@ -1362,13 +1367,15 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   <div id="header-title">Guardian Collector</div>
   <div id="header-stats">
     <div id="progress-ring-wrap">
-      <svg id="progress-ring" viewBox="0 0 44 44">
-        <circle class="bg" cx="22" cy="22" r="18"/>
-        <circle class="fg" id="ring-fg" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-      </svg>
-      <div id="ring-label-wrap">
-        <span id="pct-label">0%</span>
-        <span id="ring-total-label">COLECCIÓN</span>
+      <div id="progress-ring-donut">
+        <svg id="progress-ring" viewBox="0 0 44 44">
+          <circle class="bg" cx="22" cy="22" r="18"/>
+          <circle class="fg" id="ring-fg" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+        </svg>
+        <div id="ring-label-wrap">
+          <span id="pct-label">0%</span>
+          <span id="ring-total-label">COLECCIÓN</span>
+        </div>
       </div>
     </div>
     <span id="icon-status" style="font-size:11px;color:rgba(199,169,255,.55);padding:0 8px;font-family:'Chakra Petch',sans-serif;"></span>
