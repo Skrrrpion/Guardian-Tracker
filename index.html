@@ -1144,7 +1144,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 /* ── CLASS BUTTONS ── */
 .bc-class-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .bc-class-btns{display:flex;gap:6px}
-.bc-class-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 14px;background:#111;border:1px solid #2a2a3a;color:#666;cursor:pointer;transition:all .18s;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;min-width:64px}
+.bc-class-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 10px;background:#111;border:1px solid #2a2a3a;color:#666;cursor:pointer;transition:all .18s;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;min-width:60px}
 .bc-class-btn:hover{border-color:#888;color:#aaa;background:#181828}
 .bc-class-btn.titan.active{border-color:#c8a84b;color:#c8a84b;background:rgba(200,168,75,.08)}
 .bc-class-btn.hunter.active{border-color:#4ccb6e;color:#4ccb6e;background:rgba(76,203,110,.08)}
@@ -1157,7 +1157,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 /* ── SUBCLASS ELEMENT BUTTONS ── */
 .bc-sub-row{display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap}
 .bc-sub-btns{display:flex;gap:5px;flex-wrap:wrap}
-.bc-sub-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 10px;background:#111;border:1px solid #2a2a3a;color:#666;cursor:pointer;transition:all .18s;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase}
+.bc-sub-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:4px 6px;background:#111;border:1px solid #2a2a3a;color:#666;cursor:pointer;transition:all .18s;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;min-width:52px}
 .bc-sub-btn:hover{opacity:.8}
 .bc-sub-btn.active{color:#fff}
 .bc-sub-btn[data-el=solar]{border-color:#f7a73a44}
@@ -1173,6 +1173,9 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-sub-btn[data-el=prismatic]{border-color:#c87fff44}
 .bc-sub-btn[data-el=prismatic]:hover,.bc-sub-btn[data-el=prismatic].active{border-color:#c87fff;background:linear-gradient(135deg,rgba(247,167,58,.08),rgba(169,111,214,.08));color:#c87fff}
 .bc-sub-btn .el-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.bc-sub-btn .el-diamond{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);transition:filter .18s}
+.bc-sub-btn .el-diamond img{width:28px;height:28px;object-fit:contain;filter:brightness(0) invert(1)}
+.bc-sub-btn:hover .el-diamond,.bc-sub-btn.active .el-diamond{filter:brightness(1.2) drop-shadow(0 0 4px currentColor)}
 
 /* ── ABILITY SLOT BUTTONS ── */
 .bc-slot-btn{display:flex;align-items:center;gap:7px;padding:5px 8px;background:#111;border:1px solid #2a2a3a;color:#999;cursor:pointer;transition:all .15s;width:100%;text-align:left;font-size:.76rem;min-height:34px;position:relative}
@@ -1690,18 +1693,34 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
           <span class="bc-top-label">Clase</span>
           <div class="bc-class-btns">
             <button class="bc-class-btn titan" onclick="bcSelectClass('Titán',this)" title="Titán">
-              <img id="class-icon-titan" src="" width="32" height="32" style="object-fit:contain;display:none" onerror="this.style.display='none'">
-              <svg id="class-svg-titan" width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="14" width="8" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><line x1="4" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1"/></svg>
+              <!-- Titan: three mountain peaks (D2 class emblem) -->
+              <svg width="34" height="46" viewBox="0 0 34 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2h30v34l-15 8L2 36V2z" fill="#0d0d18" stroke="#333350" stroke-width="1.2" stroke-linejoin="round"/>
+                <polygon points="3,32 10,14 17,32" fill="#7070a0" opacity="0.85"/>
+                <polygon points="17,32 24,12 31,32" fill="#7070a0" opacity="0.85"/>
+                <polygon points="10,32 17,8 24,32" fill="#c0c0d8"/>
+              </svg>
               <span>Titán</span>
             </button>
             <button class="bc-class-btn hunter" onclick="bcSelectClass('Cazador',this)" title="Cazador">
-              <img id="class-icon-hunter" src="" width="32" height="32" style="object-fit:contain;display:none" onerror="this.style.display='none'">
-              <svg id="class-svg-hunter" width="22" height="22" viewBox="0 0 22 22" fill="none"><ellipse cx="11" cy="8" rx="5" ry="5" stroke="currentColor" stroke-width="1.5"/><path d="M4,18 Q7,13 11,12 Q15,13 18,18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6,8 Q4,6 5,4" stroke="currentColor" stroke-width="1" fill="none"/><path d="M16,8 Q18,6 17,4" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+              <!-- Hunter: three upward feathers/arrows (D2 class emblem) -->
+              <svg width="34" height="46" viewBox="0 0 34 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2h30v34l-15 8L2 36V2z" fill="#0d0d18" stroke="#333350" stroke-width="1.2" stroke-linejoin="round"/>
+                <line x1="17" y1="33" x2="8" y2="10" stroke="#7070a0" stroke-width="2.8" stroke-linecap="round"/>
+                <line x1="17" y1="33" x2="17" y2="7" stroke="#c0c0d8" stroke-width="2.8" stroke-linecap="round"/>
+                <line x1="17" y1="33" x2="26" y2="10" stroke="#7070a0" stroke-width="2.8" stroke-linecap="round"/>
+              </svg>
               <span>Cazador</span>
             </button>
             <button class="bc-class-btn warlock" onclick="bcSelectClass('Hechicero',this)" title="Hechicero">
-              <img id="class-icon-warlock" src="" width="32" height="32" style="object-fit:contain;display:none" onerror="this.style.display='none'">
-              <svg id="class-svg-warlock" width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M5,18 C5,14 17,14 17,18" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="17" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="21" cy="10" r="1.5" fill="currentColor"/></svg>
+              <!-- Warlock: angular diamond bond (D2 class emblem) -->
+              <svg width="34" height="46" viewBox="0 0 34 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2h30v34l-15 8L2 36V2z" fill="#0d0d18" stroke="#333350" stroke-width="1.2" stroke-linejoin="round"/>
+                <polygon points="17,8 30,20 17,32 4,20" fill="none" stroke="#c0c0d8" stroke-width="1.8" stroke-linejoin="round"/>
+                <polygon points="17,13 25,20 17,27 9,20" fill="#7070a0"/>
+                <line x1="17" y1="8" x2="17" y2="32" stroke="#404060" stroke-width="0.8"/>
+                <line x1="4" y1="20" x2="30" y2="20" stroke="#404060" stroke-width="0.8"/>
+              </svg>
               <span>Hechicero</span>
             </button>
           </div>
@@ -8203,7 +8222,13 @@ function bcSelectClass(cls, btn){
       b.className = 'bc-sub-btn';
       b.setAttribute('data-el', el);
       b.setAttribute('data-val', sub);
-      b.innerHTML = `<span class="el-dot" style="background:${ELEMENT_COLORS[el]||'#888'}"></span>${sub}`;
+      const elIconUrl = iconMap['element:'+el]?.icon || '';
+      if(elIconUrl){
+        b.innerHTML = `<span class="el-diamond" style="background:${ELEMENT_COLORS[el]||'#888'}"><img src="${elIconUrl}" alt="${sub}" onerror="this.style.display='none'"></span>`;
+        b.title = sub;
+      } else {
+        b.innerHTML = `<span class="el-dot" style="background:${ELEMENT_COLORS[el]||'#888'}"></span>${sub}`;
+      }
       b.onclick = function(){ bcSelectSub(sub, this); };
       subBtns.appendChild(b);
     });
@@ -8822,7 +8847,7 @@ function init() {
 
 // =========== ICON LOADER (Bungie API) ===========
 const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v16';
+const ICON_CACHE_KEY = 'd2icons.v17';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
 let iconMap = {};
 
@@ -8870,15 +8895,17 @@ async function fetchIcons(apiKey) {
     const litePath_es = paths_es.DestinyInventoryItemLiteDefinition || paths_es.DestinyInventoryItemDefinition;
     const statPath_en = paths_en.DestinyStatDefinition;
     const classDefPath_en = paths_en.DestinyClassDefinition;
+    const damageDefPath_en = paths_en.DestinyDamageTypeDefinition;
     if (status) status.textContent = 'Descargando datos de Bungie…';
-    // Fetch EN + ES + Stats + ClassDefs in parallel
-    const [en_items, es_items, stat_defs, class_defs] = await Promise.all([
+    // Fetch EN + ES + Stats + ClassDefs + DamageTypes in parallel
+    const [en_items, es_items, stat_defs, class_defs, damage_defs] = await Promise.all([
       fetch(BNET + litePath_en).then(r => r.json()),
       litePath_es !== litePath_en
         ? fetch(BNET + litePath_es).then(r => r.json())
         : Promise.resolve(null),
       statPath_en ? fetch(BNET + statPath_en).then(r => r.json()) : Promise.resolve(null),
-      classDefPath_en ? fetch(BNET + classDefPath_en).then(r => r.json()) : Promise.resolve(null)
+      classDefPath_en ? fetch(BNET + classDefPath_en).then(r => r.json()) : Promise.resolve(null),
+      damageDefPath_en ? fetch(BNET + damageDefPath_en).then(r => r.json()) : Promise.resolve(null)
     ]);
     // Build needed set — English names (weapons, armor, perks/traits)
     const needed = new Set();
@@ -8923,17 +8950,27 @@ async function fetchIcons(apiKey) {
       }
       if (needed.size === 0 && neededEs.size === 0) break;
     }
+    // Helper: strip accents for fuzzy matching
+    const stripAccents = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'');
+    // Build accent-stripped version of neededEs for fallback matching
+    const neededEsNorm = new Map(); // normalized → original
+    neededEs.forEach(nm => neededEsNorm.set(stripAccents(nm), nm));
+
     // Second pass — match Spanish names via es manifest
     if (neededEs.size > 0 && es_items) {
       for (const [hash, item] of Object.entries(es_items)) {
         const dp = item.displayProperties;
         if (!dp?.name) continue;
         const esN = dp.name.toLowerCase();
-        if (neededEs.has(esN)) {
+        const esNnorm = stripAccents(esN);
+        // Exact match first, then accent-stripped fallback
+        const matchKey = neededEs.has(esN) ? esN : (neededEsNorm.has(esNnorm) ? neededEsNorm.get(esNnorm) : null);
+        if (matchKey) {
           const iconPath = dp.icon || en_items[hash]?.displayProperties?.icon;
           if (iconPath) {
-            icons['es:' + esN] = { icon: BNET + iconPath };
-            neededEs.delete(esN);
+            icons['es:' + matchKey] = { icon: BNET + iconPath };
+            neededEs.delete(matchKey);
+            neededEsNorm.delete(esNnorm);
           }
         }
         if (neededEs.size === 0) break;
@@ -9028,13 +9065,28 @@ async function fetchIcons(apiKey) {
         }
       }
     }
-    // Class icons from DestinyClassDefinition (classType: 0=Titan, 1=Hunter, 2=Warlock)
-    if (class_defs) {
-      const classMap = {0:'titan', 1:'hunter', 2:'warlock'};
-      for (const [hash, cls] of Object.entries(class_defs)) {
-        const t = cls.classType;
-        if (t in classMap && cls.displayProperties?.icon) {
-          icons['class:'+classMap[t]] = { icon: BNET + cls.displayProperties.icon };
+    // Element/Damage type icons for subclass buttons
+    // DestinyDamageTypeDefinition: Solar, Arc, Void, Stasis, Strand
+    if (damage_defs) {
+      const elemNameMap = {
+        'Solar':'solar','Arc':'arc','Void':'void',
+        'Stasis':'stasis','Strand':'strand','Kinetic':'kinetic'
+      };
+      for (const [hash, dmg] of Object.entries(damage_defs)) {
+        const n = dmg.displayProperties?.name;
+        if (n && elemNameMap[n] && dmg.displayProperties?.icon) {
+          icons['element:'+elemNameMap[n]] = { icon: BNET + dmg.displayProperties.icon, color: dmg.color };
+        }
+      }
+    }
+    // Prismatic: scan en_items for a Prismatic subclass icon (search by name)
+    if (!icons['element:prismatic']) {
+      for (const [hash, item] of Object.entries(en_items)) {
+        const dp = item.displayProperties;
+        if (!dp?.name || !dp?.icon) continue;
+        if (dp.name === 'Prismatic' && dp.icon) {
+          icons['element:prismatic'] = { icon: BNET + dp.icon };
+          break;
         }
       }
     }
@@ -9085,17 +9137,7 @@ function applyAllIcons() {
   });
 }
 
-function applyClassIcons() {
-  const classMap = {titan:'Titán', hunter:'Cazador', warlock:'Hechicero'};
-  ['titan','hunter','warlock'].forEach(cls => {
-    const entry = iconMap['class:'+cls];
-    if (!entry?.icon) return;
-    const img = document.getElementById('class-icon-'+cls);
-    const svg = document.getElementById('class-svg-'+cls);
-    if (img) { img.src = entry.icon; img.style.display = 'block'; }
-    if (svg) svg.style.display = 'none';
-  });
-}
+function applyClassIcons() { /* Class icons are static SVGs — nothing to do */ }
 
 function saveApiKey() {
   const k = document.getElementById('apikey-input')?.value?.trim();
