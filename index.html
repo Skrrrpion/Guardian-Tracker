@@ -2094,7 +2094,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 // Añade/quita clase 'is-mobile' al body según el ancho de pantalla.
 // Todo el CSS móvil depende de body.is-mobile — sin esto, no se aplica nada.
 function _checkMobile(){
-  const mob = window.innerWidth <= 768;
+  const mob = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth <= 768;
   document.body.classList.toggle('is-mobile', mob);
 }
 // Ejecutar inmediatamente (body ya existe porque el script está al final)
