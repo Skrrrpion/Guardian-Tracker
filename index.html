@@ -281,6 +281,10 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .tsrc{background:rgba(255,255,255,.04);color:var(--text-secondary);border:1px solid var(--border)}
 .tcraft{background:rgba(94,189,106,.1);color:#5ebd6a;border:1px solid rgba(94,189,106,.25)}
 .tseas{background:rgba(201,168,76,.1);color:var(--accent-gold);border:1px solid var(--accent-gold-dim)}
+.tammo{display:inline-flex;align-items:center;gap:4px}
+.tammo-p{background:rgba(120,200,120,.08);color:#78c878;border:1px solid rgba(120,200,120,.3)}
+.tammo-s{background:rgba(120,168,248,.08);color:#78a8f8;border:1px solid rgba(120,168,248,.3)}
+.tammo-h{background:rgba(200,120,120,.08);color:#c87878;border:1px solid rgba(200,120,120,.3)}
 /* armor */
 .asectitle{font-family:'Chakra Petch',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent-gold);margin:14px 0 7px;padding-bottom:4px;border-bottom:1px solid var(--accent-gold-dim)}
 .aclssec{margin-bottom:14px}
@@ -3793,6 +3797,7 @@ function buildWeaponCard(w) {
       </div>
       <div class="wtags">
         <span class="tag ttype">${w.type}</span>
+        ${(()=>{ const s=_wAmmoSlot(w); return s==='heavy'?'<span class="tag tammo tammo-h"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</span>':s==='special'?'<span class="tag tammo tammo-s"><span class="bc-ammo-dot ammo-special"></span>Especial</span>':'<span class="tag tammo tammo-p"><span class="bc-ammo-dot ammo-primary"></span>Primaria</span>'; })()}
         ${w.elem?`<span class="tag element ${ELEM_CLASS[w.elem]||''}">${ei} ${w.elem}</span>`:""}
         ${(()=>{ const ch=detectChampion(w); if(!ch) return ''; const ci=iconMap['champ:'+ch]; const csrc=ci?.icon||''; return `<span class="tag champ-badge champ-${ch}">${csrc?`<img data-pimg="champ:${ch}" src="${csrc}" onerror="this.style.display='none'">`:''} ${CHAMP_LABEL[ch]}</span>`; })()}
         ${w.frame?`<span class="tag tframe">${translateFrame(w.frame)}</span>`:''}
