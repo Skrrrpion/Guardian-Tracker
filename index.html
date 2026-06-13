@@ -40,11 +40,11 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 #progress-ring-wrap{display:flex;align-items:center;gap:8px}
 #progress-ring-donut{position:relative;width:66px;height:66px;flex-shrink:0}
 #progress-ring{width:66px;height:66px;display:block}
-#progress-ring circle.bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:5}
-#progress-ring circle.fg{fill:none;stroke:var(--accent-gold);stroke-width:5;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .4s ease}
+#progress-ring circle.bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:3}
+#progress-ring circle.fg{fill:none;stroke:var(--accent-gold);stroke-width:3;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .4s ease}
 #ring-label-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-#pct-label{font-family:'Chakra Petch',sans-serif;font-size:14px;font-weight:700;color:var(--accent-gold-light);line-height:1}
-#ring-total-label{font-family:'Chakra Petch',sans-serif;font-size:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+#pct-label{font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:700;color:var(--accent-gold-light);line-height:1}
+#ring-total-label{display:none}
 #btn-refresh-api{background:none;border:1px solid rgba(199,169,255,.25);border-radius:4px;color:rgba(199,169,255,.75);font-size:17px;padding:3px 8px;cursor:pointer;font-family:'Chakra Petch',sans-serif;transition:opacity .2s,transform .3s;opacity:.7}
 #btn-refresh-api:hover{opacity:1;transform:rotate(180deg)}
 #header-stats{display:flex;gap:10px;flex-wrap:wrap;align-items:center;flex:1;justify-content:center}
@@ -669,8 +669,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 #progress-ring-donut{width:66px;height:66px}
 #progress-ring{width:66px;height:66px}
 #ring-label-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-#pct-label{font-size:14px;font-weight:700;letter-spacing:.5px;line-height:1}
-#ring-total-label{font-size:6px;letter-spacing:1px;margin-top:2px}
+#pct-label{font-size:18px;font-weight:700;letter-spacing:.5px;line-height:1}
+#ring-total-label{display:none}
 
 /* ── WEAPON COLORS: PURPLE (legendary) / GOLD (exotic) ── */
 /* Legendary: purple tinted 2-palette card */
@@ -974,16 +974,17 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-top-select{background:#111;border:1px solid #3a3a4a;color:#e8e8f0;padding:6px 10px;font-size:.8rem;outline:none;cursor:pointer}
 .bc-top-select:focus{border-color:#c8a84b}
 
-.bc-canvas{display:grid;grid-template-columns:260px 1fr 260px;flex:1;overflow:hidden;gap:0;min-height:0}
+.bc-canvas{display:grid;grid-template-columns:235px 210px 1fr;flex:1;overflow:hidden;gap:0;min-height:0}
 
-/* Left panel */
-.bc-panel-left{background:#0d0d18;border-right:1px solid #1e1e2e;padding:10px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
-/* Right panel */
-.bc-panel-right{background:#0d0d18;border-left:1px solid #1e1e2e;padding:10px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+/* Left panel — Habilidades */
+.bc-panel-left{background:#0d0d18;border-right:1px solid #1e1e2e;padding:8px 10px;overflow:hidden;display:flex;flex-direction:column;gap:3px}
+/* Mid panel — Aspectos / Fragmentos / Stats */
+.bc-panel-mid{background:#0a0a14;border-right:1px solid #1e1e2e;padding:8px 10px;overflow:hidden;display:flex;flex-direction:column;gap:3px}
+/* Right panel — Equipamiento */
+.bc-panel-right{background:#0d0d18;padding:8px 10px;overflow:hidden;display:flex;flex-direction:column;gap:3px}
 
-/* Center mannequin */
-.bc-center{background:radial-gradient(ellipse at center,#0f0f20 0%,#08080f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.bc-center::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 40%,rgba(200,168,75,.04) 0%,transparent 70%);pointer-events:none}
+/* Center mannequin (kept for compat, hidden) */
+.bc-center{display:none}
 
 /* Element aura on center */
 .bc-center.el-solar .guardian-aura{fill:rgba(255,140,0,.12);stroke:#f7a73a}
@@ -1036,8 +1037,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-stat-input:focus{border-color:#c8a84b;outline:none}
 
 /* Weapon/armor rows */
-.bc-equip-row{display:flex;flex-direction:column;gap:3px}
-.bc-equip-label{color:#666;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:4px}
+.bc-equip-row{display:flex;align-items:center;gap:8px}
+.bc-equip-label{color:#666;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:4px;width:58px;flex-shrink:0;line-height:1.2}
 .bc-ammo-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
 .ammo-primary{background:#78c878}
 .ammo-special{background:#78a8f8}
@@ -1093,7 +1094,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-panel-left::-webkit-scrollbar-track,.bc-panel-right::-webkit-scrollbar-track,#bc-list::-webkit-scrollbar-track{background:#0a0a0f}
 .bc-panel-left::-webkit-scrollbar-thumb,.bc-panel-right::-webkit-scrollbar-thumb,#bc-list::-webkit-scrollbar-thumb{background:#2a2a3a}
 
-@media(max-width:900px){.bc-canvas{grid-template-columns:1fr}.bc-center{min-height:300px}.bc-panel-left,.bc-panel-right{max-height:400px}}
+@media(max-width:900px){.bc-canvas{grid-template-columns:1fr}.bc-panel-left,.bc-panel-mid,.bc-panel-right{max-height:none;overflow-y:auto}}
 
 /* ── AMMO FILTER BUTTONS ── */
 .ammo-filter-btns{display:flex;gap:4px;align-items:center}
@@ -1121,7 +1122,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .el-stasis .ab-icon.ab-selected{border-color:#4d88ff!important;box-shadow:0 0 7px rgba(77,136,255,.4)!important}
 .el-strand .ab-icon.ab-selected{border-color:#00c894!important;box-shadow:0 0 7px rgba(0,200,148,.4)!important}
 .el-prismatic .ab-icon.ab-selected{border-color:#c87fff!important;box-shadow:0 0 7px rgba(200,127,255,.4)!important}
-/* Compact stats */
+/* Compact stats (legacy, kept for BC cards) */
 .bc-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .bc-stat-row-c{display:flex;align-items:center;gap:4px;font-size:.68rem}
 .bc-stat-name-c{color:#666;width:24px;font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;flex-shrink:0}
@@ -1129,6 +1130,16 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-stat-bar-fill-c{height:100%;background:linear-gradient(90deg,#c8a84b,#f0d080);border-radius:2px;transition:width .3s}
 .bc-stat-input-c{background:#111;border:1px solid #1e1e2e;color:#aaa;width:28px;padding:1px 3px;font-size:.65rem;text-align:center}
 .bc-stat-input-c:focus{border-color:#c8a84b;outline:none}
+/* Full-width stats (panel-mid) */
+.bc-stats-full{display:flex;flex-direction:column;gap:6px}
+.bc-stat-full-row{display:grid;grid-template-columns:26px 1fr 34px;align-items:center;gap:6px}
+.bc-sfn{color:#666;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase}
+.bc-sfb-bg{background:#1a1a2a;height:4px;border-radius:2px;overflow:hidden}
+.bc-sfb-fill{height:100%;background:linear-gradient(90deg,#c8a84b,#f0d080);border-radius:2px;transition:width .3s}
+.bc-sfi{background:#111;border:1px solid #1e1e2e;color:#aaa;width:34px;padding:1px 3px;font-size:.64rem;text-align:center;outline:none}
+.bc-sfi:focus{border-color:#c8a84b}
+/* Larger ab-icons for aspects/fragments */
+.ab-grid-large .ab-icon{width:52px;height:52px}
 
 /* ── CLASS BUTTONS ── */
 .bc-class-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -1170,15 +1181,15 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-slot-btn .slot-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.74rem}
 .bc-slot-btn .slot-arr{color:#444;font-size:.6rem;flex-shrink:0;margin-left:auto}
 
-/* ── EQUIP IMAGE SLOT BUTTONS ── */
-.bc-equip-slot-btn{display:flex;align-items:center;gap:8px;padding:5px 8px;background:#111;border:1px solid #2a2a3a;color:#888;cursor:pointer;transition:all .15s;width:100%;text-align:left;min-height:38px}
-.bc-equip-slot-btn:hover{border-color:#5a6a8a;background:#161620;color:#ccc}
-.bc-equip-slot-btn.has-val{border-color:#3a4a6a}
-.bc-equip-slot-btn.exotic.has-val{border-color:#c8a84b}
-.bc-equip-slot-btn .equip-thumb{width:32px;height:32px;border-radius:3px;object-fit:cover;flex-shrink:0;background:#0a0a15;border:1px solid #1e1e2e}
-.bc-equip-slot-btn .equip-thumb.has-img{border:none}
-.bc-equip-slot-btn .equip-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.75rem}
-.bc-equip-slot-btn .equip-tag{font-size:.6rem;color:#c8a84b;flex-shrink:0}
+/* ── EQUIP ICON-ONLY SLOT BUTTONS ── */
+.bc-equip-slot-btn{width:44px;height:44px;padding:0;background:#0d0d18;border:1px solid #2a2a3a;cursor:pointer;transition:border-color .15s,box-shadow .15s;flex-shrink:0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.bc-equip-slot-btn:hover{border-color:#5a6a8a;background:#161620}
+.bc-equip-slot-btn.has-val{border-color:#4a5a7a}
+.bc-equip-slot-btn.exotic.has-val{border-color:#c8a84b;box-shadow:0 0 6px rgba(200,168,75,.3)}
+.bc-equip-slot-btn .equip-thumb{width:44px;height:44px;object-fit:cover;display:block}
+.bc-equip-slot-btn .equip-empty{font-size:16px;color:#2a2a3a;line-height:1}
+.bc-equip-slot-btn .equip-name{display:none}
+.bc-equip-slot-btn .equip-tag,.bc-equip-slot-btn .slot-arr{display:none}
 
 /* ── PICKER POPUP ── */
 #bc-picker-popup{position:fixed;z-index:9000;background:#0d0d18;border:1px solid #3a3a5a;box-shadow:0 8px 32px rgba(0,0,0,.7);min-width:260px;max-width:380px;max-height:380px;overflow:hidden;display:flex;flex-direction:column}
@@ -1186,7 +1197,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-pick-header{padding:8px 12px;background:#111;border-bottom:1px solid #2a2a3a;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:#888;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .bc-pick-search{background:#0a0a12;border:1px solid #2a2a3a;color:#ccc;padding:4px 8px;font-size:.75rem;width:100%;outline:none;flex-shrink:0}
 .bc-pick-search:focus{border-color:#4a4a7a}
-.bc-pick-list{overflow-y:auto;flex:1}
+.bc-pick-list{overflow-y:auto;flex:1;max-height:220px}
 .bc-pick-list::-webkit-scrollbar{width:4px}
 .bc-pick-list::-webkit-scrollbar-track{background:#0a0a12}
 .bc-pick-list::-webkit-scrollbar-thumb{background:#2a2a4a}
@@ -1374,7 +1385,6 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         </svg>
         <div id="ring-label-wrap">
           <span id="pct-label">0%</span>
-          <span id="ring-total-label">COLECCIÓN</span>
         </div>
       </div>
     </div>
@@ -1698,302 +1708,141 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
       </div>
     </div>
 
-    <!-- Canvas -->
+    <!-- Canvas — 3 columns, no guardian -->
     <div class="bc-canvas">
 
-      <!-- LEFT: Abilities (inline icon grids) -->
+      <!-- COL 1: Habilidades (ability icon grids) -->
       <div class="bc-panel-left">
-
         <div class="bc-section-title">
           <svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="6" r="2" fill="currentColor"/></svg>
           Habilidades
         </div>
-
-        <div class="ab-row"><span class="ab-lbl">Super</span>
-          <div class="ab-row-icons" id="icons-bc-super"></div>
-        </div>
-        <div class="ab-row"><span class="ab-lbl">Melee</span>
-          <div class="ab-row-icons" id="icons-bc-melee"></div>
-        </div>
-        <div class="ab-row"><span class="ab-lbl">Granada</span>
-          <div class="ab-row-icons" id="icons-bc-grenade"></div>
-        </div>
-        <div class="ab-row"><span class="ab-lbl">Clase</span>
-          <div class="ab-row-icons" id="icons-bc-class-ab"></div>
-        </div>
-        <div class="ab-row"><span class="ab-lbl">Mov.</span>
-          <div class="ab-row-icons" id="icons-bc-movement"></div>
-        </div>
-
-        <!-- Hidden inputs for ability values -->
+        <div class="ab-row"><span class="ab-lbl">Super</span><div class="ab-row-icons" id="icons-bc-super"></div></div>
+        <div class="ab-row"><span class="ab-lbl">Melee</span><div class="ab-row-icons" id="icons-bc-melee"></div></div>
+        <div class="ab-row"><span class="ab-lbl">Granada</span><div class="ab-row-icons" id="icons-bc-grenade"></div></div>
+        <div class="ab-row"><span class="ab-lbl">Clase</span><div class="ab-row-icons" id="icons-bc-class-ab"></div></div>
+        <div class="ab-row"><span class="ab-lbl">Mov.</span><div class="ab-row-icons" id="icons-bc-movement"></div></div>
         <input type="hidden" id="bc-super" value="">
         <input type="hidden" id="bc-melee" value="">
         <input type="hidden" id="bc-grenade" value="">
         <input type="hidden" id="bc-class-ab" value="">
         <input type="hidden" id="bc-movement" value="">
+      </div>
 
-        <div class="bc-section-title" style="margin-top:6px">
+      <!-- COL 2: Aspectos + Fragmentos + Stats -->
+      <div class="bc-panel-mid">
+        <div class="bc-section-title">
           <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
           Aspectos <span style="color:#444;font-size:.6rem;margin-left:4px" id="asp-count">0/2</span>
         </div>
-        <div class="ab-grid-icons" id="icons-bc-aspects"></div>
+        <div class="ab-grid-icons ab-grid-large" id="icons-bc-aspects"></div>
         <input type="hidden" id="bc-aspect1" value="">
         <input type="hidden" id="bc-aspect2" value="">
 
-        <div class="bc-section-title" style="margin-top:6px">
+        <div class="bc-section-title" style="margin-top:7px">
           <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
           Fragmentos <span style="color:#444;font-size:.6rem;margin-left:4px" id="frag-count">0/4</span>
         </div>
-        <div class="ab-grid-icons" id="icons-bc-fragments"></div>
+        <div class="ab-grid-icons ab-grid-large" id="icons-bc-fragments"></div>
         <input type="hidden" id="bc-frag1" value="">
         <input type="hidden" id="bc-frag2" value="">
         <input type="hidden" id="bc-frag3" value="">
         <input type="hidden" id="bc-frag4" value="">
 
-        <div class="bc-section-title" style="margin-top:6px">
+        <div class="bc-section-title" style="margin-top:7px">
           <svg width="12" height="12" viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
           Estadísticas
         </div>
-        <div class="bc-stats-grid" id="bc-stats-block">
-          <div class="bc-stat-row-c"><span class="bc-stat-name-c">MOV</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-mob" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-mob" min="0" max="100" value="50" oninput="bcUpdateBar('mob')"></div>
-          <div class="bc-stat-row-c"><span class="bc-stat-name-c">RES</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-res" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-res" min="0" max="100" value="50" oninput="bcUpdateBar('res')"></div>
-          <div class="bc-stat-row-c"><span class="bc-stat-name-c">REC</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-rec" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-rec" min="0" max="100" value="50" oninput="bcUpdateBar('rec')"></div>
-          <div class="bc-stat-row-c"><span class="bc-stat-name-c">DIS</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-dis" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-dis" min="0" max="100" value="50" oninput="bcUpdateBar('dis')"></div>
-          <div class="bc-stat-row-c"><span class="bc-stat-name-c">INT</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-int" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-int" min="0" max="100" value="50" oninput="bcUpdateBar('int')"></div>
-          <div class="bc-stat-row-c"><span class="bc-stat-name-c">FOR</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-for" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-for" min="0" max="100" value="50" oninput="bcUpdateBar('for')"></div>
+        <div class="bc-stats-full" id="bc-stats-block">
+          <div class="bc-stat-full-row"><span class="bc-sfn">MOV</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-mob" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-mob" min="0" max="100" value="50" oninput="bcUpdateBar('mob')"></div>
+          <div class="bc-stat-full-row"><span class="bc-sfn">RES</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-res" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-res" min="0" max="100" value="50" oninput="bcUpdateBar('res')"></div>
+          <div class="bc-stat-full-row"><span class="bc-sfn">REC</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-rec" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-rec" min="0" max="100" value="50" oninput="bcUpdateBar('rec')"></div>
+          <div class="bc-stat-full-row"><span class="bc-sfn">DIS</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-dis" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-dis" min="0" max="100" value="50" oninput="bcUpdateBar('dis')"></div>
+          <div class="bc-stat-full-row"><span class="bc-sfn">INT</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-int" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-int" min="0" max="100" value="50" oninput="bcUpdateBar('int')"></div>
+          <div class="bc-stat-full-row"><span class="bc-sfn">FOR</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-for" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-for" min="0" max="100" value="50" oninput="bcUpdateBar('for')"></div>
         </div>
-
-        <button class="bc-save-btn" onclick="bcSaveBuild()" style="margin-top:8px">
-          ⬡ Guardar Build
-        </button>
       </div>
 
-      <!-- CENTER: Guardian -->
-      <div class="bc-center" id="bc-center-stage">
-        <!-- Guardian SVG -->
-        <svg class="bc-guardian-svg" id="bc-guardian" width="280" height="420" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;height:auto">
-          <!-- Outer glow ring -->
-          <ellipse class="guardian-aura-outer" cx="100" cy="200" rx="90" ry="115" fill="none" stroke-width="1" stroke-dasharray="8 6" opacity=".3" style="animation:aura-rotate 12s linear infinite;transform-origin:100px 200px"/>
-          <!-- Aura -->
-          <ellipse class="guardian-aura" cx="100" cy="200" rx="82" ry="108"/>
-          <!-- Inner light -->
-          <ellipse cx="100" cy="200" rx="50" ry="70" fill="none" class="guardian-aura-inner" opacity=".12"/>
-
-          <!-- Titan silhouette -->
-          <g id="guardian-titan" style="display:none">
-            <!-- Helmet broad -->
-            <rect x="68" y="18" width="64" height="56" rx="6" fill="#1a1a2e" stroke="#c8a84b" stroke-width="1.5"/>
-            <rect x="72" y="22" width="56" height="20" rx="3" fill="#222" stroke="#c8a84b44" stroke-width="1"/>
-            <!-- Visor -->
-            <rect x="76" y="32" width="48" height="16" rx="2" fill="#c8a84b22" stroke="#c8a84b66" stroke-width="1"/>
-            <line x1="100" y1="32" x2="100" y2="48" stroke="#c8a84b44" stroke-width="1"/>
-            <!-- Neck -->
-            <rect x="90" y="74" width="20" height="10" rx="2" fill="#1a1a2e"/>
-            <!-- Chest broad -->
-            <rect x="58" y="84" width="84" height="72" rx="4" fill="#1a1a2e" stroke="#c8a84b" stroke-width="1.5"/>
-            <line x1="100" y1="84" x2="100" y2="156" stroke="#c8a84b33" stroke-width="1"/>
-            <rect x="65" y="92" width="32" height="20" rx="2" fill="#c8a84b15" stroke="#c8a84b44" stroke-width="1"/>
-            <rect x="103" y="92" width="32" height="20" rx="2" fill="#c8a84b15" stroke="#c8a84b44" stroke-width="1"/>
-            <!-- Shoulder pads L -->
-            <rect x="30" y="78" width="32" height="24" rx="10" fill="#1a1a2e" stroke="#c8a84b" stroke-width="1.5"/>
-            <!-- Shoulder pads R -->
-            <rect x="138" y="78" width="32" height="24" rx="10" fill="#1a1a2e" stroke="#c8a84b" stroke-width="1.5"/>
-            <!-- Arms L -->
-            <rect x="36" y="100" width="24" height="58" rx="4" fill="#1a1a2e" stroke="#c8a84b88" stroke-width="1.2"/>
-            <!-- Arms R -->
-            <rect x="140" y="100" width="24" height="58" rx="4" fill="#1a1a2e" stroke="#c8a84b88" stroke-width="1.2"/>
-            <!-- Hands -->
-            <rect x="38" y="156" width="20" height="18" rx="4" fill="#1a1a2e" stroke="#c8a84b55" stroke-width="1"/>
-            <rect x="142" y="156" width="20" height="18" rx="4" fill="#1a1a2e" stroke="#c8a84b55" stroke-width="1"/>
-            <!-- Belt/waist -->
-            <rect x="62" y="154" width="76" height="18" rx="3" fill="#151520" stroke="#c8a84b" stroke-width="1.5"/>
-            <!-- Legs L -->
-            <rect x="64" y="170" width="32" height="80" rx="4" fill="#1a1a2e" stroke="#c8a84b88" stroke-width="1.2"/>
-            <!-- Legs R -->
-            <rect x="104" y="170" width="32" height="80" rx="4" fill="#1a1a2e" stroke="#c8a84b88" stroke-width="1.2"/>
-            <!-- Boots -->
-            <rect x="62" y="248" width="36" height="22" rx="4" fill="#1a1a2e" stroke="#c8a84b" stroke-width="1.5"/>
-            <rect x="102" y="248" width="36" height="22" rx="4" fill="#1a1a2e" stroke="#c8a84b" stroke-width="1.5"/>
-            <!-- Class item (mark on belt) -->
-            <rect x="90" y="156" width="20" height="14" rx="1" fill="#c8a84b22" stroke="#c8a84b" stroke-width="1"/>
-          </g>
-
-          <!-- Hunter silhouette -->
-          <g id="guardian-hunter" style="display:none">
-            <!-- Helmet sleek -->
-            <ellipse cx="100" cy="46" rx="28" ry="32" fill="#1a1a2e" stroke="#4ccb6e" stroke-width="1.5"/>
-            <ellipse cx="100" cy="38" rx="22" ry="12" fill="#222" stroke="#4ccb6e44" stroke-width="1"/>
-            <!-- Visor -->
-            <path d="M78,42 Q100,52 122,42" fill="none" stroke="#4ccb6e66" stroke-width="2"/>
-            <ellipse cx="100" cy="44" rx="18" ry="7" fill="#4ccb6e11"/>
-            <!-- Neck -->
-            <rect x="93" y="78" width="14" height="8" rx="2" fill="#1a1a2e"/>
-            <!-- Chest sleek -->
-            <path d="M72,86 L80,84 L100,86 L120,84 L128,86 L130,152 L70,152 Z" fill="#1a1a2e" stroke="#4ccb6e" stroke-width="1.5"/>
-            <line x1="100" y1="88" x2="100" y2="150" stroke="#4ccb6e22" stroke-width="1"/>
-            <!-- Shoulder narrow L -->
-            <ellipse cx="60" cy="96" rx="14" ry="10" fill="#1a1a2e" stroke="#4ccb6e" stroke-width="1.5"/>
-            <!-- Shoulder narrow R -->
-            <ellipse cx="140" cy="96" rx="14" ry="10" fill="#1a1a2e" stroke="#4ccb6e" stroke-width="1.5"/>
-            <!-- Arms L -->
-            <rect x="44" y="104" width="18" height="56" rx="5" fill="#1a1a2e" stroke="#4ccb6e77" stroke-width="1.2"/>
-            <!-- Arms R -->
-            <rect x="138" y="104" width="18" height="56" rx="5" fill="#1a1a2e" stroke="#4ccb6e77" stroke-width="1.2"/>
-            <!-- Cloak (hunter) -->
-            <path d="M68,88 Q40,140 45,200 Q55,220 68,240 L70,152 Z" fill="#1a1a2e" stroke="#4ccb6e55" stroke-width="1" opacity="0.8"/>
-            <path d="M132,88 Q160,140 155,200 Q145,220 132,240 L130,152 Z" fill="#1a1a2e" stroke="#4ccb6e55" stroke-width="1" opacity="0.8"/>
-            <!-- Belt -->
-            <rect x="66" y="152" width="68" height="14" rx="2" fill="#151520" stroke="#4ccb6e" stroke-width="1.5"/>
-            <!-- Legs -->
-            <rect x="68" y="164" width="26" height="78" rx="4" fill="#1a1a2e" stroke="#4ccb6e77" stroke-width="1.2"/>
-            <rect x="106" y="164" width="26" height="78" rx="4" fill="#1a1a2e" stroke="#4ccb6e77" stroke-width="1.2"/>
-            <!-- Boots -->
-            <rect x="66" y="240" width="30" height="20" rx="4" fill="#1a1a2e" stroke="#4ccb6e" stroke-width="1.5"/>
-            <rect x="104" y="240" width="30" height="20" rx="4" fill="#1a1a2e" stroke="#4ccb6e" stroke-width="1.5"/>
-          </g>
-
-          <!-- Warlock silhouette -->
-          <g id="guardian-warlock" style="display:none">
-            <!-- Helmet round -->
-            <ellipse cx="100" cy="44" rx="26" ry="30" fill="#1a1a2e" stroke="#a96fd6" stroke-width="1.5"/>
-            <rect x="82" y="38" width="36" height="14" rx="2" fill="#a96fd611"/>
-            <!-- Visor -->
-            <rect x="86" y="40" width="28" height="10" rx="3" fill="#a96fd622" stroke="#a96fd666" stroke-width="1"/>
-            <!-- Neck -->
-            <rect x="94" y="74" width="12" height="10" rx="2" fill="#1a1a2e"/>
-            <!-- Robe/chest -->
-            <path d="M75,84 L100,80 L125,84 L135,260 L65,260 Z" fill="#1a1a2e" stroke="#a96fd6" stroke-width="1.5"/>
-            <line x1="100" y1="84" x2="100" y2="260" stroke="#a96fd622" stroke-width="1"/>
-            <!-- Robe detail lines -->
-            <line x1="85" y1="120" x2="115" y2="120" stroke="#a96fd622" stroke-width="1"/>
-            <line x1="82" y1="160" x2="118" y2="160" stroke="#a96fd622" stroke-width="1"/>
-            <line x1="79" y1="200" x2="121" y2="200" stroke="#a96fd622" stroke-width="1"/>
-            <!-- Shoulder flowy L -->
-            <ellipse cx="58" cy="94" rx="16" ry="11" fill="#1a1a2e" stroke="#a96fd6" stroke-width="1.5"/>
-            <!-- Shoulder flowy R -->
-            <ellipse cx="142" cy="94" rx="16" ry="11" fill="#1a1a2e" stroke="#a96fd6" stroke-width="1.5"/>
-            <!-- Arms L (under robe) -->
-            <path d="M42,102 Q38,130 42,160 L60,160 L62,102 Z" fill="#1a1a2e" stroke="#a96fd677" stroke-width="1.2"/>
-            <!-- Arms R -->
-            <path d="M138,102 Q142,130 158,160 L140,160 L138,102 Z" fill="#1a1a2e" stroke="#a96fd677" stroke-width="1.2"/>
-            <!-- Cuffs -->
-            <ellipse cx="50" cy="163" rx="12" ry="6" fill="#1a1a2e" stroke="#a96fd6" stroke-width="1.5"/>
-            <ellipse cx="150" cy="163" rx="12" ry="6" fill="#1a1a2e" stroke="#a96fd6" stroke-width="1.5"/>
-            <!-- Boots peeking -->
-            <rect x="80" y="250" width="18" height="20" rx="3" fill="#1a1a2e" stroke="#a96fd6" stroke-width="1.5"/>
-            <rect x="102" y="250" width="18" height="20" rx="3" fill="#1a1a2e" stroke="#a96fd6" stroke-width="1.5"/>
-            <!-- Class item (bond) -->
-            <rect x="130" y="105" width="10" height="30" rx="2" fill="#a96fd622" stroke="#a96fd6" stroke-width="1"/>
-          </g>
-
-          <!-- Default ghost icon (no class selected) -->
-          <g id="guardian-default">
-            <text x="100" y="140" text-anchor="middle" fill="#333" font-size="14" letter-spacing="2">GUARDIÁN</text>
-            <text x="100" y="165" text-anchor="middle" fill="#222" font-size="11">Selecciona clase</text>
-            <circle cx="100" cy="190" r="30" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="4 3"/>
-            <text x="100" y="196" text-anchor="middle" fill="#2a2a3a" font-size="22">⬡</text>
-          </g>
-        </svg>
-
-        <!-- Element label -->
-        <div id="bc-element-label" style="position:absolute;bottom:20px;left:0;right:0;text-align:center;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#555"></div>
-      </div>
-
-      <!-- RIGHT: Equipment -->
+      <!-- COL 3: Equipamiento + Notas + Guardar -->
       <div class="bc-panel-right">
         <div class="bc-section-title">
           <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2,6 L6,2 L10,6 L6,10 Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
           Armas
         </div>
-
         <div class="bc-equip-row">
           <div class="bc-equip-label"><span class="bc-ammo-dot ammo-primary"></span>Primaria</div>
           <button class="bc-equip-slot-btn" id="btn-bc-w1" onclick="bcPickWeapon('bc-w1','primary',this)">
-            <img class="equip-thumb" id="img-bc-w1" src="" onerror="this.style.display='none'">
-            <span class="equip-name" id="name-bc-w1">— Arma primaria —</span>
-            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+            <img class="equip-thumb" id="img-bc-w1" src="" style="display:none" onerror="this.style.display='none'">
+            <span class="equip-empty" id="ph-bc-w1">⬡</span>
           </button>
           <input type="hidden" id="bc-w1" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label"><span class="bc-ammo-dot ammo-special"></span>Especial</div>
           <button class="bc-equip-slot-btn" id="btn-bc-w2" onclick="bcPickWeapon('bc-w2','special',this)">
-            <img class="equip-thumb" id="img-bc-w2" src="" onerror="this.style.display='none'">
-            <span class="equip-name" id="name-bc-w2">— Arma especial —</span>
-            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+            <img class="equip-thumb" id="img-bc-w2" src="" style="display:none" onerror="this.style.display='none'">
+            <span class="equip-empty" id="ph-bc-w2">⬡</span>
           </button>
           <input type="hidden" id="bc-w2" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</div>
           <button class="bc-equip-slot-btn" id="btn-bc-w3" onclick="bcPickWeapon('bc-w3','heavy',this)">
-            <img class="equip-thumb" id="img-bc-w3" src="" onerror="this.style.display='none'">
-            <span class="equip-name" id="name-bc-w3">— Arma pesada —</span>
-            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+            <img class="equip-thumb" id="img-bc-w3" src="" style="display:none" onerror="this.style.display='none'">
+            <span class="equip-empty" id="ph-bc-w3">⬡</span>
           </button>
           <input type="hidden" id="bc-w3" value="">
         </div>
 
-        <div class="bc-section-title" style="margin-top:8px">
+        <div class="bc-section-title" style="margin-top:6px">
           <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6,1 L11,4 L11,8 L6,11 L1,8 L1,4 Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
           Armadura
         </div>
-
         <div class="bc-equip-row">
           <div class="bc-equip-label">Casco</div>
           <button class="bc-equip-slot-btn" id="btn-bc-a-helm" onclick="bcPickArmor('bc-a-helm','Casco',this)">
-            <img class="equip-thumb" id="img-bc-a-helm" src="" onerror="this.style.display='none'">
-            <span class="equip-name" id="name-bc-a-helm">— Casco —</span>
-            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+            <img class="equip-thumb" id="img-bc-a-helm" src="" style="display:none" onerror="this.style.display='none'">
+            <span class="equip-empty" id="ph-bc-a-helm">⬡</span>
           </button>
           <input type="hidden" id="bc-a-helm" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label">Brazos</div>
           <button class="bc-equip-slot-btn" id="btn-bc-a-arms" onclick="bcPickArmor('bc-a-arms','Brazos',this)">
-            <img class="equip-thumb" id="img-bc-a-arms" src="" onerror="this.style.display='none'">
-            <span class="equip-name" id="name-bc-a-arms">— Brazos —</span>
-            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+            <img class="equip-thumb" id="img-bc-a-arms" src="" style="display:none" onerror="this.style.display='none'">
+            <span class="equip-empty" id="ph-bc-a-arms">⬡</span>
           </button>
           <input type="hidden" id="bc-a-arms" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label">Pecho</div>
           <button class="bc-equip-slot-btn" id="btn-bc-a-chest" onclick="bcPickArmor('bc-a-chest','Pecho',this)">
-            <img class="equip-thumb" id="img-bc-a-chest" src="" onerror="this.style.display='none'">
-            <span class="equip-name" id="name-bc-a-chest">— Pecho —</span>
-            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+            <img class="equip-thumb" id="img-bc-a-chest" src="" style="display:none" onerror="this.style.display='none'">
+            <span class="equip-empty" id="ph-bc-a-chest">⬡</span>
           </button>
           <input type="hidden" id="bc-a-chest" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label">Piernas</div>
           <button class="bc-equip-slot-btn" id="btn-bc-a-legs" onclick="bcPickArmor('bc-a-legs','Piernas',this)">
-            <img class="equip-thumb" id="img-bc-a-legs" src="" onerror="this.style.display='none'">
-            <span class="equip-name" id="name-bc-a-legs">— Piernas —</span>
-            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+            <img class="equip-thumb" id="img-bc-a-legs" src="" style="display:none" onerror="this.style.display='none'">
+            <span class="equip-empty" id="ph-bc-a-legs">⬡</span>
           </button>
           <input type="hidden" id="bc-a-legs" value="">
         </div>
-        <div class="bc-equip-row">
-          <div class="bc-equip-label">Ítem de Clase</div>
-          <button class="bc-equip-slot-btn" id="btn-bc-a-class" onclick="bcPickArmor('bc-a-class','Ítem de Clase',this)">
-            <img class="equip-thumb" id="img-bc-a-class" src="" onerror="this.style.display='none'">
-            <span class="equip-name" id="name-bc-a-class">— Ítem de Clase —</span>
-            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
-          </button>
-          <input type="hidden" id="bc-a-class" value="">
-        </div>
+        <input type="hidden" id="bc-a-class" value="">
 
-        <div class="bc-section-title" style="margin-top:8px">
+        <div class="bc-section-title" style="margin-top:6px">
           <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2,9 L6,2 L10,9" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="3.5" y1="6.5" x2="8.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg>
-          Perks / Notas
+          Notas
         </div>
-        <div class="bc-equip-row">
-          <div class="bc-ability-label">Perk Exótica / Nota</div>
-          <textarea id="bc-notes" rows="3" placeholder="Describe la sinergia, perks clave..." style="background:#111;border:1px solid #2a2a3a;color:#ccc;padding:6px 8px;font-size:.75rem;width:100%;resize:vertical;outline:none;font-family:inherit"></textarea>
-        </div>
+        <textarea id="bc-notes" rows="2" placeholder="Perk exótica, sinergia clave..." style="background:#111;border:1px solid #2a2a3a;color:#ccc;padding:5px 8px;font-size:.73rem;width:100%;resize:none;outline:none;font-family:inherit"></textarea>
+
+        <button class="bc-save-btn" onclick="bcSaveBuild()" style="margin-top:auto">
+          ⬡ Guardar Build
+        </button>
       </div>
+
     </div><!-- /bc-canvas -->
 
     <!-- Picker popup (shared) -->
@@ -8371,9 +8220,9 @@ function bcSelectSub(sub, btn){
   const d = SUBCLASS_DATA[cls]?.[sub];
   if(!d) return;
   const center = document.getElementById('bc-center-stage');
-  center.className = 'bc-center el-' + d.element;
-  document.getElementById('bc-element-label').textContent = sub;
-  document.getElementById('bc-element-label').style.color = ELEMENT_COLORS[d.element]||'#888';
+  if(center) center.className = 'bc-center el-' + d.element;
+  const elLbl = document.getElementById('bc-element-label');
+  if(elLbl){ elLbl.textContent = sub; elLbl.style.color = ELEMENT_COLORS[d.element]||'#888'; }
   // Render inline icon grids
   bcRenderAbilityIcons('bc-super',   d.supers,       d.element, 'single');
   bcRenderAbilityIcons('bc-melee',   d.melees,       d.element, 'single');
@@ -8503,14 +8352,12 @@ function bcClearAbilities(){
 }
 
 function bcUpdateGuardian(){
-  const cls = document.getElementById('bc-class').value;
-  document.getElementById('guardian-titan').style.display = cls==='Titán'?'block':'none';
-  document.getElementById('guardian-hunter').style.display = cls==='Cazador'?'block':'none';
-  document.getElementById('guardian-warlock').style.display = cls==='Hechicero'?'block':'none';
-  document.getElementById('guardian-default').style.display = cls?'none':'block';
+  // Guardian SVG removed — function kept for compat with bcSelectClass
   if(!document.getElementById('bc-sub').value){
-    document.getElementById('bc-center-stage').className='bc-center';
-    document.getElementById('bc-element-label').textContent='';
+    const cs = document.getElementById('bc-center-stage');
+    if(cs) cs.className='bc-center';
+    const el = document.getElementById('bc-element-label');
+    if(el) el.textContent='';
   }
 }
 
@@ -8604,9 +8451,10 @@ function bcPickerSelect(val, label, icon, tag){
     // For equip slots (weapon/armor)
     const imgEl = document.getElementById('img-'+_bcPickerTarget);
     const nameEl = document.getElementById('name-'+_bcPickerTarget);
+    const phEl = document.getElementById('ph-'+_bcPickerTarget);
     if(imgEl){
-      if(icon){ imgEl.src=icon; imgEl.style.display=''; imgEl.classList.add('has-img'); }
-      else { imgEl.src=''; imgEl.style.display='none'; imgEl.classList.remove('has-img'); }
+      if(icon){ imgEl.src=icon; imgEl.style.display='block'; imgEl.classList.add('has-img'); if(phEl) phEl.style.display='none'; }
+      else { imgEl.src=''; imgEl.style.display='none'; imgEl.classList.remove('has-img'); if(phEl) phEl.style.display=''; }
     }
     if(nameEl) nameEl.textContent = val || '—';
     if(btn && val && tag==='★') btn.classList.add('exotic');
@@ -8742,8 +8590,8 @@ function bcResetCreator(){
   if(subRow){subRow.style.opacity='.35';subRow.style.pointerEvents='none';}
   bcClearAbilities();
   bcUpdateGuardian();
-  document.getElementById('bc-center-stage').className='bc-center';
-  document.getElementById('bc-element-label').textContent='';
+  const cs2=document.getElementById('bc-center-stage'); if(cs2) cs2.className='bc-center';
+  const el2=document.getElementById('bc-element-label'); if(el2) el2.textContent='';
   // Reset weapon/armor slots
   ['bc-w1','bc-w2','bc-w3','bc-a-helm','bc-a-arms','bc-a-chest','bc-a-legs','bc-a-class'].forEach(id=>{
     const hidIn=document.getElementById(id); if(hidIn) hidIn.value='';
