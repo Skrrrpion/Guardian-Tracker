@@ -620,7 +620,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 
   /* ── Armor ── */
   body.is-mobile .aslots{grid-template-columns:1fr!important}
-  body.is-mobile .archgrid{grid-template-columns:repeat(6,1fr)!important}
+  body.is-mobile .archgrid{grid-template-columns:repeat(4,1fr)!important}
 
   /* ── Inventory grid ── */
   body.is-mobile .inv-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
@@ -1543,9 +1543,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 
 <!-- MOBILE STATS BAR -->
 <div id="mobile-stats-bar">
-  <div class="mob-row mob-row-refresh">
-    <button onclick="clearIconCache()" class="mob-refresh-btn" title="Actualizar datos de Bungie">🔄 Actualizar</button>
-  </div>
+
   <div class="mob-row">
     <div class="stat-chip wpurple"><span class="label">⚔ Armas</span><span class="value" id="mstat-armas">0</span></div>
     <div class="stat-chip wpurple"><span class="label">🛡 Arm. Leg.</span><span class="value" id="mstat-armor-leg">0</span></div>
@@ -3831,12 +3829,16 @@ function updateHeader() {
 
 function updateMobileStats() {
   const p = calcProgress();
+  const tw = WEAPONS.length;
+  const texo = WEAPONS.filter(w=>w.exotic).length;
+  const tLeg = ARMOR_SETS.reduce((n,s) => n+s.slots.length*3, 0);
+  const tExo = EXOTIC_ARMOR.length;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  set('mstat-armas',     p.armas);
-  set('mstat-armor-leg', p.armorLeg);
-  set('mstat-armor',     p.setsComplete);
-  set('mstat-exo',       p.exoArmas);
-  set('mstat-armor-exo', p.armorExo);
+  set('mstat-armas',     p.armas+'/'+tw);
+  set('mstat-armor-leg', p.armorLeg+'/'+tLeg);
+  set('mstat-armor',     p.setsComplete+'/'+ARMOR_SETS.length);
+  set('mstat-exo',       p.exoArmas+'/'+texo);
+  set('mstat-armor-exo', p.armorExo+'/'+tExo);
   set('mstat-titan',     p.titan);
   set('mstat-hunter',    p.cazador);
   set('mstat-warlock',   p.hechicero);
