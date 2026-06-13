@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guardian Collector</title>
+<title>Definitive Collector</title>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -32,11 +32,14 @@
   --danger: #e05050;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;height:100%}
 body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
+/* Sin scroll en el tab de builds */
+body:has(#tab-builds.active){overflow:hidden;height:100vh}
 /* ── HEADER ── */
 #app-header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,#0a0f18 0%,var(--bg-panel) 100%);border-bottom:1px solid var(--border-bright);padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-#header-title{font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:2px;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);padding-right:16px}
+#header-title{font-family:'Chakra Petch',sans-serif;font-size:18px;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:2px;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);padding-right:16px;display:flex;align-items:center;gap:8px}
+#header-title svg{flex-shrink:0;filter:drop-shadow(0 0 4px rgba(201,168,76,.45))}
 #progress-ring-wrap{display:flex;align-items:center;gap:8px}
 #progress-ring-donut{position:relative;width:66px;height:66px;flex-shrink:0}
 #progress-ring{width:66px;height:66px;display:block}
@@ -650,7 +653,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 /* ── HEADER RESTRUCTURE ── */
 /* ── HUD HEADER ── */
 #app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 28px;gap:14px;flex-wrap:nowrap;min-height:72px}
-#header-title{font-family:'Chakra Petch',sans-serif;font-size:34px;font-weight:700;color:var(--accent-gold-light);letter-spacing:3px;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+#header-title{font-family:'Chakra Petch',sans-serif;font-size:34px;font-weight:700;color:var(--accent-gold-light);letter-spacing:3px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:10px}
+#header-title svg{width:40px;height:40px;filter:drop-shadow(0 0 6px rgba(201,168,76,.5))}
 #header-stats{display:flex;flex-wrap:nowrap;gap:5px;flex:1;justify-content:center;align-items:center}
 .schip-sep{width:1px;height:36px;background:var(--border-bright);opacity:.4;flex-shrink:0;margin:0 3px}
 .stat-chip{display:flex;flex-direction:row;align-items:center;gap:8px;padding:7px 13px;border:1px solid var(--border);white-space:nowrap;flex-shrink:0;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%)}
@@ -868,6 +872,23 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   color:rgba(212,184,255,.7);
 }
 .aslot-bonus-hdr::before{content:'◈';font-size:14px;color:#a673ff}
+/* ── Per-class armor rows ─────────────────────────── */
+.aclass-rows{display:flex;flex-direction:column;gap:0}
+.aclass-row{border-top:1px solid rgba(142,103,216,.18);padding:8px 0 6px}
+.aclass-row:first-child{border-top:none;padding-top:2px}
+.aclass-row-hdr{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.aclass-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.aclass-label{font-family:'Chakra Petch',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;flex:1}
+.aclass-label.lbl-caz{color:#79c7e3}
+.aclass-label.lbl-hec{color:#b985e6}
+.aclass-label.lbl-tit{color:#f4a33d}
+.aclass-markbtn{font-family:'Chakra Petch',sans-serif;font-size:10px;font-weight:700;padding:4px 10px;cursor:pointer;border:1px solid rgba(142,103,216,.4);background:transparent;color:rgba(182,148,255,.7);text-transform:uppercase;letter-spacing:.8px;transition:all .18s;white-space:nowrap}
+.aclass-markbtn.on{background:rgba(124,58,237,.2);border-color:#9d5eff;color:#d4b8ff;box-shadow:0 0 8px rgba(124,58,237,.35)}
+.aclass-markbtn:not(.on):hover{border-color:#7c3aed;color:#c084fc}
+.aclass-slots{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+@media(max-width:900px){.aclass-slots{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.aclass-slots{grid-template-columns:repeat(2,1fr)}}
+
 .aset-bonus2{display:flex;flex-direction:column;gap:6px}
 .aset-brow{
   display:flex;align-items:flex-start;gap:10px;
@@ -1141,6 +1162,62 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 /* Larger ab-icons for aspects/fragments */
 .ab-grid-large .ab-icon{width:52px;height:52px}
 
+/* ══════════════════════════════════════════════════
+   NEW BUILD CREATOR LAYOUT
+   ══════════════════════════════════════════════════ */
+/* Top bar */
+.bc-name-save{display:flex;flex-direction:column;gap:6px;min-width:160px}
+.bc-name-save .bc-save-top{margin-top:0;padding:8px 14px;font-size:.72rem;width:100%}
+.bc-class-block{display:flex;flex-direction:column;gap:4px}
+/* Sub row now horizontal alongside class */
+#bc-sub-row.bc-sub-row{margin-top:0}
+/* Main row */
+.bc-main-row{display:flex;flex:1;overflow:hidden;min-height:0}
+/* Abilities column — 2x icons */
+.bc-panel-abilities{background:#0d0d18;border-right:1px solid #1e1e2e;padding:10px 12px;display:flex;flex-direction:column;gap:6px;flex-shrink:0;overflow-y:auto;min-width:0;width:auto}
+.bc-panel-abilities .ab-icon{width:104px!important;height:104px!important}
+.bc-panel-abilities .ab-row{flex-direction:column;gap:3px;margin-bottom:2px;align-items:flex-start}
+.bc-panel-abilities .ab-row-icons{flex-wrap:wrap}
+.bc-panel-abilities .ab-lbl{font-size:.62rem;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+/* Dos columnas de habilidades */
+.bc-ab-two-cols{display:flex;gap:12px;align-items:flex-start}
+.bc-ab-col-left,.bc-ab-col-right{display:flex;flex-direction:column;gap:6px}
+/* Habilidades: grid 3×3, iconos 104px */
+#icons-bc-super,#icons-bc-melee,#icons-bc-grenade,#icons-bc-class-ab,#icons-bc-movement{display:grid!important;grid-template-columns:repeat(3,104px);gap:4px}
+/* Aspects + Fragments panel — fills remaining horizontal space */
+.bc-panel-aspfrag{background:#0a0a14;border-right:1px solid #1e1e2e;padding:10px 12px;display:flex;flex-direction:column;overflow-y:auto;flex:1;min-width:0;gap:10px}
+.bc-aspfrag-inner{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.bc-asp-col{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.bc-frag-col{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+/* Aspects: 2 cols × 4 rows grid, icons 104px */
+#icons-bc-aspects{display:grid!important;grid-template-columns:repeat(2,104px);gap:4px;flex:none}
+#icons-bc-aspects .ab-icon{width:104px!important;height:104px!important}
+#icons-bc-aspects .ab-fb{font-size:11px}
+/* Fragments: 4 cols × 4 rows grid, icons 104px */
+#icons-bc-fragments{display:grid!important;grid-template-columns:repeat(4,104px);gap:4px;flex:none}
+#icons-bc-fragments .ab-icon{width:104px!important;height:104px!important}
+#icons-bc-fragments .ab-fb{font-size:11px}
+/* Equip en top bar */
+.bc-top-equip{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;border-left:1px solid #2a2a3a;padding-left:16px;margin-left:4px}
+.bc-top-equip-group{display:flex;flex-direction:column;gap:4px}
+.bc-equip-horizontal{display:flex;gap:6px;flex-wrap:wrap}
+.bc-equip-h-slot{display:flex;flex-direction:column;align-items:center;gap:3px}
+.bc-equip-h-label{color:#555;font-size:.55rem;text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:2px;white-space:nowrap}
+/* Stats + Notas column */
+.bc-panel-stats-notes{background:#0d0d18;padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-width:380px;width:380px;flex-shrink:0;overflow-y:auto}
+/* 2x stat bars with draggable range */
+.bc-stats-xl{display:flex;flex-direction:column;gap:18px}
+.bc-stat-xl-row{display:grid;grid-template-columns:44px 1fr 58px 44px;align-items:center;gap:10px}
+.bc-stat-xl-name{color:#aaa;font-size:1rem;letter-spacing:.1em;text-transform:uppercase;font-family:'Chakra Petch',sans-serif}
+.bc-stat-xl-bar{position:relative;height:16px;background:#1a1a2a;border-radius:4px;overflow:hidden}
+.bc-stat-xl-fill{height:100%;background:linear-gradient(90deg,#c8a84b,#f0d080);border-radius:4px;transition:width .1s;pointer-events:none}
+.bc-stat-xl-range{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;padding:0;z-index:2;-webkit-appearance:none;appearance:none}
+.bc-stat-xl-num{background:#111;border:1px solid #1e1e2e;color:#c8a84b;width:58px;padding:4px 6px;font-size:1rem;text-align:center;outline:none;font-family:'Chakra Petch',sans-serif}
+.bc-stat-xl-num:focus{border-color:#c8a84b}
+.bc-frag-mod{font-size:.78rem;font-family:'Chakra Petch',sans-serif;font-weight:700;text-align:center;min-width:40px;letter-spacing:.04em}
+/* Notes */
+#bc-notes{background:#111;border:1px solid #2a2a3a;color:#ccc;padding:8px 10px;font-size:.8rem;width:100%;resize:vertical;outline:none;font-family:inherit;min-height:160px;box-sizing:border-box;flex:1}
+
 /* ── CLASS BUTTONS ── */
 .bc-class-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .bc-class-btns{display:flex;gap:6px}
@@ -1192,7 +1269,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-equip-slot-btn.has-val{border-color:#4a5a7a}
 .bc-equip-slot-btn.exotic.has-val{border-color:#c8a84b;box-shadow:0 0 6px rgba(200,168,75,.3)}
 .bc-equip-slot-btn .equip-thumb{width:44px;height:44px;object-fit:cover;display:block}
-.bc-equip-slot-btn .equip-empty{font-size:16px;color:#2a2a3a;line-height:1}
+.bc-equip-slot-btn .equip-empty{font-size:16px;color:#2a2a3a;line-height:1;display:flex;align-items:center;justify-content:center}
 .bc-equip-slot-btn .equip-name{display:none}
 .bc-equip-slot-btn .equip-tag,.bc-equip-slot-btn .slot-arr{display:none}
 
@@ -1260,16 +1337,14 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 }
 #splash-logo{text-align:center}
 .splash-emblem{
-  width:80px;height:80px;margin:0 auto 16px;
-  border:2px solid var(--accent-gold-dim);
-  border-radius:50%;
+  width:88px;height:88px;margin:0 auto 16px;
   display:flex;align-items:center;justify-content:center;
-  font-size:38px;
-  background:radial-gradient(circle, rgba(201,168,76,.15) 0%, transparent 70%);
-  box-shadow:0 0 40px rgba(201,168,76,.2),inset 0 0 20px rgba(201,168,76,.05);
+  background:radial-gradient(circle, rgba(201,168,76,.12) 0%, transparent 65%);
+  filter:drop-shadow(0 0 18px rgba(201,168,76,.35));
   animation:emblem-pulse 3s ease-in-out infinite;
 }
-@keyframes emblem-pulse{0%,100%{box-shadow:0 0 40px rgba(201,168,76,.2),inset 0 0 20px rgba(201,168,76,.05)} 50%{box-shadow:0 0 60px rgba(201,168,76,.35),inset 0 0 30px rgba(201,168,76,.1)}}
+.splash-emblem svg{overflow:visible}
+@keyframes emblem-pulse{0%,100%{filter:drop-shadow(0 0 12px rgba(201,168,76,.3))} 50%{filter:drop-shadow(0 0 28px rgba(201,168,76,.6))}}
 #splash-logo h1{
   font-family:'Chakra Petch',sans-serif;font-size:clamp(20px,5vw,28px);
   color:var(--accent-gold-light);text-transform:uppercase;letter-spacing:4px;font-weight:700;
@@ -1362,21 +1437,41 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 <div id="login-splash">
   <div id="splash-content">
     <div id="splash-logo">
-      <div class="splash-emblem">⊕</div>
-      <h1>Guardian Collector</h1>
+      <div class="splash-emblem">
+        <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg" fill="none" width="68" height="68">
+          <!-- Lens fill -->
+          <circle cx="36" cy="36" r="28" fill="rgba(10,8,20,0.75)"/>
+          <!-- Lens outer ring -->
+          <circle cx="36" cy="36" r="28" stroke="#c8a84b" stroke-width="2.8"/>
+          <!-- Inner reticle ring (dashed) -->
+          <circle cx="36" cy="36" r="15" stroke="#c8a84b" stroke-width="1.1" stroke-dasharray="4.5 3" opacity="0.65"/>
+          <!-- Crosshair H — left segment -->
+          <line x1="8" y1="36" x2="27" y2="36" stroke="#c8a84b" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Crosshair H — right segment -->
+          <line x1="45" y1="36" x2="64" y2="36" stroke="#c8a84b" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Crosshair V — top segment -->
+          <line x1="36" y1="8" x2="36" y2="27" stroke="#c8a84b" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Crosshair V — bottom segment -->
+          <line x1="36" y1="45" x2="36" y2="64" stroke="#c8a84b" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Center dot -->
+          <circle cx="36" cy="36" r="2.8" fill="#c8a84b"/>
+          <!-- Center glow ring -->
+          <circle cx="36" cy="36" r="5.5" stroke="#c8a84b" stroke-width="0.8" opacity="0.4"/>
+          <!-- Handle outer (shadow) -->
+          <line x1="58" y1="58" x2="82" y2="82" stroke="rgba(0,0,0,0.5)" stroke-width="9" stroke-linecap="round"/>
+          <!-- Handle -->
+          <line x1="58" y1="58" x2="82" y2="82" stroke="#c8a84b" stroke-width="6.5" stroke-linecap="round"/>
+          <!-- Handle highlight -->
+          <line x1="59" y1="58" x2="80" y2="79" stroke="rgba(255,240,180,0.25)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1>Definitive Collector</h1>
       <p>Destiny 2 · Collection Tracker</p>
     </div>
     <div class="splash-divider"></div>
-    <div id="splash-platform-select" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
-      <button id="splash-login-btn" onclick="splashDoLogin(this)" style="font-family:'Chakra Petch',sans-serif;font-size:13px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.4);color:var(--accent-gold);padding:16px 32px;cursor:pointer;text-transform:uppercase;letter-spacing:2px;font-weight:700;width:100%;max-width:320px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:all .2s">🔐 Iniciar Sesión con Bungie</button>
-    </div>
-    <div id="splash-loading" style="display:none;font-family:'Chakra Petch',sans-serif;font-size:12px;color:var(--text-muted);letter-spacing:1px">Conectando…</div>
-    <div id="splash-error" style="font-family:'Chakra Petch',sans-serif;font-size:11px;color:var(--danger);min-height:16px;text-align:center"></div>
-    <div id="splash-bungie-form" style="display:none;flex-direction:column;gap:12px;align-items:center;width:100%">
-      <div class="splash-prompt">Introduce tu nombre de Bungie</div>
-      <input id="splash-input" type="text" placeholder="Guardián#1234" autocomplete="off" onkeydown="if(event.key==='Enter')splashConnect()">
-      <button id="splash-connect-btn" onclick="splashConnect()">Conectar</button>
-      <button id="splash-back-btn" onclick="splashBack()">← Volver</button>
+    <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+      <button id="splash-login-btn" onclick="bungieOAuthLogin()" style="font-family:'Chakra Petch',sans-serif;font-size:13px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.4);color:var(--accent-gold);padding:16px 32px;cursor:pointer;text-transform:uppercase;letter-spacing:2px;font-weight:700;width:100%;max-width:320px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:all .2s">🔐 Iniciar Sesión con Bungie</button>
+      <div id="splash-error" style="font-family:'Chakra Petch',sans-serif;font-size:11px;color:var(--danger);min-height:16px;text-align:center"></div>
     </div>
     <button class="splash-skip" onclick="splashSkip()">Entrar sin sesión →</button>
   </div>
@@ -1384,7 +1479,20 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
 <!-- HEADER -->
 <header id="app-header">
-  <div id="header-title">Guardian Collector</div>
+  <div id="header-title">
+    <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg" fill="none" width="28" height="28" style="overflow:visible">
+      <circle cx="36" cy="36" r="28" fill="rgba(10,8,20,0.7)"/>
+      <circle cx="36" cy="36" r="28" stroke="#c8a84b" stroke-width="2.8"/>
+      <circle cx="36" cy="36" r="15" stroke="#c8a84b" stroke-width="1" stroke-dasharray="4.5 3" opacity="0.6"/>
+      <line x1="8" y1="36" x2="27" y2="36" stroke="#c8a84b" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="45" y1="36" x2="64" y2="36" stroke="#c8a84b" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="36" y1="8" x2="36" y2="27" stroke="#c8a84b" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="36" y1="45" x2="36" y2="64" stroke="#c8a84b" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="36" cy="36" r="2.8" fill="#c8a84b"/>
+      <line x1="58" y1="58" x2="82" y2="82" stroke="#c8a84b" stroke-width="6.5" stroke-linecap="round"/>
+    </svg>
+    Definitive Collector
+  </div>
   <div id="header-stats">
     <div id="progress-ring-wrap">
       <div id="progress-ring-donut">
@@ -1427,13 +1535,9 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   <div id="login-modal">
     <button id="login-modal-close" onclick="closeLoginModal()">✕</button>
     <h3>🔐 Iniciar Sesión</h3>
-    <div class="login-field">
-      <label>Nombre de Guardián</label>
-      <input id="login-modal-input" type="text" placeholder="Guardian#1234" autocomplete="off"
-             onkeydown="if(event.key==='Enter')doLoginModal()">
-    </div>
-    <div id="login-modal-error"></div>
-    <button id="login-modal-btn" onclick="doLoginModal()">Conectar cuenta Bungie</button>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;line-height:1.5">Serás redirigido a Bungie.net para autenticarte. Necesitas tener configurado tu <strong>Client ID</strong> en el banner de API Key.</p>
+    <div id="login-modal-error" style="font-size:11px;color:var(--danger);min-height:18px;margin-bottom:8px"></div>
+    <button id="login-modal-btn" onclick="bungieOAuthLogin()">🔐 Ir a Bungie.net</button>
   </div>
 </div>
 
@@ -1460,9 +1564,11 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
 
 <!-- API KEY BANNER -->
-<div id="apikey-banner" style="display:none;align-items:center;gap:10px;padding:8px 16px;background:rgba(30,20,50,.95);border-bottom:1px solid rgba(199,169,255,.2);font-size:12px;color:rgba(199,169,255,.7);">
-  <span>🔑 Introduce tu <a href="https://www.bungie.net/en/Application" target="_blank">Bungie API Key</a> para cargar iconos y nombres oficiales:</span>
-  <input id="apikey-input" type="text" placeholder="API Key…" style="flex:1;max-width:340px;background:rgba(255,255,255,.07);border:1px solid rgba(199,169,255,.3);border-radius:4px;padding:4px 8px;color:#fff;font-size:12px;">
+<div id="apikey-banner" style="display:none;align-items:center;gap:10px;padding:8px 16px;background:rgba(30,20,50,.95);border-bottom:1px solid rgba(199,169,255,.2);font-size:12px;color:rgba(199,169,255,.7);flex-wrap:wrap">
+  <span>🔑 <a href="https://www.bungie.net/en/Application" target="_blank">Bungie API Key</a>:</span>
+  <input id="apikey-input" type="text" placeholder="API Key…" style="flex:1;min-width:180px;max-width:300px;background:rgba(255,255,255,.07);border:1px solid rgba(199,169,255,.3);border-radius:4px;padding:4px 8px;color:#fff;font-size:12px;">
+  <span style="margin-left:8px">🆔 Client ID (OAuth):</span>
+  <input id="clientid-input" type="text" placeholder="Client ID…" style="flex:1;min-width:100px;max-width:160px;background:rgba(255,255,255,.07);border:1px solid rgba(199,169,255,.3);border-radius:4px;padding:4px 8px;color:#fff;font-size:12px;">
   <button onclick="saveApiKey()" style="background:var(--accent-gold-dim,#b8972a);color:#000;border:none;border-radius:4px;padding:4px 12px;cursor:pointer;font-size:12px;">Guardar</button>
 </div>
 
@@ -1681,77 +1787,142 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
   <!-- ── CREATOR VIEW ── -->
   <div id="bc-creator" class="bc-view active">
-    <!-- Top bar -->
-    <div class="bc-creator-top" style="flex-wrap:wrap;gap:14px">
-      <div style="display:flex;flex-direction:column;gap:4px;min-width:160px">
+
+    <!-- TOP BAR: [Nombre + Guardar] | [Clases] | [Subclases] -->
+    <div class="bc-creator-top">
+      <!-- Nombre + Guardar Build -->
+      <div class="bc-name-save">
         <label>Nombre</label>
         <input type="text" id="bc-name" placeholder="Mi Build..." maxlength="40">
+        <button class="bc-save-btn bc-save-top" onclick="bcSaveBuild()">⬡ Guardar Build</button>
       </div>
-      <div class="bc-top-class-area">
-        <!-- Class row -->
-        <div class="bc-class-row">
-          <span class="bc-top-label">Clase</span>
-          <div class="bc-class-btns">
-            <button class="bc-class-btn titan" onclick="bcSelectClass('Titán',this)" title="Titán">
-              <!-- Titan: three mountain peaks (D2 class emblem) -->
-              <svg width="38" height="50" viewBox="0 0 38 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4" stroke-linejoin="round"/>
-                <polygon points="2,34 11,13 20,34" fill="#606080" opacity="0.75"/>
-                <polygon points="18,34 27,11 36,34" fill="#606080" opacity="0.75"/>
-                <polygon points="10,34 19,7 28,34" fill="#d0d0e8"/>
-              </svg>
-              <span>Titán</span>
-            </button>
-            <button class="bc-class-btn hunter" onclick="bcSelectClass('Cazador',this)" title="Cazador">
-              <!-- Hunter: three upward feathers fanning out (D2 class emblem) -->
-              <svg width="38" height="50" viewBox="0 0 38 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4" stroke-linejoin="round"/>
-                <line x1="19" y1="35" x2="6" y2="9" stroke="#606080" stroke-width="3" stroke-linecap="round"/>
-                <line x1="19" y1="35" x2="19" y2="6" stroke="#d0d0e8" stroke-width="3" stroke-linecap="round"/>
-                <line x1="19" y1="35" x2="32" y2="9" stroke="#606080" stroke-width="3" stroke-linecap="round"/>
-              </svg>
-              <span>Cazador</span>
-            </button>
-            <button class="bc-class-btn warlock" onclick="bcSelectClass('Hechicero',this)" title="Hechicero">
-              <!-- Warlock: hexagonal ring bond (D2 class emblem) -->
-              <svg width="38" height="50" viewBox="0 0 38 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4" stroke-linejoin="round"/>
-                <!-- Outer hexagon ring -->
-                <polygon points="19,7 31,14 31,28 19,35 7,28 7,14" fill="none" stroke="#d0d0e8" stroke-width="2.2" stroke-linejoin="round"/>
-                <!-- Inner hexagon filled -->
-                <polygon points="19,12 27,17 27,25 19,30 11,25 11,17" fill="#585878"/>
-                <!-- Center detail -->
-                <circle cx="19" cy="21" r="3" fill="#d0d0e8"/>
-              </svg>
-              <span>Hechicero</span>
-            </button>
+      <!-- Clases -->
+      <div class="bc-class-block">
+        <span class="bc-top-label">Clase</span>
+        <div class="bc-class-btns">
+          <button class="bc-class-btn titan" onclick="bcSelectClass('Titán',this)" title="Titán">
+            <svg width="38" height="50" viewBox="0 0 38 50" fill="none"><path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4" stroke-linejoin="round"/><polygon points="2,34 11,13 20,34" fill="#606080" opacity="0.75"/><polygon points="18,34 27,11 36,34" fill="#606080" opacity="0.75"/><polygon points="10,34 19,7 28,34" fill="#d0d0e8"/></svg>
+            <span>Titán</span>
+          </button>
+          <button class="bc-class-btn hunter" onclick="bcSelectClass('Cazador',this)" title="Cazador">
+            <svg width="38" height="50" viewBox="0 0 38 50" fill="none"><path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4" stroke-linejoin="round"/><line x1="19" y1="35" x2="6" y2="9" stroke="#606080" stroke-width="3" stroke-linecap="round"/><line x1="19" y1="35" x2="19" y2="6" stroke="#d0d0e8" stroke-width="3" stroke-linecap="round"/><line x1="19" y1="35" x2="32" y2="9" stroke="#606080" stroke-width="3" stroke-linecap="round"/></svg>
+            <span>Cazador</span>
+          </button>
+          <button class="bc-class-btn warlock" onclick="bcSelectClass('Hechicero',this)" title="Hechicero">
+            <svg width="38" height="50" viewBox="0 0 38 50" fill="none"><path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4"/><polygon points="19,7 31,14 31,28 19,35 7,28 7,14" fill="none" stroke="#d0d0e8" stroke-width="2.2" stroke-linejoin="round"/><polygon points="19,12 27,17 27,25 19,30 11,25 11,17" fill="#585878"/><circle cx="19" cy="21" r="3" fill="#d0d0e8"/></svg>
+            <span>Hechicero</span>
+          </button>
+        </div>
+      </div>
+      <!-- Subclases (a la derecha de Clases) -->
+      <div class="bc-sub-row" id="bc-sub-row" style="opacity:.35;pointer-events:none">
+        <span class="bc-top-label">Subclase</span>
+        <div class="bc-sub-btns" id="bc-sub-btns"></div>
+      </div>
+      <!-- Armas + Armadura (a la derecha de subclases) -->
+      <div class="bc-top-equip" id="bc-top-equip" style="display:none">
+        <div class="bc-top-equip-group">
+          <span class="bc-top-label">Armas</span>
+          <div class="bc-equip-horizontal">
+            <div class="bc-equip-h-slot">
+              <div class="bc-equip-h-label"><span class="bc-ammo-dot ammo-primary"></span>Primaria</div>
+              <button class="bc-equip-slot-btn" id="btn-bc-w1" onclick="bcPickWeapon('bc-w1','primary',this)">
+                <img class="equip-thumb" id="img-bc-w1" src="" style="display:none" onerror="this.style.display='none'">
+                <span class="equip-empty" id="ph-bc-w1">⬡</span>
+              </button>
+              <input type="hidden" id="bc-w1" value="">
+            </div>
+            <div class="bc-equip-h-slot">
+              <div class="bc-equip-h-label"><span class="bc-ammo-dot ammo-special"></span>Especial</div>
+              <button class="bc-equip-slot-btn" id="btn-bc-w2" onclick="bcPickWeapon('bc-w2','special',this)">
+                <img class="equip-thumb" id="img-bc-w2" src="" style="display:none" onerror="this.style.display='none'">
+                <span class="equip-empty" id="ph-bc-w2">⬡</span>
+              </button>
+              <input type="hidden" id="bc-w2" value="">
+            </div>
+            <div class="bc-equip-h-slot">
+              <div class="bc-equip-h-label"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</div>
+              <button class="bc-equip-slot-btn" id="btn-bc-w3" onclick="bcPickWeapon('bc-w3','heavy',this)">
+                <img class="equip-thumb" id="img-bc-w3" src="" style="display:none" onerror="this.style.display='none'">
+                <span class="equip-empty" id="ph-bc-w3">⬡</span>
+              </button>
+              <input type="hidden" id="bc-w3" value="">
+            </div>
           </div>
         </div>
-        <!-- Subclass row -->
-        <div class="bc-sub-row" id="bc-sub-row" style="opacity:.35;pointer-events:none">
-          <span class="bc-top-label">Subclase</span>
-          <div class="bc-sub-btns" id="bc-sub-btns"></div>
+        <div class="bc-top-equip-group">
+          <span class="bc-top-label">Armadura</span>
+          <div class="bc-equip-horizontal">
+            <div class="bc-equip-h-slot">
+              <button class="bc-equip-slot-btn" id="btn-bc-a-helm" title="Casco" onclick="bcPickArmor('bc-a-helm','Casco',this)">
+                <img class="equip-thumb" id="img-bc-a-helm" src="" style="display:none" onerror="this.style.display='none'">
+                <span class="equip-empty" id="ph-bc-a-helm"><svg viewBox="0 0 40 40" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6C12.3 6 7 12 7 19v7h4v-7c0-5 4-9 9-9s9 4 9 9v7h4v-7c0-7-5.3-13-13-13z" fill="#3a3a5a"/><rect x="5" y="26" width="30" height="6" rx="2" fill="#3a3a5a"/><path d="M13 22c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="#6a6a9a" stroke-width="1.5" fill="none"/></svg></span>
+              </button>
+              <input type="hidden" id="bc-a-helm" value="">
+            </div>
+            <div class="bc-equip-h-slot">
+              <button class="bc-equip-slot-btn" id="btn-bc-a-arms" title="Brazos" onclick="bcPickArmor('bc-a-arms','Brazos',this)">
+                <img class="equip-thumb" id="img-bc-a-arms" src="" style="display:none" onerror="this.style.display='none'">
+                <span class="equip-empty" id="ph-bc-a-arms"><svg viewBox="0 0 40 40" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="5" width="12" height="18" rx="4" fill="#3a3a5a" stroke="#6a6a9a" stroke-width="1.2"/><rect x="11" y="22" width="18" height="10" rx="3" fill="#3a3a5a" stroke="#6a6a9a" stroke-width="1.2"/><rect x="13" y="30" width="14" height="5" rx="2" fill="#4a4a7a"/></svg></span>
+              </button>
+              <input type="hidden" id="bc-a-arms" value="">
+            </div>
+            <div class="bc-equip-h-slot">
+              <button class="bc-equip-slot-btn" id="btn-bc-a-chest" title="Pecho" onclick="bcPickArmor('bc-a-chest','Pecho',this)">
+                <img class="equip-thumb" id="img-bc-a-chest" src="" style="display:none" onerror="this.style.display='none'">
+                <span class="equip-empty" id="ph-bc-a-chest"><svg viewBox="0 0 40 40" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 10 L20 6 L32 10 L34 28 L20 34 L6 28 Z" fill="#3a3a5a" stroke="#6a6a9a" stroke-width="1.2"/><path d="M20 6 L20 34" stroke="#6a6a9a" stroke-width="1" opacity="0.5"/><path d="M10 14 L30 14" stroke="#6a6a9a" stroke-width="1" opacity="0.4"/><path d="M14 8 L14 12 M26 8 L26 12" stroke="#8a8aaa" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+              </button>
+              <input type="hidden" id="bc-a-chest" value="">
+            </div>
+            <div class="bc-equip-h-slot">
+              <button class="bc-equip-slot-btn" id="btn-bc-a-legs" title="Piernas" onclick="bcPickArmor('bc-a-legs','Piernas',this)">
+                <img class="equip-thumb" id="img-bc-a-legs" src="" style="display:none" onerror="this.style.display='none'">
+                <span class="equip-empty" id="ph-bc-a-legs"><svg viewBox="0 0 40 40" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="5" width="10" height="20" rx="2" fill="#3a3a5a" stroke="#6a6a9a" stroke-width="1.2"/><rect x="21" y="5" width="10" height="20" rx="2" fill="#3a3a5a" stroke="#6a6a9a" stroke-width="1.2"/><rect x="9" y="24" width="10" height="11" rx="2" fill="#4a4a7a" stroke="#6a6a9a" stroke-width="1"/><rect x="21" y="24" width="10" height="11" rx="2" fill="#4a4a7a" stroke="#6a6a9a" stroke-width="1"/></svg></span>
+              </button>
+              <input type="hidden" id="bc-a-legs" value="">
+            </div>
+            <div class="bc-equip-h-slot">
+              <button class="bc-equip-slot-btn" id="btn-bc-a-class" title="Ítem de Clase" onclick="bcPickArmor('bc-a-class','Ítem de Clase',this)">
+                <img class="equip-thumb" id="img-bc-a-class" src="" style="display:none" onerror="this.style.display='none'">
+                <span class="equip-empty" id="ph-bc-a-class"><svg viewBox="0 0 40 40" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg" id="classitem-svg"><path d="M20 4 L36 20 L20 36 L4 20 Z" fill="#3a3a5a" stroke="#6a6a9a" stroke-width="1.5"/><path d="M20 10 L30 20 L20 30 L10 20 Z" fill="#4a4a7a"/><circle cx="20" cy="20" r="3" fill="#8a8aaa"/></svg></span>
+              </button>
+              <input type="hidden" id="bc-a-class" value="">
+            </div>
+          </div>
         </div>
-        <!-- Hidden inputs for value storage -->
-        <input type="hidden" id="bc-class" value="">
-        <input type="hidden" id="bc-sub" value="">
       </div>
+      <input type="hidden" id="bc-class" value="">
+      <input type="hidden" id="bc-sub" value="">
     </div>
 
-    <!-- Canvas — 3 columns, no guardian -->
-    <div class="bc-canvas">
+    <!-- Mensaje informativo (visible hasta que se elige clase+subclase) -->
+    <div id="bc-prompt-msg" style="display:flex;align-items:center;justify-content:center;gap:12px;padding:28px 20px;color:#555;font-size:.85rem;letter-spacing:.06em;font-family:'Chakra Petch',sans-serif;border-top:1px solid #1a1a2a">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" opacity=".5"><circle cx="10" cy="10" r="8.5" stroke="#c8a84b" stroke-width="1.4"/><circle cx="10" cy="10" r="4" stroke="#c8a84b" stroke-width=".9" stroke-dasharray="3 2"/><line x1="2" y1="10" x2="6.5" y2="10" stroke="#c8a84b" stroke-width="1.2" stroke-linecap="round"/><line x1="13.5" y1="10" x2="18" y2="10" stroke="#c8a84b" stroke-width="1.2" stroke-linecap="round"/><line x1="10" y1="2" x2="10" y2="6.5" stroke="#c8a84b" stroke-width="1.2" stroke-linecap="round"/><line x1="10" y1="13.5" x2="10" y2="18" stroke="#c8a84b" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Elige clase y subclase para desplegar las opciones de equipación
+    </div>
 
-      <!-- COL 1: Habilidades (ability icon grids) -->
-      <div class="bc-panel-left">
+    <!-- MAIN ROW: Habilidades | Aspectos+Fragmentos | Stats+Notas -->
+    <div class="bc-main-row" id="bc-main-row" style="display:none">
+
+      <!-- COL 1: Habilidades — izq: Super/Clase/Mov · der: Melee/Granada -->
+      <div class="bc-panel-abilities">
         <div class="bc-section-title">
           <svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="6" r="2" fill="currentColor"/></svg>
           Habilidades
         </div>
-        <div class="ab-row"><span class="ab-lbl">Super</span><div class="ab-row-icons" id="icons-bc-super"></div></div>
-        <div class="ab-row"><span class="ab-lbl">Melee</span><div class="ab-row-icons" id="icons-bc-melee"></div></div>
-        <div class="ab-row"><span class="ab-lbl">Granada</span><div class="ab-row-icons" id="icons-bc-grenade"></div></div>
-        <div class="ab-row"><span class="ab-lbl">Clase</span><div class="ab-row-icons" id="icons-bc-class-ab"></div></div>
-        <div class="ab-row"><span class="ab-lbl">Mov.</span><div class="ab-row-icons" id="icons-bc-movement"></div></div>
+        <div class="bc-ab-two-cols">
+          <!-- Columna izquierda: Super, Clase, Movilidad -->
+          <div class="bc-ab-col-left">
+            <div class="ab-row"><span class="ab-lbl">Super</span><div class="ab-row-icons" id="icons-bc-super"></div></div>
+            <div class="ab-row"><span class="ab-lbl">Clase</span><div class="ab-row-icons" id="icons-bc-class-ab"></div></div>
+            <div class="ab-row"><span class="ab-lbl">Mov.</span><div class="ab-row-icons" id="icons-bc-movement"></div></div>
+          </div>
+          <!-- Columna derecha: Melee, Granada -->
+          <div class="bc-ab-col-right">
+            <div class="ab-row"><span class="ab-lbl">Melee</span><div class="ab-row-icons" id="icons-bc-melee"></div></div>
+            <div class="ab-row"><span class="ab-lbl">Granada</span><div class="ab-row-icons" id="icons-bc-grenade"></div></div>
+          </div>
+        </div>
         <input type="hidden" id="bc-super" value="">
         <input type="hidden" id="bc-melee" value="">
         <input type="hidden" id="bc-grenade" value="">
@@ -1759,121 +1930,89 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         <input type="hidden" id="bc-movement" value="">
       </div>
 
-      <!-- COL 2: Aspectos + Fragmentos + Stats -->
-      <div class="bc-panel-mid">
+      <!-- COL 2: Aspectos | Fragmentos + Armas + Armadura abajo -->
+      <div class="bc-panel-aspfrag">
+        <!-- Aspectos (2 vertical) + Fragmentos (3 por columna) -->
+        <div class="bc-aspfrag-inner">
+          <!-- Aspectos: 2 iconos en columna -->
+          <div class="bc-asp-col">
+            <div class="bc-section-title">
+              <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+              Aspectos <span style="color:#c8a84b;font-size:.9rem;font-weight:700;margin-left:8px;font-family:'Chakra Petch',sans-serif;letter-spacing:.05em" id="asp-count">0/2</span>
+            </div>
+            <div class="ab-grid-icons ab-grid-large" id="icons-bc-aspects"></div>
+            <input type="hidden" id="bc-aspect1" value="">
+            <input type="hidden" id="bc-aspect2" value="">
+          </div>
+          <!-- Fragmentos: 3 por columna -->
+          <div class="bc-frag-col">
+            <div class="bc-section-title">
+              <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+              Fragmentos <span style="color:#c8a84b;font-size:.9rem;font-weight:700;margin-left:8px;font-family:'Chakra Petch',sans-serif;letter-spacing:.05em" id="frag-count">0/0</span>
+            </div>
+            <div class="ab-grid-icons ab-grid-large" id="icons-bc-fragments"></div>
+            <input type="hidden" id="bc-frag1" value="">
+            <input type="hidden" id="bc-frag2" value="">
+            <input type="hidden" id="bc-frag3" value="">
+            <input type="hidden" id="bc-frag4" value="">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COL 3: Estadísticas (x2 + arrastrables) + Notas -->
+      <div class="bc-panel-stats-notes">
         <div class="bc-section-title">
-          <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-          Aspectos <span style="color:#444;font-size:.6rem;margin-left:4px" id="asp-count">0/2</span>
-        </div>
-        <div class="ab-grid-icons ab-grid-large" id="icons-bc-aspects"></div>
-        <input type="hidden" id="bc-aspect1" value="">
-        <input type="hidden" id="bc-aspect2" value="">
-
-        <div class="bc-section-title" style="margin-top:7px">
-          <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
-          Fragmentos <span style="color:#444;font-size:.6rem;margin-left:4px" id="frag-count">0/4</span>
-        </div>
-        <div class="ab-grid-icons ab-grid-large" id="icons-bc-fragments"></div>
-        <input type="hidden" id="bc-frag1" value="">
-        <input type="hidden" id="bc-frag2" value="">
-        <input type="hidden" id="bc-frag3" value="">
-        <input type="hidden" id="bc-frag4" value="">
-
-        <div class="bc-section-title" style="margin-top:7px">
           <svg width="12" height="12" viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
           Estadísticas
         </div>
-        <div class="bc-stats-full" id="bc-stats-block">
-          <div class="bc-stat-full-row"><span class="bc-sfn">MOV</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-mob" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-mob" min="0" max="100" value="50" oninput="bcUpdateBar('mob')"></div>
-          <div class="bc-stat-full-row"><span class="bc-sfn">RES</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-res" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-res" min="0" max="100" value="50" oninput="bcUpdateBar('res')"></div>
-          <div class="bc-stat-full-row"><span class="bc-sfn">REC</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-rec" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-rec" min="0" max="100" value="50" oninput="bcUpdateBar('rec')"></div>
-          <div class="bc-stat-full-row"><span class="bc-sfn">DIS</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-dis" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-dis" min="0" max="100" value="50" oninput="bcUpdateBar('dis')"></div>
-          <div class="bc-stat-full-row"><span class="bc-sfn">INT</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-int" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-int" min="0" max="100" value="50" oninput="bcUpdateBar('int')"></div>
-          <div class="bc-stat-full-row"><span class="bc-sfn">FOR</span><div class="bc-sfb-bg"><div class="bc-sfb-fill" id="bar-for" style="width:50%"></div></div><input class="bc-sfi" type="number" id="bc-stat-for" min="0" max="100" value="50" oninput="bcUpdateBar('for')"></div>
+        <div class="bc-stats-xl" id="bc-stats-block">
+          <div class="bc-stat-xl-row">
+            <span class="bc-stat-xl-name">MOV</span>
+            <div class="bc-stat-xl-bar"><div class="bc-stat-xl-fill" id="bar-mob" style="width:50%"></div><input type="range" class="bc-stat-xl-range" min="0" max="100" value="50" id="drag-mob" oninput="bcDragStat('mob',this.value)"></div>
+            <input class="bc-stat-xl-num" type="number" id="bc-stat-mob" min="0" max="100" value="50" oninput="bcUpdateBar('mob')">
+            <span id="frag-mod-mob" class="bc-frag-mod" style="display:none"></span>
+          </div>
+          <div class="bc-stat-xl-row">
+            <span class="bc-stat-xl-name">RES</span>
+            <div class="bc-stat-xl-bar"><div class="bc-stat-xl-fill" id="bar-res" style="width:50%"></div><input type="range" class="bc-stat-xl-range" min="0" max="100" value="50" id="drag-res" oninput="bcDragStat('res',this.value)"></div>
+            <input class="bc-stat-xl-num" type="number" id="bc-stat-res" min="0" max="100" value="50" oninput="bcUpdateBar('res')">
+            <span id="frag-mod-res" class="bc-frag-mod" style="display:none"></span>
+          </div>
+          <div class="bc-stat-xl-row">
+            <span class="bc-stat-xl-name">REC</span>
+            <div class="bc-stat-xl-bar"><div class="bc-stat-xl-fill" id="bar-rec" style="width:50%"></div><input type="range" class="bc-stat-xl-range" min="0" max="100" value="50" id="drag-rec" oninput="bcDragStat('rec',this.value)"></div>
+            <input class="bc-stat-xl-num" type="number" id="bc-stat-rec" min="0" max="100" value="50" oninput="bcUpdateBar('rec')">
+            <span id="frag-mod-rec" class="bc-frag-mod" style="display:none"></span>
+          </div>
+          <div class="bc-stat-xl-row">
+            <span class="bc-stat-xl-name">DIS</span>
+            <div class="bc-stat-xl-bar"><div class="bc-stat-xl-fill" id="bar-dis" style="width:50%"></div><input type="range" class="bc-stat-xl-range" min="0" max="100" value="50" id="drag-dis" oninput="bcDragStat('dis',this.value)"></div>
+            <input class="bc-stat-xl-num" type="number" id="bc-stat-dis" min="0" max="100" value="50" oninput="bcUpdateBar('dis')">
+            <span id="frag-mod-dis" class="bc-frag-mod" style="display:none"></span>
+          </div>
+          <div class="bc-stat-xl-row">
+            <span class="bc-stat-xl-name">INT</span>
+            <div class="bc-stat-xl-bar"><div class="bc-stat-xl-fill" id="bar-int" style="width:50%"></div><input type="range" class="bc-stat-xl-range" min="0" max="100" value="50" id="drag-int" oninput="bcDragStat('int',this.value)"></div>
+            <input class="bc-stat-xl-num" type="number" id="bc-stat-int" min="0" max="100" value="50" oninput="bcUpdateBar('int')">
+            <span id="frag-mod-int" class="bc-frag-mod" style="display:none"></span>
+          </div>
+          <div class="bc-stat-xl-row">
+            <span class="bc-stat-xl-name">FOR</span>
+            <div class="bc-stat-xl-bar"><div class="bc-stat-xl-fill" id="bar-for" style="width:50%"></div><input type="range" class="bc-stat-xl-range" min="0" max="100" value="50" id="drag-for" oninput="bcDragStat('for',this.value)"></div>
+            <input class="bc-stat-xl-num" type="number" id="bc-stat-for" min="0" max="100" value="50" oninput="bcUpdateBar('for')">
+            <span id="frag-mod-for" class="bc-frag-mod" style="display:none"></span>
+          </div>
         </div>
-      </div>
-
-      <!-- COL 3: Equipamiento + Notas + Guardar -->
-      <div class="bc-panel-right">
-        <div class="bc-section-title">
-          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2,6 L6,2 L10,6 L6,10 Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-          Armas
-        </div>
-        <div class="bc-equip-row">
-          <div class="bc-equip-label"><span class="bc-ammo-dot ammo-primary"></span>Primaria</div>
-          <button class="bc-equip-slot-btn" id="btn-bc-w1" onclick="bcPickWeapon('bc-w1','primary',this)">
-            <img class="equip-thumb" id="img-bc-w1" src="" style="display:none" onerror="this.style.display='none'">
-            <span class="equip-empty" id="ph-bc-w1">⬡</span>
-          </button>
-          <input type="hidden" id="bc-w1" value="">
-        </div>
-        <div class="bc-equip-row">
-          <div class="bc-equip-label"><span class="bc-ammo-dot ammo-special"></span>Especial</div>
-          <button class="bc-equip-slot-btn" id="btn-bc-w2" onclick="bcPickWeapon('bc-w2','special',this)">
-            <img class="equip-thumb" id="img-bc-w2" src="" style="display:none" onerror="this.style.display='none'">
-            <span class="equip-empty" id="ph-bc-w2">⬡</span>
-          </button>
-          <input type="hidden" id="bc-w2" value="">
-        </div>
-        <div class="bc-equip-row">
-          <div class="bc-equip-label"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</div>
-          <button class="bc-equip-slot-btn" id="btn-bc-w3" onclick="bcPickWeapon('bc-w3','heavy',this)">
-            <img class="equip-thumb" id="img-bc-w3" src="" style="display:none" onerror="this.style.display='none'">
-            <span class="equip-empty" id="ph-bc-w3">⬡</span>
-          </button>
-          <input type="hidden" id="bc-w3" value="">
-        </div>
-
-        <div class="bc-section-title" style="margin-top:6px">
-          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6,1 L11,4 L11,8 L6,11 L1,8 L1,4 Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-          Armadura
-        </div>
-        <div class="bc-equip-row">
-          <div class="bc-equip-label">Casco</div>
-          <button class="bc-equip-slot-btn" id="btn-bc-a-helm" onclick="bcPickArmor('bc-a-helm','Casco',this)">
-            <img class="equip-thumb" id="img-bc-a-helm" src="" style="display:none" onerror="this.style.display='none'">
-            <span class="equip-empty" id="ph-bc-a-helm">⬡</span>
-          </button>
-          <input type="hidden" id="bc-a-helm" value="">
-        </div>
-        <div class="bc-equip-row">
-          <div class="bc-equip-label">Brazos</div>
-          <button class="bc-equip-slot-btn" id="btn-bc-a-arms" onclick="bcPickArmor('bc-a-arms','Brazos',this)">
-            <img class="equip-thumb" id="img-bc-a-arms" src="" style="display:none" onerror="this.style.display='none'">
-            <span class="equip-empty" id="ph-bc-a-arms">⬡</span>
-          </button>
-          <input type="hidden" id="bc-a-arms" value="">
-        </div>
-        <div class="bc-equip-row">
-          <div class="bc-equip-label">Pecho</div>
-          <button class="bc-equip-slot-btn" id="btn-bc-a-chest" onclick="bcPickArmor('bc-a-chest','Pecho',this)">
-            <img class="equip-thumb" id="img-bc-a-chest" src="" style="display:none" onerror="this.style.display='none'">
-            <span class="equip-empty" id="ph-bc-a-chest">⬡</span>
-          </button>
-          <input type="hidden" id="bc-a-chest" value="">
-        </div>
-        <div class="bc-equip-row">
-          <div class="bc-equip-label">Piernas</div>
-          <button class="bc-equip-slot-btn" id="btn-bc-a-legs" onclick="bcPickArmor('bc-a-legs','Piernas',this)">
-            <img class="equip-thumb" id="img-bc-a-legs" src="" style="display:none" onerror="this.style.display='none'">
-            <span class="equip-empty" id="ph-bc-a-legs">⬡</span>
-          </button>
-          <input type="hidden" id="bc-a-legs" value="">
-        </div>
-        <input type="hidden" id="bc-a-class" value="">
-
-        <div class="bc-section-title" style="margin-top:6px">
+        <div class="bc-section-title" style="margin-top:10px">
           <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2,9 L6,2 L10,9" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="3.5" y1="6.5" x2="8.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg>
           Notas
         </div>
-        <textarea id="bc-notes" rows="2" placeholder="Perk exótica, sinergia clave..." style="background:#111;border:1px solid #2a2a3a;color:#ccc;padding:5px 8px;font-size:.73rem;width:100%;resize:none;outline:none;font-family:inherit"></textarea>
-
-        <button class="bc-save-btn" onclick="bcSaveBuild()" style="margin-top:auto">
-          ⬡ Guardar Build
-        </button>
+        <textarea id="bc-notes" rows="6" placeholder="Perk exótica, sinergia clave..."></textarea>
       </div>
 
-    </div><!-- /bc-canvas -->
+    </div><!-- /bc-main-row -->
+
 
     <!-- Picker popup (shared) -->
     <div id="bc-picker-popup" class="hidden">
@@ -3425,12 +3564,15 @@ function calcProgress() {
   });
   let setsComplete = 0;
   ARMOR_SETS.forEach(set => {
-    let setDone = true;
-    set.slots.forEach(slot => {
-      if (state.armor[slot.id] && state.armor[slot.id].obtained) armorLeg++;
-      else setDone = false;
+    ['Cazador','Hechicero','Titán'].forEach(cls => {
+      let clsDone = true;
+      set.slots.forEach(slot => {
+        const sid = slotId(slot.id, cls);
+        if (state.armor[sid] && state.armor[sid].obtained) armorLeg++;
+        else clsDone = false;
+      });
+      if (clsDone && set.slots.length > 0) setsComplete++;
     });
-    if (setDone && set.slots.length > 0) setsComplete++;
   });
   EXOTIC_ARMOR.forEach(ea => {
     if (!state.exoticArmor[ea.id] || !state.exoticArmor[ea.id].obtained) return;
@@ -3447,7 +3589,7 @@ function updateHeader() {
   const tw = WEAPONS.length;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   const texo = WEAPONS.filter(w=>w.exotic).length;
-  const tLeg = ARMOR_SETS.reduce((n,s) => n+s.slots.length, 0);
+  const tLeg = ARMOR_SETS.reduce((n,s) => n+s.slots.length*3, 0);
   const tExoArmor = EXOTIC_ARMOR.length;
   set('stat-armas',     p.armas+'/'+tw);
   set('stat-godrolls',  p.godrolls);
@@ -3852,11 +3994,33 @@ function renderExoWeapons() {
 }
 
 // =========== ARMOR CARD ==========
-function buildArmorSlotCard(set, slotDef) {
-  const sid = slotDef.id;
+// ─── helpers ───────────────────────────────────────────────────────────────
+const CLS_SUFFIX   = {Cazador:'_h', Hechicero:'_w', Titán:''};
+const CLS_ICON     = {Cazador:'🏹', Hechicero:'⚡', Titán:'🛡'};
+const CLS_LABEL    = {Cazador:'lbl-caz', Hechicero:'lbl-hec', Titán:'lbl-tit'};
+const CLASS_ITEM   = {Cazador:'Capa', Hechicero:'Vínculo', Titán:'Marca'};
+
+function slotId(baseId, cls) {
+  return baseId + (CLS_SUFFIX[cls] ?? '');
+}
+
+function isSetClassComplete(set, cls) {
+  if (!set.slots.length) return false;
+  return set.slots.every(sl => {
+    const sid = slotId(sl.id, cls);
+    return state.armor[sid] && state.armor[sid].obtained;
+  });
+}
+function isSetComplete(set) {
+  return ['Cazador','Hechicero','Titán'].some(cls => isSetClassComplete(set, cls));
+}
+
+// ─── build one armor slot card ─────────────────────────────────────────────
+function buildArmorSlotCard(set, slotDef, cls) {
+  cls = cls || 'Titán';
+  const sid = slotId(slotDef.id, cls);
   const as_ = state.armor[sid] || {obtained:false, archetypes:{}, stats:{}, farm:false};
   const obtained = as_.obtained;
-  const farm = as_.farm || false;
   const stats = as_.stats || {};
   const _STAT2ID = {Salud:'health',Granada:'grenade',Clase:'class',Super:'super',Cuerpo:'melee',Armas:'weapons',Variable:'',Todos:''};
   const combos = ARCHETYPES.map(a => {
@@ -3872,33 +4036,30 @@ function buildArmorSlotCard(set, slotDef) {
         ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" style="${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>
     </div>`;
   }).join('');
-  const pieceName = slotDef.n || `${slotDef.slot} de ${set.n}`;
+  // slot label: class item gets class-specific name
+  const slotLabel = slotDef.slot === 'Objeto de clase' ? (CLASS_ITEM[cls]||slotDef.slot) : slotDef.slot;
+  const pieceName = slotDef.n || `${slotLabel} de ${set.n}`;
   const _enKey = slotDef.n ? slotDef.n.toLowerCase() : '';
   const _esKey = slotDef.n ? 'es:' + slotDef.n.toLowerCase() : '';
-  const pieceImgKey = _enKey;
   const _pieceUrl = (iconMap[_enKey]?.icon) || (iconMap[_esKey]?.icon) || '';
   return `<div class="aslot ${obtained?'aobt':''}" id="acard_${sid}">
     <div class="aslothedr">
-      <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:0">
-        ${pieceImgKey ? (_pieceUrl
-        ? `<img data-pimg="${pieceImgKey}" src="${_pieceUrl}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
-        : `<img data-pimg="${pieceImgKey}" src="" style="display:none;width:36px;height:36px;border-radius:4px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`) : ''}
-        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:0">
-          <span class="aslot-slot-tag">${slotDef.slot}</span>
-          <span class="aslotname">${pieceName}</span>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0">
+        ${_pieceUrl ? `<img data-pimg="${_enKey||_esKey}" src="${_pieceUrl}" style="width:28px;height:28px;border-radius:3px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
+        <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+          <span class="aslot-slot-tag">${slotLabel}</span>
+          <span class="aslotname" style="font-size:10px">${pieceName}</span>
         </div>
       </div>
-      <div class="btn-group" style="flex-shrink:0">
-        <button class="ownbtn ${obtained?'on':''}" onclick="toggleArmorObtained('${sid}')">${obtained?'✓ Obtenido':'Obtenido'}</button>
-      </div>
+    </div>
+    <div style="display:flex;gap:4px;margin-bottom:5px">
+      <button class="ownbtn ${obtained?'on':''}" style="font-size:9px;padding:3px 6px;flex:1" onclick="toggleArmorObtained('${sid}','${set.id}','${cls}')">${obtained?'✓':'Obtener'}</button>
     </div>
     <div class="armor-arch-grid">${combos}</div>
   </div>`;
 }
 
-function isSetComplete(set) {
-  return set.slots.length > 0 && set.slots.every(sl => state.armor[sl.id] && state.armor[sl.id].obtained);
-}
+// ─── build set card (3 class rows) ────────────────────────────────────────
 function buildArmorSetCard(set) {
   const _bIcon = (b) => {
     if (!b) return '';
@@ -3911,16 +4072,28 @@ function buildArmorSetCard(set) {
       ${set.bonus2pc ? `<div class="aset-brow brow-2pc"><span class="aset-bpill">2 piezas</span>${_bIcon(set.bonus2pc)}<span class="aset-bdesc">${set.bonus2pc}</span></div>` : ''}
       ${set.bonus4pc ? `<div class="aset-brow brow-4pc"><span class="aset-bpill p4pc">4 piezas</span>${_bIcon(set.bonus4pc)}<span class="aset-bdesc">${set.bonus4pc}</span></div>` : ''}
     </div>` : '';
-  const setComplete = isSetComplete(set);
-  return `<div class="asetcard">
+
+  const classRows = ['Cazador','Hechicero','Titán'].map(cls => {
+    const complete = isSetClassComplete(set, cls);
+    const slots = set.slots.map(s => buildArmorSlotCard(set, s, cls)).join('');
+    return `<div class="aclass-row">
+      <div class="aclass-row-hdr">
+        <span class="aclass-icon">${CLS_ICON[cls]}</span>
+        <span class="aclass-label ${CLS_LABEL[cls]}">${cls}</span>
+        <button class="aclass-markbtn ${complete?'on':''}" id="set-cls-btn-${set.id}-${cls}" onclick="toggleSetClassObtained('${set.id}','${cls}')">${complete?'✓ Completo':'Marcar '+cls}</button>
+      </div>
+      <div class="aclass-slots">${slots}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="asetcard" id="asetcard_${set.id}">
     <div class="asethdr">
       <span class="asetname">${set.n}</span>
       <span class="tag tseas">${set.season}</span>
       <span class="tag tsrc">${set.src}</span>
-      <div class="set-own-wrap"><button class="set-ownbtn ${setComplete?'on':''}" id="set-own-btn-${set.id}" onclick="toggleSetObtained('${set.id}')">${setComplete?'✓ Set Completo':'Marcar Set'}</button></div>
     </div>
     ${bonusBlock}
-    <div class="aslots" style="margin-top:0">${set.slots.map(s => buildArmorSlotCard(set,s)).join('')}</div>
+    <div class="aclass-rows">${classRows}</div>
   </div>`;
 }
 
@@ -4018,49 +4191,57 @@ function toggleExoticFarm(eid) {
   if (btn) { btn.classList.toggle('on', state.exoticArmor[eid].farm); btn.textContent = '⚙ ' + (state.exoticArmor[eid].farm ? 'Farmeando' : 'Farmear'); }
 }
 
-function toggleSetObtained(setId) {
+function toggleSetClassObtained(setId, cls) {
   const set = ARMOR_SETS.find(s => s.id === setId);
   if (!set) return;
-  const complete = isSetComplete(set);
+  const wasComplete = isSetClassComplete(set, cls);
+  const nowComplete = !wasComplete;
   set.slots.forEach(sl => {
-    if (!state.armor[sl.id]) state.armor[sl.id] = {obtained:false,archetypes:{}};
-    state.armor[sl.id].obtained = !complete;
-    const card = document.getElementById('acard_'+sl.id);
+    const sid = slotId(sl.id, cls);
+    if (!state.armor[sid]) state.armor[sid] = {obtained:false,archetypes:{},stats:{}};
+    state.armor[sid].obtained = nowComplete;
+    const card = document.getElementById('acard_'+sid);
     if (card) {
-      card.classList.toggle('aobt', !complete);
+      card.classList.toggle('aobt', nowComplete);
       const btn = card.querySelector('.ownbtn');
-      if (btn) { btn.textContent = !complete?'✓ Obtenido':'Obtenido'; btn.classList.toggle('on', !complete); }
+      if (btn) { btn.textContent = nowComplete?'✓':'Obtener'; btn.classList.toggle('on', nowComplete); }
     }
   });
   saveState(); updateHeader();
-  const setBtn = document.getElementById('set-own-btn-'+setId);
-  if (setBtn) {
-    const nowComplete = !complete;
-    setBtn.classList.toggle('on', nowComplete);
-    setBtn.textContent = nowComplete ? '✓ Set Completo' : 'Marcar Set';
-  }
+  const btn = document.getElementById('set-cls-btn-'+setId+'-'+cls);
+  if (btn) { btn.classList.toggle('on', nowComplete); btn.textContent = nowComplete?'✓ Completo':'Marcar '+cls; }
 }
+// kept for compat
+function toggleSetObtained(setId) { toggleSetClassObtained(setId, 'Titán'); }
 function updateSetButton(setId) {
   const set = ARMOR_SETS.find(s => s.id === setId);
   if (!set) return;
-  const complete = isSetComplete(set);
-  const setBtn = document.getElementById('set-own-btn-'+setId);
-  if (setBtn) {
-    setBtn.classList.toggle('on', complete);
-    setBtn.textContent = complete ? '✓ Set Completo' : 'Marcar Set';
-  }
+  ['Cazador','Hechicero','Titán'].forEach(cls => {
+    const btn = document.getElementById('set-cls-btn-'+setId+'-'+cls);
+    if (!btn) return;
+    const complete = isSetClassComplete(set, cls);
+    btn.classList.toggle('on', complete);
+    btn.textContent = complete ? '✓ Completo' : 'Marcar '+cls;
+  });
 }
-function toggleArmorObtained(sid) {
-  if (!state.armor[sid]) state.armor[sid] = {obtained:false,archetypes:{}};
+function toggleArmorObtained(sid, setId, cls) {
+  if (!state.armor[sid]) state.armor[sid] = {obtained:false,archetypes:{},stats:{}};
   state.armor[sid].obtained = !state.armor[sid].obtained;
   saveState(); updateHeader();
   const card = document.getElementById('acard_'+sid);
-  if (!card) return;
-  card.classList.toggle('aobt', state.armor[sid].obtained);
-  const btn = card.querySelector('.ownbtn');
-  if (btn) { btn.textContent = state.armor[sid].obtained?'✓ Obtenido':'Obtenido'; btn.classList.toggle('on', state.armor[sid].obtained); }
-  const parentSet = ARMOR_SETS.find(s => s.slots.some(sl => sl.id === sid));
-  if (parentSet) updateSetButton(parentSet.id);
+  if (card) {
+    card.classList.toggle('aobt', state.armor[sid].obtained);
+    const btn = card.querySelector('.ownbtn');
+    if (btn) { btn.textContent = state.armor[sid].obtained?'✓':'Obtener'; btn.classList.toggle('on', state.armor[sid].obtained); }
+  }
+  if (setId) {
+    updateSetButton(setId);
+  } else {
+    // fallback: find parent by base id
+    const baseId = sid.replace(/_h$|_w$/,'');
+    const parentSet = ARMOR_SETS.find(s => s.slots.some(sl => sl.id === baseId || sl.id === sid));
+    if (parentSet) updateSetButton(parentSet.id);
+  }
 }
 
 function cycleArch(sid, aid) {
@@ -4105,7 +4286,7 @@ function renderLegArmor() {
     if (search && !s.n.toLowerCase().includes(search)) return false;
     if (slot && !s.slots.some(sl => sl.slot === slot)) return false;
     if (seas && s.season !== seas) return false;
-    if (aLegMissing && s.slots.every(sl => state.armor[sl.id] && state.armor[sl.id].obtained)) return false;
+    if (aLegMissing && ['Cazador','Hechicero','Titán'].every(cls => isSetClassComplete(s, cls))) return false;
     return true;
   });
   if (sets.length) {
@@ -4220,913 +4401,436 @@ const SUBCLASS_DATA = {
   "Titán": {
     "Solar": {
       "element": "solar",
-      "supers": [
-        "Mazo ardiente",
-        "Martillo del Sol"
-      ],
-      "melees": [
-        "Golpe de martillo",
-        "Martillo arrojadizo"
-      ],
-      "grenades": [
-        "Granada de fusión",
-        "Granada curativa",
-        "Granada de proyectiles ígneos",
-        "Granada solar",
-        "Granada incendiaria",
-        "Granada trampa",
-        "Granada de enjambre",
-        "Granada de termita"
-      ],
-      "classAbility": [
-        "Barricada imponente",
-        "Barricada ofensiva"
-      ],
-      "movement": [
-        "Gran elevación",
-        "Elevación lateral",
-        "Elevación de catapulta"
-      ],
-      "aspects": [
-        "Llamas ardientes",
-        "Sol invicto",
-        "Consagración",
-        "Explosión de escudo",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Mazo ardiente","Martillo del Sol"],
+      "melees": ["Golpe de martillo","Martillo arrojadizo"],
+      "grenades": ["Granada de fusión","Granada curativa","Granada de proyectiles ígneos","Granada solar","Granada incendiaria","Granada trampa","Granada de enjambre","Granada de termita"],
+      "classAbility": ["Barricada imponente","Barricada ofensiva"],
+      "movement": ["Gran elevación","Elevación lateral","Elevación de catapulta"],
+      "aspects": ["Llamas ardientes","Sol invicto","Consagración","Explosión de escudo"],
       "fragments": [
-        "Ascua de antorchas",
-        "Ascua de combustión",
-        "Ascua de templado",
-        "Ascua carbonizadora",
-        "Ascua de benevolencia",
-        "Ascua abrasadora",
-        "Ascua empírea",
-        "Ascua de haces",
-        "Ascua de consuelo",
-        "Ascua fulminante",
-        "Ranura de fragmento vacía",
-        "Ascua de erupción",
-        "Ascua de cenizas",
-        "Ascua prodigiosa",
-        "Ascua cauterizadora",
-        "Ascua de determinación"
-      ]
+        "Ascua de antorchas","Ascua de combustión","Ascua de templado",
+        "Ascua carbonizadora","Ascua de benevolencia","Ascua abrasadora",
+        "Ascua empírea","Ascua de haces","Ascua de consuelo",
+        "Ascua fulminante","Ascua de erupción","Ascua de cenizas",
+        "Ascua prodigiosa","Ascua cauterizadora","Ascua de determinación",
+        "Ascua de misericordia"
+      ],
+      "fragmentStats": {
+        "Ascua de haces":{"int":10},"Ascua de benevolencia":{"dis":-10},
+        "Ascua carbonizadora":{"dis":10},"Ascua de combustión":{"for":10},
+        "Ascua empírea":{"res":-10},"Ascua de erupción":{"for":10},
+        "Ascua de misericordia":{"res":10},"Ascua abrasadora":{"rec":10},
+        "Ascua de templado":{"rec":-10},"Ascua de antorchas":{"dis":-10},
+        "Ascua prodigiosa":{"res":10}
+      }
     },
     "Arco": {
       "element": "arc",
-      "supers": [
-        "Choque de trueno",
-        "Puños del caos"
-      ],
-      "melees": [
-        "Azote balístico",
-        "Golpe sísmico",
-        "Azote de trueno"
-      ],
-      "grenades": [
-        "Granada saltarina",
-        "Granada de proyectiles de arco",
-        "Granada de pulsos",
-        "Granada tormenta",
-        "Granada cegadora",
-        "Granada relámpago",
-        "Granada de flujo"
-      ],
-      "classAbility": [
-        "Barricada imponente",
-        "Barricada ofensiva",
-        "Impulsor"
-      ],
-      "movement": [
-        "Elevación de catapulta",
-        "Gran elevación",
-        "Elevación lateral"
-      ],
-      "aspects": [
-        "Toque electrizante",
-        "Mole",
-        "Fuera de combate",
-        "Fortaleza de la tormenta",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Choque de trueno","Puños del caos"],
+      "melees": ["Azote balístico","Golpe sísmico","Azote de trueno"],
+      "grenades": ["Granada saltarina","Granada de proyectiles de arco","Granada de pulsos","Granada tormenta","Granada cegadora","Granada relámpago","Granada de flujo"],
+      "classAbility": ["Barricada imponente","Barricada ofensiva","Impulsor"],
+      "movement": ["Elevación de catapulta","Gran elevación","Elevación lateral"],
+      "aspects": ["Toque electrizante","Mole","Fuera de combate","Fortaleza de la tormenta"],
       "fragments": [
-        "Chispa de Enfoque",
-        "Chispa de Frecuencia",
-        "Chispa de Descarga",
-        "Chispa de Iones",
-        "Chispa de Choque",
-        "Chispa de Impulso",
-        "Chispa de Resistencia",
-        "Chispa de Balizas",
-        "Chispa de Magnitud",
-        "Chispa de Recarga",
-        "Ranura de fragmento vacía",
-        "Chispa de Voltios",
-        "Chispa de Brillantez",
-        "Chispa de Amplitud",
-        "Chispa de Retroalimentación",
-        "Chispa de instinto"
-      ]
+        "Chispa de Enfoque","Chispa de Frecuencia","Chispa de Descarga",
+        "Chispa de Iones","Chispa de Choque","Chispa de Impulso",
+        "Chispa de Resistencia","Chispa de Balizas","Chispa de Magnitud",
+        "Chispa de Recarga","Chispa de Voltios","Chispa de Brillantez",
+        "Chispa de Amplitud","Chispa de Retroalimentación","Chispa de instinto"
+      ],
+      "fragmentStats": {
+        "Chispa de Brillantez":{"int":10},"Chispa de Descarga":{"for":-10},
+        "Chispa de Retroalimentación":{"res":10},"Chispa de Resistencia":{"for":10},
+        "Chispa de Choque":{"dis":-10},"Chispa de Voltios":{"rec":10}
+      }
     },
     "Vacío": {
       "element": "void",
-      "supers": [
-        "Escudo centinela",
-        "Amparo del alba",
-        "Arsenal del Crepúsculo"
-      ],
-      "melees": [
-        "Lanzamiento de escudo",
-        "Golpe de escudo"
-      ],
-      "grenades": [
-        "Granada de vórtice",
-        "Pico de vacío",
-        "Granada de dispersión",
-        "Granada magnética",
-        "Granada supresora",
-        "Muro de vacío",
-        "Proyectil de axiones"
-      ],
-      "classAbility": [
-        "Barricada imponente",
-        "Barricada ofensiva"
-      ],
-      "movement": [
-        "Elevación de catapulta",
-        "Gran elevación",
-        "Elevación lateral"
-      ],
-      "aspects": [
-        "Ranura de aspecto vacía",
-        "Demolición controlada",
-        "Bastión",
-        "Baluarte ofensivo",
-        "Inquebrantable"
-      ],
+      "supers": ["Escudo centinela","Amparo del alba","Arsenal del Crepúsculo"],
+      "melees": ["Lanzamiento de escudo","Golpe de escudo"],
+      "grenades": ["Granada de vórtice","Pico de vacío","Granada de dispersión","Granada magnética","Granada supresora","Muro de vacío","Proyectil de axiones"],
+      "classAbility": ["Barricada imponente","Barricada ofensiva"],
+      "movement": ["Elevación de catapulta","Gran elevación","Elevación lateral"],
+      "aspects": ["Demolición controlada","Bastión","Baluarte ofensivo","Inquebrantable"],
       "fragments": [
-        "Ranura de fragmento vacía",
-        "Eco de dilatación",
-        "Eco de dominación",
-        "Eco de provisión",
-        "Eco de expulsión",
-        "Eco de remanentes",
-        "Eco de intercambio",
-        "Eco de socavación",
-        "Eco de represalia",
-        "Eco de extracción",
-        "Eco de persistencia",
-        "Eco de inestabilidad",
-        "Eco de cosecha",
-        "Eco de oscuridad",
-        "Eco de hambruna",
-        "Eco de interrupción"
-      ]
+        "Eco de dilatación","Eco de dominación","Eco de provisión",
+        "Eco de expulsión","Eco de remanentes","Eco de intercambio",
+        "Eco de socavación","Eco de represalia","Eco de extracción",
+        "Eco de persistencia","Eco de inestabilidad","Eco de cosecha",
+        "Eco de oscuridad","Eco de hambruna","Eco de interrupción",
+        "Eco de vigilancia"
+      ],
+      "fragmentStats": {
+        "Eco de dilatación":{"mob":10,"int":10},"Eco de dominación":{"dis":10},
+        "Eco de expulsión":{"int":10},"Eco de cosecha":{"int":-10},
+        "Eco de inestabilidad":{"for":10},"Eco de extracción":{"res":10},
+        "Eco de oscuridad":{"rec":10},"Eco de provisión":{"for":-10},
+        "Eco de hambruna":{"rec":-10},"Eco de socavación":{"dis":-20},
+        "Eco de vigilancia":{"rec":-10}
+      }
     },
     "Estasis": {
       "element": "stasis",
-      "supers": [
-        "Sismo glacial"
+      "supers": ["Sismo glacial"],
+      "melees": ["Golpe escalofriante"],
+      "grenades": ["Granada de campo crepuscular","Granada glaciar","Granada de trituración","Granada de desublimación"],
+      "classAbility": ["Barricada imponente","Barricada ofensiva"],
+      "movement": ["Gran elevación","Elevación lateral","Elevación de catapulta"],
+      "aspects": ["Crioclasma","Cosecha tectónica","Aullido de la tormenta","Lanza diamantina"],
+      "fragments": [
+        "Susurro de vínculos","Susurro de las cadenas","Susurro del escalofrío",
+        "Susurro de la conducción","Susurro del confinamiento","Susurro de las fisuras",
+        "Susurro de las fracturas","Susurro de los edros","Susurro del hambre",
+        "Susurro del ímpetu","Susurro de la refracción","Susurro desgarrador",
+        "Susurro de inversión","Susurro de la escarcha","Susurro de los fragmentos",
+        "Susurro del tormento"
       ],
-      "melees": [
-        "Golpe escalofriante"
-      ],
-      "grenades": [
-        "Granada de campo crepuscular",
-        "Granada glaciar",
-        "Granada de trituración",
-        "Granada de desublimación"
-      ],
-      "classAbility": [
-        "Barricada imponente",
-        "Barricada ofensiva"
-      ],
-      "movement": [
-        "Gran elevación",
-        "Elevación lateral",
-        "Elevación de catapulta"
-      ],
-      "aspects": [],
-      "fragments": []
+      "fragmentStats": {
+        "Susurro de vínculos":{"int":-10},"Susurro de las cadenas":{"rec":10},
+        "Susurro de la conducción":{"int":10,"res":10},"Susurro del confinamiento":{"for":10},
+        "Susurro del hambre":{"for":-20},"Susurro del ímpetu":{"res":10},
+        "Susurro del tormento":{"dis":-10}
+      }
     },
     "Cuerdas": {
       "element": "strand",
-      "supers": [
-        "Furia de cuchillas"
-      ],
-      "melees": [
-        "Cuchilla en frenesí"
-      ],
-      "grenades": [
-        "Granada cortante",
-        "Gancho",
-        "Granada de cadenas",
-        "Granada de hilarachas"
-      ],
-      "classAbility": [
-        "Barricada ofensiva",
-        "Barricada imponente"
-      ],
-      "movement": [
-        "Elevación lateral",
-        "Gran elevación",
-        "Elevación de catapulta"
-      ],
-      "aspects": [
-        "Látigo de drengr",
-        "En medio de la batalla",
-        "Estandarte de guerra",
-        "Tormenta de flechillas",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Furia de cuchillas"],
+      "melees": ["Cuchilla en frenesí"],
+      "grenades": ["Granada cortante","Gancho","Granada de cadenas","Granada de hilarachas"],
+      "classAbility": ["Barricada ofensiva","Barricada imponente"],
+      "movement": ["Elevación lateral","Gran elevación","Elevación de catapulta"],
+      "aspects": ["Látigo de drengr","En medio de la batalla","Estandarte de guerra","Tormenta de flechillas"],
       "fragments": [
-        "Ranura de fragmento vacía",
-        "Hilo de enlace",
-        "Hilo de aislamiento",
-        "Hilo de continuidad",
-        "Hilo de generación",
-        "Hilo de propagación",
-        "Hilo de evolución",
-        "Hilo de ascenso",
-        "Hilo de finalidad",
-        "Hilo de la mente",
-        "Hilo de furia",
-        "Hilo de renacimiento",
-        "Hilo de transmutación",
-        "Hilo de protección",
-        "Hilo de sabiduría"
-      ]
+        "Hilo de enlace","Hilo de aislamiento","Hilo de continuidad",
+        "Hilo de generación","Hilo de propagación","Hilo de evolución",
+        "Hilo de ascenso","Hilo de finalidad","Hilo de la mente",
+        "Hilo de furia","Hilo de renacimiento","Hilo de transmutación",
+        "Hilo de protección","Hilo de sabiduría"
+      ],
+      "fragmentStats": {
+        "Hilo de ascenso":{"mob":10},"Hilo de enlace":{"res":10},
+        "Hilo de evolución":{"int":10},"Hilo de finalidad":{"rec":10},
+        "Hilo de furia":{"for":-10},"Hilo de generación":{"dis":-10},
+        "Hilo de propagación":{"for":10},"Hilo de transmutación":{"for":10},
+        "Hilo de protección":{"res":-10}
+      }
     },
     "Prismático": {
       "element": "prismatic",
-      "supers": [
-        "Furia de cuchillas",
-        "Choque de trueno",
-        "Sismo glacial",
-        "Arsenal del Crepúsculo",
-        "Martillo del Sol"
-      ],
-      "melees": [
-        "Lanzamiento de escudo",
-        "Golpe escalofriante",
-        "Golpe de martillo",
-        "Azote de trueno",
-        "Cuchilla en frenesí"
-      ],
-      "grenades": [
-        "Granada glaciar",
-        "Granada de pulsos",
-        "Granada de cadenas",
-        "Granada de termita",
-        "Granada supresora"
-      ],
-      "classAbility": [
-        "Barricada ofensiva",
-        "Barricada imponente",
-        "Impulsor"
-      ],
-      "movement": [
-        "Elevación de catapulta",
-        "Elevación lateral",
-        "Gran elevación"
-      ],
-      "aspects": [
-        "Consagración",
-        "Inquebrantable",
-        "Lanza Diamante",
-        "Fuera de combate",
-        "Látigo de drengr",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Furia de cuchillas","Choque de trueno","Sismo glacial","Arsenal del Crepúsculo","Martillo del Sol"],
+      "melees": ["Lanzamiento de escudo","Golpe escalofriante","Golpe de martillo","Azote de trueno","Cuchilla en frenesí"],
+      "grenades": ["Granada glaciar","Granada de pulsos","Granada de cadenas","Granada de termita","Granada supresora"],
+      "classAbility": ["Barricada ofensiva","Barricada imponente","Impulsor"],
+      "movement": ["Elevación de catapulta","Elevación lateral","Gran elevación"],
+      "aspects": ["Consagración","Inquebrantable","Lanza diamantina","Fuera de combate","Látigo de drengr"],
       "fragments": [
-        "Faceta de rebeldía",
-        "Faceta de bendición",
-        "Faceta de orden",
-        "Faceta de propósito",
-        "Faceta de ruina",
-        "Faceta de enmienda",
-        "Faceta de honor",
-        "Faceta de sacrificio",
-        "Faceta de valentía",
-        "Faceta de dominio",
-        "Faceta de despertar",
-        "Faceta de estabilidad",
-        "Faceta de justicia",
-        "Faceta de protección",
-        "Faceta de gracia",
-        "Faceta de esperanza"
-      ]
+        "Faceta del alba","Faceta de la bendición","Faceta del mando",
+        "Faceta del coraje","Faceta del desafío","Faceta de la devoción",
+        "Faceta de la dominación","Faceta del equilibrio","Faceta de la generosidad",
+        "Faceta de la gracia","Faceta del honor","Faceta de la esperanza",
+        "Faceta de la justicia","Faceta de la enmienda","Faceta de la protección",
+        "Faceta del propósito","Faceta del despertar","Faceta de la ruina",
+        "Faceta del sacrificio","Faceta de la soledad","Faceta de la valentía"
+      ],
+      "fragmentStats": {
+        "Faceta del desafío":{"rec":10},"Faceta de la dominación":{"dis":-10},
+        "Faceta de la gracia":{"res":-10},"Faceta del honor":{"for":10},
+        "Faceta de la justicia":{"int":10},"Faceta de la protección":{"for":10},
+        "Faceta del propósito":{"rec":-10},"Faceta del despertar":{"res":10},
+        "Faceta de la ruina":{"mob":10},"Faceta del sacrificio":{"dis":10},
+        "Faceta de la valentía":{"dis":10},"Faceta del alba":{"for":-10}
+      }
     }
   },
   "Cazador": {
     "Solar": {
       "element": "solar",
-      "supers": [
-        "Arma Dorada: Tirador",
-        "Arma Dorada: Tiro a la cabeza",
-        "Lluvia de cuchillas"
-      ],
-      "melees": [
-        "Truco de cuchillos",
-        "Cuchillo explosivo de proximidad",
-        "Cuchillo ligero",
-        "Cuchillo arrojadizo contrapesado"
-      ],
-      "grenades": [
-        "Granada de fusión",
-        "Granada curativa",
-        "Granada de proyectiles ígneos",
-        "Granada solar",
-        "Granada incendiaria",
-        "Granada trampa",
-        "Granada de enjambre",
-        "Granada de termita"
-      ],
-      "classAbility": [
-        "Evasión del acróbata",
-        "Evasión de tirador",
-        "Evasión de jugador"
-      ],
-      "movement": [
-        "Triple salto",
-        "Salto de altura",
-        "Salto lateral"
-      ],
-      "aspects": [
-        "Apuesta de pólvora",
-        "Tirador",
-        "Liquídalos",
-        "En sus marcas",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Arma Dorada: Tirador","Arma Dorada: Tiro a la cabeza","Lluvia de cuchillas"],
+      "melees": ["Truco de cuchillos","Cuchillo explosivo de proximidad","Cuchillo ligero","Cuchillo arrojadizo contrapesado"],
+      "grenades": ["Granada de fusión","Granada curativa","Granada de proyectiles ígneos","Granada solar","Granada incendiaria","Granada trampa","Granada de enjambre","Granada de termita"],
+      "classAbility": ["Evasión del acróbata","Evasión de tirador","Evasión de jugador"],
+      "movement": ["Triple salto","Salto de altura","Salto lateral"],
+      "aspects": ["Apuesta de pólvora","Tirador","Liquídalos","En sus marcas"],
       "fragments": [
-        "Ascua de antorchas",
-        "Ascua de combustión",
-        "Ascua de templado",
-        "Ascua carbonizadora",
-        "Ascua de benevolencia",
-        "Ascua abrasadora",
-        "Ascua empírea",
-        "Ascua de haces",
-        "Ascua de consuelo",
-        "Ascua fulminante",
-        "Ranura de fragmento vacía",
-        "Ascua de erupción",
-        "Ascua de cenizas",
-        "Ascua prodigiosa",
-        "Ascua cauterizadora",
-        "Ascua de determinación"
-      ]
+        "Ascua de antorchas","Ascua de combustión","Ascua de templado",
+        "Ascua carbonizadora","Ascua de benevolencia","Ascua abrasadora",
+        "Ascua empírea","Ascua de haces","Ascua de consuelo",
+        "Ascua fulminante","Ascua de erupción","Ascua de cenizas",
+        "Ascua prodigiosa","Ascua cauterizadora","Ascua de determinación",
+        "Ascua de misericordia"
+      ],
+      "fragmentStats": {
+        "Ascua de haces":{"int":10},"Ascua de benevolencia":{"dis":-10},
+        "Ascua carbonizadora":{"dis":10},"Ascua de combustión":{"for":10},
+        "Ascua empírea":{"res":-10},"Ascua de erupción":{"for":10},
+        "Ascua de misericordia":{"res":10},"Ascua abrasadora":{"rec":10},
+        "Ascua de templado":{"rec":-10},"Ascua de antorchas":{"dis":-10},
+        "Ascua prodigiosa":{"res":10}
+      }
     },
     "Arco": {
       "element": "arc",
-      "supers": [
-        "Tormenta creciente",
-        "Vara de arco",
-        "Filo de la tormenta"
-      ],
-      "melees": [
-        "Golpe desorientador",
-        "Golpe combinación"
-      ],
-      "grenades": [
-        "Granada saltarina",
-        "Granada de proyectiles de arco",
-        "Granada de pulsos",
-        "Granada tormenta",
-        "Granada cegadora",
-        "Granada relámpago",
-        "Granada de flujo"
-      ],
-      "classAbility": [
-        "Evasión de tirador",
-        "Evasión de jugador"
-      ],
-      "movement": [
-        "Triple salto",
-        "Fugacidad",
-        "Salto de altura",
-        "Salto lateral"
-      ],
-      "aspects": [
-        "Ranura de aspecto vacía",
-        "Estado de flujo",
-        "Golpe de tempestad",
-        "Corriente letal",
-        "Ascenso"
-      ],
+      "supers": ["Tormenta creciente","Vara de arco","Filo de la tormenta"],
+      "melees": ["Golpe desorientador","Golpe combinación"],
+      "grenades": ["Granada saltarina","Granada de proyectiles de arco","Granada de pulsos","Granada tormenta","Granada cegadora","Granada relámpago","Granada de flujo"],
+      "classAbility": ["Evasión de tirador","Evasión de jugador"],
+      "movement": ["Triple salto","Fugacidad","Salto de altura","Salto lateral"],
+      "aspects": ["Estado de flujo","Golpe de tempestad","Corriente letal","Ascenso"],
       "fragments": [
-        "Chispa de Enfoque",
-        "Chispa de Frecuencia",
-        "Chispa de Descarga",
-        "Chispa de Iones",
-        "Chispa de Choque",
-        "Chispa de Impulso",
-        "Chispa de Resistencia",
-        "Chispa de Balizas",
-        "Chispa de Magnitud",
-        "Chispa de Recarga",
-        "Ranura de fragmento vacía",
-        "Chispa de Voltios",
-        "Chispa de Brillantez",
-        "Chispa de Amplitud",
-        "Chispa de Retroalimentación",
-        "Chispa de instinto"
-      ]
+        "Chispa de Enfoque","Chispa de Frecuencia","Chispa de Descarga",
+        "Chispa de Iones","Chispa de Choque","Chispa de Impulso",
+        "Chispa de Resistencia","Chispa de Balizas","Chispa de Magnitud",
+        "Chispa de Recarga","Chispa de Voltios","Chispa de Brillantez",
+        "Chispa de Amplitud","Chispa de Retroalimentación","Chispa de instinto"
+      ],
+      "fragmentStats": {
+        "Chispa de Brillantez":{"int":10},"Chispa de Descarga":{"for":-10},
+        "Chispa de Retroalimentación":{"res":10},"Chispa de Resistencia":{"for":10},
+        "Chispa de Choque":{"dis":-10},"Chispa de Voltios":{"rec":10}
+      }
     },
     "Vacío": {
       "element": "void",
-      "supers": [
-        "Tiro en la sombra: Carcaj de Moebius",
-        "Filos espectrales",
-        "Tiro en la sombra:Trampa"
-      ],
-      "melees": [
-        "Arranque fantasma",
-        "Bomba cepo"
-      ],
-      "grenades": [
-        "Granada de vórtice",
-        "Pico de vacío",
-        "Granada de dispersión",
-        "Granada magnética",
-        "Granada supresora",
-        "Muro de vacío",
-        "Proyectil de axiones"
-      ],
-      "classAbility": [
-        "Evasión de tirador",
-        "Evasión de jugador"
-      ],
-      "movement": [
-        "Triple salto",
-        "Salto de altura",
-        "Salto lateral"
-      ],
-      "aspects": [
-        "Emboscada del trampero",
-        "Paso evanescente",
-        "Ejecutor elegante",
-        "Al acecho",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Tiro en la sombra: Carcaj de Moebius","Filos espectrales","Tiro en la sombra: Trampa"],
+      "melees": ["Arranque fantasma","Bomba cepo"],
+      "grenades": ["Granada de vórtice","Pico de vacío","Granada de dispersión","Granada magnética","Granada supresora","Muro de vacío","Proyectil de axiones"],
+      "classAbility": ["Evasión de tirador","Evasión de jugador"],
+      "movement": ["Triple salto","Salto de altura","Salto lateral"],
+      "aspects": ["Emboscada del trampero","Paso evanescente","Ejecutor elegante","Al acecho"],
       "fragments": [
-        "Ranura de fragmento vacía",
-        "Eco de dilatación",
-        "Eco de dominación",
-        "Eco de provisión",
-        "Eco de expulsión",
-        "Eco de remanentes",
-        "Eco de intercambio",
-        "Eco de socavación",
-        "Eco de represalia",
-        "Eco de extracción",
-        "Eco de persistencia",
-        "Eco de inestabilidad",
-        "Eco de cosecha",
-        "Eco de oscuridad",
-        "Eco de hambruna",
-        "Eco de interrupción"
-      ]
+        "Eco de dilatación","Eco de dominación","Eco de provisión",
+        "Eco de expulsión","Eco de remanentes","Eco de intercambio",
+        "Eco de socavación","Eco de represalia","Eco de extracción",
+        "Eco de persistencia","Eco de inestabilidad","Eco de cosecha",
+        "Eco de oscuridad","Eco de hambruna","Eco de interrupción",
+        "Eco de vigilancia"
+      ],
+      "fragmentStats": {
+        "Eco de dilatación":{"mob":10,"int":10},"Eco de dominación":{"dis":10},
+        "Eco de expulsión":{"int":10},"Eco de cosecha":{"int":-10},
+        "Eco de inestabilidad":{"for":10},"Eco de extracción":{"res":10},
+        "Eco de oscuridad":{"rec":10},"Eco de provisión":{"for":-10},
+        "Eco de hambruna":{"rec":-10},"Eco de socavación":{"dis":-20},
+        "Eco de vigilancia":{"rec":-10}
+      }
     },
     "Estasis": {
       "element": "stasis",
-      "supers": [
-        "Silencio y Ventisca"
+      "supers": ["Silencio y Ventisca"],
+      "melees": ["Cuchilla atrofiante"],
+      "grenades": ["Granada de campo crepuscular","Granada glaciar","Granada de trituración","Granada de desublimación"],
+      "classAbility": ["Evasión de tirador","Evasión de jugador"],
+      "movement": ["Triple salto","Salto de altura","Salto lateral"],
+      "aspects": ["Manto invernal","Fragmentación sumergida","Cosecha macabra","Toque invernal"],
+      "fragments": [
+        "Susurro de vínculos","Susurro de las cadenas","Susurro del escalofrío",
+        "Susurro de la conducción","Susurro del confinamiento","Susurro de las fisuras",
+        "Susurro de las fracturas","Susurro de los edros","Susurro del hambre",
+        "Susurro del ímpetu","Susurro de la refracción","Susurro desgarrador",
+        "Susurro de inversión","Susurro de la escarcha","Susurro de los fragmentos",
+        "Susurro del tormento"
       ],
-      "melees": [
-        "Cuchilla atrofiante"
-      ],
-      "grenades": [
-        "Granada de campo crepuscular",
-        "Granada glaciar",
-        "Granada de trituración",
-        "Granada de desublimación"
-      ],
-      "classAbility": [
-        "Evasión de tirador",
-        "Evasión de jugador"
-      ],
-      "movement": [
-        "Triple salto",
-        "Salto de altura",
-        "Salto lateral"
-      ],
-      "aspects": [],
-      "fragments": []
+      "fragmentStats": {
+        "Susurro de vínculos":{"int":-10},"Susurro de las cadenas":{"rec":10},
+        "Susurro de la conducción":{"int":10,"res":10},"Susurro del confinamiento":{"for":10},
+        "Susurro del hambre":{"for":-20},"Susurro del ímpetu":{"res":10},
+        "Susurro del tormento":{"dis":-10}
+      }
     },
     "Cuerdas": {
       "element": "strand",
-      "supers": [
-        "Ataque de seda"
-      ],
-      "melees": [
-        "Púa hilada"
-      ],
-      "grenades": [
-        "Granada cortante",
-        "Gancho",
-        "Granada de cadenas",
-        "Granada de hilarachas"
-      ],
-      "classAbility": [
-        "Evasión de jugador",
-        "Evasión de tirador"
-      ],
-      "movement": [
-        "Triple salto",
-        "Salto lateral",
-        "Salto de altura"
-      ],
-      "aspects": [
-        "Ranura de aspecto vacía",
-        "Torbellino apabullante",
-        "Fantasma hilado",
-        "Azote aprisionador",
-        "Seda de viuda"
-      ],
+      "supers": ["Ataque de seda"],
+      "melees": ["Púa hilada"],
+      "grenades": ["Granada cortante","Gancho","Granada de cadenas","Granada de hilarachas"],
+      "classAbility": ["Evasión de jugador","Evasión de tirador"],
+      "movement": ["Triple salto","Salto lateral","Salto de altura"],
+      "aspects": ["Torbellino apabullante","Fantasma hilado","Azote aprisionador","Seda de viuda"],
       "fragments": [
-        "Ranura de fragmento vacía",
-        "Hilo de enlace",
-        "Hilo de aislamiento",
-        "Hilo de continuidad",
-        "Hilo de generación",
-        "Hilo de propagación",
-        "Hilo de evolución",
-        "Hilo de ascenso",
-        "Hilo de finalidad",
-        "Hilo de la mente",
-        "Hilo de furia",
-        "Hilo de renacimiento",
-        "Hilo de transmutación",
-        "Hilo de protección",
-        "Hilo de sabiduría"
-      ]
+        "Hilo de enlace","Hilo de aislamiento","Hilo de continuidad",
+        "Hilo de generación","Hilo de propagación","Hilo de evolución",
+        "Hilo de ascenso","Hilo de finalidad","Hilo de la mente",
+        "Hilo de furia","Hilo de renacimiento","Hilo de transmutación",
+        "Hilo de protección","Hilo de sabiduría"
+      ],
+      "fragmentStats": {
+        "Hilo de ascenso":{"mob":10},"Hilo de enlace":{"res":10},
+        "Hilo de evolución":{"int":10},"Hilo de finalidad":{"rec":10},
+        "Hilo de furia":{"for":-10},"Hilo de generación":{"dis":-10},
+        "Hilo de propagación":{"for":10},"Hilo de transmutación":{"for":10},
+        "Hilo de protección":{"res":-10}
+      }
     },
     "Prismático": {
       "element": "prismatic",
-      "supers": [
-        "Ataque de seda",
-        "Filo de la tormenta",
-        "Tiro en la sombra:Trampa",
-        "Arma Dorada: Tirador",
-        "Silencio y Ventisca"
-      ],
-      "melees": [
-        "Púa hilada",
-        "Truco de cuchillos",
-        "Golpe combinación",
-        "Cuchilla atrofiante",
-        "Bomba cepo"
-      ],
-      "grenades": [
-        "Granada magnética",
-        "Gancho",
-        "Granada de enjambre",
-        "Granada de proyectiles de arco",
-        "Granada de campo crepuscular"
-      ],
-      "classAbility": [
-        "Evasión de jugador",
-        "Evasión de tirador",
-        "Evasión del acróbata"
-      ],
-      "movement": [
-        "Fugacidad",
-        "Triple salto",
-        "Salto lateral",
-        "Salto de altura"
-      ],
-      "aspects": [
-        "Ranura de aspecto vacía",
-        "Fantasma hilado",
-        "Ejecutor elegante",
-        "Ascenso",
-        "Manto invernal",
-        "Apuesta de pólvora"
-      ],
+      "supers": ["Ataque de seda","Filo de la tormenta","Tiro en la sombra: Trampa","Arma Dorada: Tirador","Silencio y Ventisca"],
+      "melees": ["Púa hilada","Truco de cuchillos","Golpe combinación","Cuchilla atrofiante","Bomba cepo"],
+      "grenades": ["Granada magnética","Gancho","Granada de enjambre","Granada de proyectiles de arco","Granada de campo crepuscular"],
+      "classAbility": ["Evasión de jugador","Evasión de tirador","Evasión del acróbata"],
+      "movement": ["Fugacidad","Triple salto","Salto lateral","Salto de altura"],
+      "aspects": ["Fantasma hilado","Ejecutor elegante","Ascenso","Manto invernal","Apuesta de pólvora"],
       "fragments": [
-        "Faceta de rebeldía",
-        "Faceta de bendición",
-        "Faceta de orden",
-        "Faceta de propósito",
-        "Faceta de ruina",
-        "Faceta de enmienda",
-        "Faceta de honor",
-        "Faceta de sacrificio",
-        "Faceta de valentía",
-        "Faceta de dominio",
-        "Faceta de despertar",
-        "Faceta de estabilidad",
-        "Faceta de justicia",
-        "Faceta de protección",
-        "Faceta de gracia",
-        "Faceta de esperanza"
-      ]
+        "Faceta del alba","Faceta de la bendición","Faceta del mando",
+        "Faceta del coraje","Faceta del desafío","Faceta de la devoción",
+        "Faceta de la dominación","Faceta del equilibrio","Faceta de la generosidad",
+        "Faceta de la gracia","Faceta del honor","Faceta de la esperanza",
+        "Faceta de la justicia","Faceta de la enmienda","Faceta de la protección",
+        "Faceta del propósito","Faceta del despertar","Faceta de la ruina",
+        "Faceta del sacrificio","Faceta de la soledad","Faceta de la valentía"
+      ],
+      "fragmentStats": {
+        "Faceta del desafío":{"rec":10},"Faceta de la dominación":{"dis":-10},
+        "Faceta de la gracia":{"res":-10},"Faceta del honor":{"for":10},
+        "Faceta de la justicia":{"int":10},"Faceta de la protección":{"for":10},
+        "Faceta del propósito":{"rec":-10},"Faceta del despertar":{"res":10},
+        "Faceta de la ruina":{"mob":10},"Faceta del sacrificio":{"dis":10},
+        "Faceta de la valentía":{"dis":10},"Faceta del alba":{"for":-10}
+      }
     }
   },
   "Hechicero": {
     "Solar": {
       "element": "solar",
-      "supers": [
-        "Canción flamígera",
-        "Alborada",
-        "Pozo de resplandor"
-      ],
-      "melees": [
-        "Estallido incinerador",
-        "Fuego celestial"
-      ],
-      "grenades": [
-        "Granada de fusión",
-        "Granada curativa",
-        "Granada de proyectiles ígneos",
-        "Granada solar",
-        "Granada incendiaria",
-        "Granada trampa",
-        "Granada de enjambre",
-        "Granada de termita"
-      ],
-      "classAbility": [
-        "Salto de Fénix",
-        "Grieta de poder",
-        "Grieta de curación"
-      ],
-      "movement": [
-        "Planeo equilibrado",
-        "Planeo de ráfaga",
-        "Planeo lateral"
-      ],
-      "aspects": [
-        "Infernal",
-        "Toque de la llama",
-        "Aumento térmico",
-        "Embestida de Ícaro",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Canción flamígera","Alborada","Pozo de resplandor"],
+      "melees": ["Estallido incinerador","Fuego celestial"],
+      "grenades": ["Granada de fusión","Granada curativa","Granada de proyectiles ígneos","Granada solar","Granada incendiaria","Granada trampa","Granada de enjambre","Granada de termita"],
+      "classAbility": ["Salto de Fénix","Grieta de poder","Grieta de curación"],
+      "movement": ["Planeo equilibrado","Planeo de ráfaga","Planeo lateral"],
+      "aspects": ["Infernal","Toque de la llama","Aumento térmico","Embestida de Ícaro"],
       "fragments": [
-        "Ascua de antorchas",
-        "Ascua de combustión",
-        "Ascua de templado",
-        "Ascua carbonizadora",
-        "Ascua de benevolencia",
-        "Ascua abrasadora",
-        "Ascua empírea",
-        "Ascua de haces",
-        "Ascua de consuelo",
-        "Ascua fulminante",
-        "Ranura de fragmento vacía",
-        "Ascua de erupción",
-        "Ascua de cenizas",
-        "Ascua prodigiosa",
-        "Ascua cauterizadora",
-        "Ascua de determinación"
-      ]
+        "Ascua de antorchas","Ascua de combustión","Ascua de templado",
+        "Ascua carbonizadora","Ascua de benevolencia","Ascua abrasadora",
+        "Ascua empírea","Ascua de haces","Ascua de consuelo",
+        "Ascua fulminante","Ascua de erupción","Ascua de cenizas",
+        "Ascua prodigiosa","Ascua cauterizadora","Ascua de determinación",
+        "Ascua de misericordia"
+      ],
+      "fragmentStats": {
+        "Ascua de haces":{"int":10},"Ascua de benevolencia":{"dis":-10},
+        "Ascua carbonizadora":{"dis":10},"Ascua de combustión":{"for":10},
+        "Ascua empírea":{"res":-10},"Ascua de erupción":{"for":10},
+        "Ascua de misericordia":{"res":10},"Ascua abrasadora":{"rec":10},
+        "Ascua de templado":{"rec":-10},"Ascua de antorchas":{"dis":-10},
+        "Ascua prodigiosa":{"res":10}
+      }
     },
     "Arco": {
       "element": "arc",
-      "supers": [
-        "Trance tormentoso",
-        "Alcance caótico"
-      ],
-      "melees": [
-        "Esfera luminosa",
-        "Relámpago encadenado"
-      ],
-      "grenades": [
-        "Granada saltarina",
-        "Granada de proyectiles de arco",
-        "Granada de pulsos",
-        "Granada tormenta",
-        "Granada cegadora",
-        "Granada relámpago",
-        "Granada de flujo"
-      ],
-      "classAbility": [
-        "Grieta de poder",
-        "Grieta de curación"
-      ],
-      "movement": [
-        "Planeo de ráfaga",
-        "Planeo lateral",
-        "Planeo equilibrado"
-      ],
-      "aspects": [
-        "Defensor iónico",
-        "Mente electrostática",
-        "Sobrecarga relámpago",
-        "Alma de arco",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Trance tormentoso","Alcance caótico"],
+      "melees": ["Esfera luminosa","Relámpago encadenado"],
+      "grenades": ["Granada saltarina","Granada de proyectiles de arco","Granada de pulsos","Granada tormenta","Granada cegadora","Granada relámpago","Granada de flujo"],
+      "classAbility": ["Grieta de poder","Grieta de curación"],
+      "movement": ["Planeo de ráfaga","Planeo lateral","Planeo equilibrado"],
+      "aspects": ["Defensor iónico","Mente electrostática","Sobrecarga relámpago","Alma de arco"],
       "fragments": [
-        "Chispa de Enfoque",
-        "Chispa de Frecuencia",
-        "Chispa de Descarga",
-        "Chispa de Iones",
-        "Chispa de Choque",
-        "Chispa de Impulso",
-        "Chispa de Resistencia",
-        "Chispa de Balizas",
-        "Chispa de Magnitud",
-        "Chispa de Recarga",
-        "Ranura de fragmento vacía",
-        "Chispa de Voltios",
-        "Chispa de Brillantez",
-        "Chispa de Amplitud",
-        "Chispa de Retroalimentación",
-        "Chispa de instinto"
-      ]
+        "Chispa de Enfoque","Chispa de Frecuencia","Chispa de Descarga",
+        "Chispa de Iones","Chispa de Choque","Chispa de Impulso",
+        "Chispa de Resistencia","Chispa de Balizas","Chispa de Magnitud",
+        "Chispa de Recarga","Chispa de Voltios","Chispa de Brillantez",
+        "Chispa de Amplitud","Chispa de Retroalimentación","Chispa de instinto"
+      ],
+      "fragmentStats": {
+        "Chispa de Brillantez":{"int":10},"Chispa de Descarga":{"for":-10},
+        "Chispa de Retroalimentación":{"res":10},"Chispa de Resistencia":{"for":10},
+        "Chispa de Choque":{"dis":-10},"Chispa de Voltios":{"rec":10}
+      }
     },
     "Vacío": {
       "element": "void",
-      "supers": [
-        "Distorsión Nova",
-        "Bomba Nova: Vórtice",
-        "Bomba Nova: Cataclismo"
-      ],
-      "melees": [
-        "Singularidad de bolsillo"
-      ],
-      "grenades": [
-        "Granada de vórtice",
-        "Pico de vacío",
-        "Granada de dispersión",
-        "Granada magnética",
-        "Granada supresora",
-        "Muro de vacío",
-        "Proyectil de axiones"
-      ],
-      "classAbility": [
-        "Grieta de poder",
-        "Grieta de curación"
-      ],
-      "movement": [
-        "Fugacidad",
-        "Planeo equilibrado",
-        "Planeo de ráfaga",
-        "Planeo lateral"
-      ],
-      "aspects": [
-        "Alimenta el vacío",
-        "Acelerante de caos",
-        "Sifón de almas",
-        "Hijo de los viejos dioses",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Distorsión Nova","Bomba Nova: Vórtice","Bomba Nova: Cataclismo"],
+      "melees": ["Singularidad de bolsillo"],
+      "grenades": ["Granada de vórtice","Pico de vacío","Granada de dispersión","Granada magnética","Granada supresora","Muro de vacío","Proyectil de axiones"],
+      "classAbility": ["Grieta de poder","Grieta de curación"],
+      "movement": ["Fugacidad","Planeo equilibrado","Planeo de ráfaga","Planeo lateral"],
+      "aspects": ["Alimenta el vacío","Acelerante de caos","Sifón de almas","Hijo de los viejos dioses"],
       "fragments": [
-        "Ranura de fragmento vacía",
-        "Eco de dilatación",
-        "Eco de dominación",
-        "Eco de provisión",
-        "Eco de expulsión",
-        "Eco de remanentes",
-        "Eco de intercambio",
-        "Eco de socavación",
-        "Eco de represalia",
-        "Eco de extracción",
-        "Eco de persistencia",
-        "Eco de inestabilidad",
-        "Eco de cosecha",
-        "Eco de oscuridad",
-        "Eco de hambruna",
-        "Eco de interrupción"
-      ]
+        "Eco de dilatación","Eco de dominación","Eco de provisión",
+        "Eco de expulsión","Eco de remanentes","Eco de intercambio",
+        "Eco de socavación","Eco de represalia","Eco de extracción",
+        "Eco de persistencia","Eco de inestabilidad","Eco de cosecha",
+        "Eco de oscuridad","Eco de hambruna","Eco de interrupción",
+        "Eco de vigilancia"
+      ],
+      "fragmentStats": {
+        "Eco de dilatación":{"mob":10,"int":10},"Eco de dominación":{"dis":10},
+        "Eco de expulsión":{"int":10},"Eco de cosecha":{"int":-10},
+        "Eco de inestabilidad":{"for":10},"Eco de extracción":{"res":10},
+        "Eco de oscuridad":{"rec":10},"Eco de provisión":{"for":-10},
+        "Eco de hambruna":{"rec":-10},"Eco de socavación":{"dis":-20},
+        "Eco de vigilancia":{"rec":-10}
+      }
     },
     "Estasis": {
       "element": "stasis",
-      "supers": [
-        "Ira invernal"
+      "supers": ["Ira invernal"],
+      "melees": ["Explosión penumbral"],
+      "grenades": ["Granada de campo crepuscular","Granada glaciar","Granada de trituración","Granada de desublimación"],
+      "classAbility": ["Grieta de poder","Grieta de curación"],
+      "movement": ["Planeo de ráfaga","Planeo lateral","Planeo equilibrado"],
+      "aspects": ["Proyectiles de llamarada gélida","Pulso gélido","Vigía sombrío","Cosecha glacial"],
+      "fragments": [
+        "Susurro de vínculos","Susurro de las cadenas","Susurro del escalofrío",
+        "Susurro de la conducción","Susurro del confinamiento","Susurro de las fisuras",
+        "Susurro de las fracturas","Susurro de los edros","Susurro del hambre",
+        "Susurro del ímpetu","Susurro de la refracción","Susurro desgarrador",
+        "Susurro de inversión","Susurro de la escarcha","Susurro de los fragmentos",
+        "Susurro del tormento"
       ],
-      "melees": [
-        "Explosión penumbral"
-      ],
-      "grenades": [
-        "Granada de campo crepuscular",
-        "Granada glaciar",
-        "Granada de trituración",
-        "Granada de desublimación"
-      ],
-      "classAbility": [
-        "Grieta de poder",
-        "Grieta de curación"
-      ],
-      "movement": [
-        "Planeo de ráfaga",
-        "Planeo lateral",
-        "Planeo equilibrado"
-      ],
-      "aspects": [],
-      "fragments": []
+      "fragmentStats": {
+        "Susurro de vínculos":{"int":-10},"Susurro de las cadenas":{"rec":10},
+        "Susurro de la conducción":{"int":10,"res":10},"Susurro del confinamiento":{"for":10},
+        "Susurro del hambre":{"for":-20},"Susurro del ímpetu":{"res":10},
+        "Susurro del tormento":{"dis":-10}
+      }
     },
     "Cuerdas": {
       "element": "strand",
-      "supers": [
-        "Tormenta de agujas"
-      ],
-      "melees": [
-        "Aguja arcana"
-      ],
-      "grenades": [
-        "Granada cortante",
-        "Gancho",
-        "Granada de cadenas",
-        "Granada de hilarachas"
-      ],
-      "classAbility": [
-        "Grieta de curación",
-        "Grieta de poder"
-      ],
-      "movement": [
-        "Planeo lateral",
-        "Planeo de ráfaga",
-        "Planeo equilibrado"
-      ],
-      "aspects": [
-        "Paso al tejido",
-        "Llamado de la Tejedora",
-        "Invocación de maraña mental",
-        "El andante",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Tormenta de agujas"],
+      "melees": ["Aguja arcana"],
+      "grenades": ["Granada cortante","Gancho","Granada de cadenas","Granada de hilarachas"],
+      "classAbility": ["Grieta de curación","Grieta de poder"],
+      "movement": ["Planeo lateral","Planeo de ráfaga","Planeo equilibrado"],
+      "aspects": ["Paso al tejido","Llamado de la Tejedora","Invocación de maraña mental","El andante"],
       "fragments": [
-        "Ranura de fragmento vacía",
-        "Hilo de enlace",
-        "Hilo de aislamiento",
-        "Hilo de continuidad",
-        "Hilo de generación",
-        "Hilo de propagación",
-        "Hilo de evolución",
-        "Hilo de ascenso",
-        "Hilo de finalidad",
-        "Hilo de la mente",
-        "Hilo de furia",
-        "Hilo de renacimiento",
-        "Hilo de transmutación",
-        "Hilo de protección",
-        "Hilo de sabiduría"
-      ]
+        "Hilo de enlace","Hilo de aislamiento","Hilo de continuidad",
+        "Hilo de generación","Hilo de propagación","Hilo de evolución",
+        "Hilo de ascenso","Hilo de finalidad","Hilo de la mente",
+        "Hilo de furia","Hilo de renacimiento","Hilo de transmutación",
+        "Hilo de protección","Hilo de sabiduría"
+      ],
+      "fragmentStats": {
+        "Hilo de ascenso":{"mob":10},"Hilo de enlace":{"res":10},
+        "Hilo de evolución":{"int":10},"Hilo de finalidad":{"rec":10},
+        "Hilo de furia":{"for":-10},"Hilo de generación":{"dis":-10},
+        "Hilo de propagación":{"for":10},"Hilo de transmutación":{"for":10},
+        "Hilo de protección":{"res":-10}
+      }
     },
     "Prismático": {
       "element": "prismatic",
-      "supers": [
-        "Tormenta de agujas",
-        "Bomba Nova: Cataclismo",
-        "Canción flamígera",
-        "Ira invernal",
-        "Trance tormentoso"
-      ],
-      "melees": [
-        "Explosión penumbral",
-        "Relámpago encadenado",
-        "Estallido incinerador",
-        "Singularidad de bolsillo",
-        "Aguja arcana"
-      ],
-      "grenades": [
-        "Granada de vórtice",
-        "Granada curativa",
-        "Granada de hilarachas",
-        "Granada tormenta",
-        "Granada de desublimación"
-      ],
-      "classAbility": [
-        "Salto de Fénix",
-        "Grieta de curación",
-        "Grieta de poder"
-      ],
-      "movement": [
-        "Planeo lateral",
-        "Planeo de ráfaga",
-        "Planeo equilibrado",
-        "Fugacidad"
-      ],
-      "aspects": [
-        "Llamado de la Tejedora",
-        "Sobrecarga relámpago",
-        "Vigía desolado",
-        "Infernal",
-        "Alimenta el vacío",
-        "Ranura de aspecto vacía"
-      ],
+      "supers": ["Tormenta de agujas","Bomba Nova: Cataclismo","Canción flamígera","Ira invernal","Trance tormentoso"],
+      "melees": ["Explosión penumbral","Relámpago encadenado","Estallido incinerador","Singularidad de bolsillo","Aguja arcana"],
+      "grenades": ["Granada de vórtice","Granada curativa","Granada de hilarachas","Granada tormenta","Granada de desublimación"],
+      "classAbility": ["Salto de Fénix","Grieta de curación","Grieta de poder"],
+      "movement": ["Planeo lateral","Planeo de ráfaga","Planeo equilibrado","Fugacidad"],
+      "aspects": ["Llamado de la Tejedora","Sobrecarga relámpago","Vigía desolado","Infernal","Alimenta el vacío"],
       "fragments": [
-        "Faceta de rebeldía",
-        "Faceta de bendición",
-        "Faceta de orden",
-        "Faceta de propósito",
-        "Faceta de ruina",
-        "Faceta de enmienda",
-        "Faceta de honor",
-        "Faceta de sacrificio",
-        "Faceta de valentía",
-        "Faceta de dominio",
-        "Faceta de despertar",
-        "Faceta de estabilidad",
-        "Faceta de justicia",
-        "Faceta de protección",
-        "Faceta de gracia",
-        "Faceta de esperanza"
-      ]
+        "Faceta del alba","Faceta de la bendición","Faceta del mando",
+        "Faceta del coraje","Faceta del desafío","Faceta de la devoción",
+        "Faceta de la dominación","Faceta del equilibrio","Faceta de la generosidad",
+        "Faceta de la gracia","Faceta del honor","Faceta de la esperanza",
+        "Faceta de la justicia","Faceta de la enmienda","Faceta de la protección",
+        "Faceta del propósito","Faceta del despertar","Faceta de la ruina",
+        "Faceta del sacrificio","Faceta de la soledad","Faceta de la valentía"
+      ],
+      "fragmentStats": {
+        "Faceta del desafío":{"rec":10},"Faceta de la dominación":{"dis":-10},
+        "Faceta de la gracia":{"res":-10},"Faceta del honor":{"for":10},
+        "Faceta de la justicia":{"int":10},"Faceta de la protección":{"for":10},
+        "Faceta del propósito":{"rec":-10},"Faceta del despertar":{"res":10},
+        "Faceta de la ruina":{"mob":10},"Faceta del sacrificio":{"dis":10},
+        "Faceta de la valentía":{"dis":10},"Faceta del alba":{"for":-10}
+      }
     }
   }
 };
@@ -8224,13 +7928,17 @@ function bcSelectClass(cls, btn){
       b.className = 'bc-sub-btn';
       b.setAttribute('data-el', el);
       b.setAttribute('data-val', sub);
-      const elIconUrl = iconMap['element:'+el]?.icon || '';
+      const elEntry = iconMap['element:'+el];
+      const elIconUrl = (elEntry && !elEntry.synthetic) ? elEntry.icon : '';
+      const elColor = ELEMENT_COLORS[el] || '#888';
+      const prisGrad = 'conic-gradient(from 0deg,#f7a73a,#79d4f0,#a96fd6,#4d88ff,#00c894,#f7a73a)';
+      const bgStyle = (el==='prismatic' && !elIconUrl) ? prisGrad : elColor;
       if(elIconUrl){
-        b.innerHTML = `<span class="el-diamond" style="background:${ELEMENT_COLORS[el]||'#888'}"><img src="${elIconUrl}" alt="${sub}" onerror="this.style.display='none'"></span>`;
-        b.title = sub;
+        b.innerHTML = `<span class="el-diamond" style="background:${elColor}"><img src="${elIconUrl}" alt="${sub}" onerror="this.style.display='none'"></span>`;
       } else {
-        b.innerHTML = `<span class="el-dot" style="background:${ELEMENT_COLORS[el]||'#888'}"></span>${sub}`;
+        b.innerHTML = `<span class="el-diamond" style="background:${bgStyle}"></span>`;
       }
+      b.title = sub;
       b.onclick = function(){ bcSelectSub(sub, this); };
       subBtns.appendChild(b);
     });
@@ -8243,6 +7951,17 @@ function bcSelectClass(cls, btn){
   bcUpdateGuardian();
   bcClearAbilities();
   bcUpdateArmorDropdowns();
+  // Actualizar label del ítem de clase según la clase elegida
+  const classItemLabels = {'Titán':'Falda','Cazador':'Capa','Hechicero':'Brazalete'};
+  const classItemLbl = document.getElementById('bc-classitem-lbl');
+  if(classItemLbl) classItemLbl.textContent = classItemLabels[cls] || 'Ítem Clase';
+  // Ocultar panel principal y equipo hasta que se elija subclase
+  const mainRow = document.getElementById('bc-main-row');
+  const promptMsg = document.getElementById('bc-prompt-msg');
+  const topEquip = document.getElementById('bc-top-equip');
+  if(mainRow) mainRow.style.display = 'none';
+  if(topEquip) topEquip.style.display = 'none';
+  if(promptMsg) promptMsg.style.display = 'flex';
 }
 
 function bcSelectSub(sub, btn){
@@ -8267,6 +7986,13 @@ function bcSelectSub(sub, btn){
   bcRenderAbilityIcons('bc-movement',d.movement,     d.element, 'single');
   bcRenderAbilityIcons('bc-aspects', d.aspects,      d.element, 'multi2');
   bcRenderAbilityIcons('bc-fragments',d.fragments,   d.element, 'multi4');
+  // Mostrar panel principal y equipo, ocultar mensaje
+  const mainRow = document.getElementById('bc-main-row');
+  const promptMsg = document.getElementById('bc-prompt-msg');
+  const topEquip = document.getElementById('bc-top-equip');
+  if(mainRow) mainRow.style.display = 'flex';
+  if(topEquip) topEquip.style.display = 'flex';
+  if(promptMsg) promptMsg.style.display = 'none';
 }
 
 // Compatibility shims for old code that calls bcOnClassChange/bcOnSubChange
@@ -8304,7 +8030,7 @@ function bcRenderAbilityIcons(containerId, arr, element, mode){
     div.dataset.mode = mode;
     div.style.borderColor = element ? (ELEMENT_COLORS[element]+'44') : '#2a2a3a';
     if(iconUrl){
-      div.innerHTML = `<img src="https://www.bungie.net${iconUrl}" alt="${name}" onerror="this.parentNode.innerHTML='<span class=ab-fb>${name.substring(0,8)}</span>'">`;
+      div.innerHTML = `<img src="${iconUrl}" alt="${name}" onerror="this.parentNode.innerHTML='<span class=ab-fb>${name.substring(0,8)}</span>'">`;
     } else {
       div.innerHTML = `<span class="ab-fb">${name.substring(0,10)}</span>`;
     }
@@ -8332,7 +8058,7 @@ function bcClickAbilityIcon(el){
       el.classList.remove('ab-selected');
       delete el.dataset.badge;
     } else {
-      if(selected.length >= 2) return; // max 2
+      if(selected.length >= 2) return; // max 2 aspects
       el.classList.add('ab-selected');
       el.dataset.badge = '✓';
     }
@@ -8340,14 +8066,17 @@ function bcClickAbilityIcon(el){
     const h1 = document.getElementById('bc-aspect1'); if(h1) h1.value = newSel[0]||'';
     const h2 = document.getElementById('bc-aspect2'); if(h2) h2.value = newSel[1]||'';
     const cnt = document.getElementById('asp-count'); if(cnt) cnt.textContent = newSel.length+'/2';
+    // Recalculate available fragment slots from selected aspects
+    bcUpdateFragmentSlots(newSel);
 
   } else if(mode === 'multi4'){
+    const maxFrags = bcGetMaxFragments();
     const selected = Array.from(container.querySelectorAll('.ab-icon.ab-selected'));
     if(el.classList.contains('ab-selected')){
       el.classList.remove('ab-selected');
       delete el.dataset.badge;
     } else {
-      if(selected.length >= 4) return; // max 4
+      if(selected.length >= maxFrags) return;
       el.classList.add('ab-selected');
       el.dataset.badge = '✓';
     }
@@ -8355,8 +8084,47 @@ function bcClickAbilityIcon(el){
     ['bc-frag1','bc-frag2','bc-frag3','bc-frag4'].forEach((id,i)=>{
       const h = document.getElementById(id); if(h) h.value = newSel[i]||'';
     });
-    const cnt = document.getElementById('frag-count'); if(cnt) cnt.textContent = newSel.length+'/4';
+    const cnt = document.getElementById('frag-count');
+    if(cnt) cnt.textContent = newSel.length + '/' + maxFrags;
+    bcUpdateFragmentStats();
   }
+}
+
+// Devuelve el total de ranuras de fragmentos según los aspectos seleccionados
+function bcGetMaxFragments(){
+  const slots = (iconMap && iconMap['_aspectFragSlots']) || {};
+  const container = document.getElementById('icons-bc-aspects');
+  if(!container) return 0;
+  let total = 0;
+  container.querySelectorAll('.ab-icon.ab-selected').forEach(el => {
+    const name = (el.dataset.val || '').toLowerCase();
+    // Usar el valor de la API; fallback a 2 si no está cacheado aún
+    total += (slots[name] !== undefined) ? slots[name] : 2;
+  });
+  return total;
+}
+
+// Actualiza el contador de fragmentos y elimina los que sobren si se reduce el máximo
+function bcUpdateFragmentSlots(selectedAspects){
+  const maxFrags = bcGetMaxFragments();
+  const cnt = document.getElementById('frag-count');
+  const fragContainer = document.getElementById('icons-bc-fragments');
+  if(!fragContainer) return;
+  // Deseleccionar fragmentos que superen el nuevo máximo
+  const selFrags = Array.from(fragContainer.querySelectorAll('.ab-icon.ab-selected'));
+  if(selFrags.length > maxFrags){
+    selFrags.slice(maxFrags).forEach(el => {
+      el.classList.remove('ab-selected');
+      delete el.dataset.badge;
+    });
+    // Actualizar hidden inputs
+    const nowSel = Array.from(fragContainer.querySelectorAll('.ab-icon.ab-selected')).map(i=>i.dataset.val);
+    ['bc-frag1','bc-frag2','bc-frag3','bc-frag4'].forEach((id,i) => {
+      const h = document.getElementById(id); if(h) h.value = nowSel[i]||'';
+    });
+  }
+  const curSel = fragContainer.querySelectorAll('.ab-icon.ab-selected').length;
+  if(cnt) cnt.textContent = curSel + '/' + maxFrags;
 }
 
 function bcFillSlot(id, arr){
@@ -8384,7 +8152,8 @@ function bcClearAbilities(){
     if(c) c.innerHTML = '';
   });
   const asp = document.getElementById('asp-count'); if(asp) asp.textContent='0/2';
-  const frg = document.getElementById('frag-count'); if(frg) frg.textContent='0/4';
+  const frg = document.getElementById('frag-count'); if(frg) frg.textContent='0/0';
+  bcUpdateFragmentStats();
 }
 
 function bcUpdateGuardian(){
@@ -8609,10 +8378,52 @@ function bcUpdateArmorDropdowns(){
   // The picker is populated dynamically when the user clicks the slot button
 }
 
+
+function bcUpdateFragmentStats(){
+  const cls = document.getElementById('bc-class').value;
+  const sub = document.getElementById('bc-sub').value;
+  const statKeys = ['mob','res','rec','dis','int','for'];
+  const totals = {};
+  statKeys.forEach(s => totals[s] = 0);
+  if(cls && sub && typeof SUBCLASS_DATA !== 'undefined' && SUBCLASS_DATA[cls]?.[sub]?.fragmentStats){
+    const fStats = SUBCLASS_DATA[cls][sub].fragmentStats;
+    ['bc-frag1','bc-frag2','bc-frag3','bc-frag4'].forEach(id => {
+      const val = document.getElementById(id)?.value;
+      if(val && fStats[val]){
+        Object.entries(fStats[val]).forEach(([s,v]) => {
+          if(Object.prototype.hasOwnProperty.call(totals,s)) totals[s] += v;
+        });
+      }
+    });
+  }
+  statKeys.forEach(stat => {
+    const badge = document.getElementById('frag-mod-'+stat);
+    if(!badge) return;
+    const total = totals[stat];
+    if(total !== 0){
+      badge.textContent = (total > 0 ? '+' : '') + total;
+      badge.style.color = total > 0 ? '#4ccb6e' : '#e07060';
+      badge.style.display = '';
+    } else {
+      badge.textContent = '';
+      badge.style.display = 'none';
+    }
+  });
+}
+
 function bcUpdateBar(stat){
   const val = Math.min(100, Math.max(0, parseInt(document.getElementById('bc-stat-'+stat).value)||0));
   const bar = document.getElementById('bar-'+stat);
+  const drag = document.getElementById('drag-'+stat);
   if(bar) bar.style.width = val+'%';
+  if(drag) drag.value = val;
+}
+function bcDragStat(id, val){
+  const v = Math.max(0, Math.min(100, parseInt(val)||0));
+  const fill = document.getElementById('bar-'+id);
+  const numIn = document.getElementById('bc-stat-'+id);
+  if(fill) fill.style.width = v+'%';
+  if(numIn) numIn.value = v;
 }
 
 function bcResetCreator(){
@@ -8631,1089 +8442,530 @@ function bcResetCreator(){
   const el2=document.getElementById('bc-element-label'); if(el2) el2.textContent='';
   // Reset weapon/armor slots
   ['bc-w1','bc-w2','bc-w3','bc-a-helm','bc-a-arms','bc-a-chest','bc-a-legs','bc-a-class'].forEach(id=>{
-    const hidIn=document.getElementById(id); if(hidIn) hidIn.value='';
-    const nameEl=document.getElementById('name-'+id);
-    const imgEl=document.getElementById('img-'+id);
-    const btn=document.getElementById('btn-'+id);
-    const defaults={'bc-w1':'— Arma primaria —','bc-w2':'— Arma especial —','bc-w3':'— Arma pesada —','bc-a-helm':'— Casco —','bc-a-arms':'— Brazos —','bc-a-chest':'— Pecho —','bc-a-legs':'— Piernas —','bc-a-class':'— Ítem de Clase —'};
-    if(nameEl) nameEl.textContent=defaults[id]||'—';
-    if(imgEl){imgEl.src='';imgEl.style.display='none';}
-    if(btn){btn.classList.remove('has-val','exotic');}
+    const hidden = document.getElementById(id); if(hidden) hidden.value='';
+    const btn = document.querySelector('[data-slot-id="'+id+'"]');
+    if(btn){
+      const img = btn.querySelector('img'); if(img){ img.src=''; img.style.display='none'; }
+      const lbl = btn.querySelector('.slot-thumb-label'); if(lbl) lbl.textContent='';
+      btn.dataset.val = '';
+    }
   });
-  ['mob','res','rec','dis','int','for'].forEach(k=>{
-    const inp=document.getElementById('bc-stat-'+k);
-    if(inp){inp.value=50; bcUpdateBar(k);}
-  });
-  const notes=document.getElementById('bc-notes'); if(notes) notes.value='';
+  // Ocultar main row de nuevo
+  const mainRow2 = document.getElementById('bc-main-row');
+  const promptMsg2 = document.getElementById('bc-prompt-msg');
+  const topEquip2 = document.getElementById('bc-top-equip');
+  if(mainRow2) mainRow2.style.display = 'none';
+  if(topEquip2) topEquip2.style.display = 'none';
+  if(promptMsg2) promptMsg2.style.display = 'flex';
 }
 
-function bcSaveBuild(){
-  const name=(document.getElementById('bc-name').value||'').trim()||'Build sin nombre';
-  const cls=document.getElementById('bc-class').value;
-  const sub=document.getElementById('bc-sub').value;
-  const build = {
-    id: Date.now().toString(36),
-    name, cls, sub,
-    element: (cls&&sub&&SUBCLASS_DATA[cls]?.[sub]?.element)||'',
-    super: document.getElementById('bc-super').value,
-    melee: document.getElementById('bc-melee').value,
-    grenade: document.getElementById('bc-grenade').value,
-    classAb: document.getElementById('bc-class-ab').value,
-    movement: document.getElementById('bc-movement').value,
-    aspect1: document.getElementById('bc-aspect1').value,
-    aspect2: document.getElementById('bc-aspect2').value,
-    frag1: document.getElementById('bc-frag1').value,
-    frag2: document.getElementById('bc-frag2').value,
-    frag3: document.getElementById('bc-frag3').value,
-    frag4: document.getElementById('bc-frag4').value,
-    w1: document.getElementById('bc-w1').value,
-    w2: document.getElementById('bc-w2').value,
-    w3: document.getElementById('bc-w3').value,
-    helm: document.getElementById('bc-a-helm').value,
-    arms: document.getElementById('bc-a-arms').value,
-    chest: document.getElementById('bc-a-chest').value,
-    legs: document.getElementById('bc-a-legs').value,
-    classItem: document.getElementById('bc-a-class').value,
-    notes: document.getElementById('bc-notes').value,
-    stats: {
-      mob: parseInt(document.getElementById('bc-stat-mob').value)||50,
-      res: parseInt(document.getElementById('bc-stat-res').value)||50,
-      rec: parseInt(document.getElementById('bc-stat-rec').value)||50,
-      dis: parseInt(document.getElementById('bc-stat-dis').value)||50,
-      int: parseInt(document.getElementById('bc-stat-int').value)||50,
-      for: parseInt(document.getElementById('bc-stat-for').value)||50
+// ─────────────────────────────────────────────────────────────
+// ICON MAP — carga de iconos desde la API de Bungie
+// ─────────────────────────────────────────────────────────────
+let iconMap = {};
+
+const BNET           = 'https://www.bungie.net';
+const ICON_CACHE_KEY = 'd2icons.v21';
+const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
+
+// ── Ranuras de fragmentos por aspecto (valores verificados en juego) ──
+// 3 slots: "al acecho" (On the Prowl), "acelerante de caos" (Chaos Accelerant)
+// 1 slot:  "llamas ardientes", "emboscada del trampero", "golpe de tempestad",
+//          "torbellino apabullante", "hijo de los viejos dioses"
+// 2 slots: todo lo demás (valor por defecto en bcGetMaxFragments)
+const ASPECT_FRAG_SLOTS = {
+  'al acecho'                 : 3,
+  'acelerante de caos'        : 3,
+  'llamas ardientes'          : 1,
+  'emboscada del trampero'    : 1,
+  'golpe de tempestad'        : 1,
+  'torbellino apabullante'    : 1,
+  'hijo de los viejos dioses' : 1,
+};
+
+function _applyAspectSlotFallback(fragSlots){
+  if(typeof SUBCLASS_DATA === 'undefined') return;
+  Object.values(SUBCLASS_DATA).forEach(cls => {
+    Object.values(cls).forEach(sub => {
+      (sub.aspects || []).forEach(name => {
+        const key = name.toLowerCase();
+        if(!(key in fragSlots)){
+          fragSlots[key] = ASPECT_FRAG_SLOTS[key] ?? 2;
+        }
+      });
+    });
+  });
+}
+
+function clearIconCache(){
+  localStorage.removeItem(ICON_CACHE_KEY);
+  iconMap = {};
+  fetchIcons();
+}
+
+function showApiKeyBanner(){
+  const b = document.getElementById('apikey-banner'); if(b) b.style.display='flex';
+}
+function hideApiKeyBanner(){
+  const b = document.getElementById('apikey-banner'); if(b) b.style.display='none';
+}
+function saveApiKey(){
+  const inp = document.getElementById('apikey-input');
+  const cid = document.getElementById('clientid-input');
+  const key = inp?.value.trim()||'';
+  const id  = cid?.value.trim()||'';
+  if(key) localStorage.setItem('d2apikey', key);
+  if(id)  localStorage.setItem('d2clientid', id);
+  // Pre-rellenar con valores guardados
+  if(inp && !key){ inp.value = localStorage.getItem('d2apikey')||''; }
+  if(cid && !id){ cid.value = localStorage.getItem('d2clientid')||''; }
+  if(!key && !id) return;
+  hideApiKeyBanner();
+  if(key) clearIconCache();
+}
+
+async function fetchIcons(){
+  const status = document.getElementById('icon-status');
+
+  // Intentar caché primero
+  try {
+    const cached = JSON.parse(localStorage.getItem(ICON_CACHE_KEY) || 'null');
+    if(cached && cached.ts && (Date.now() - cached.ts < ICON_CACHE_TTL)){
+      iconMap = cached.data || {};
+      if(!iconMap['_aspectFragSlots']) iconMap['_aspectFragSlots'] = {};
+      _applyAspectSlotFallback(iconMap['_aspectFragSlots']);
+      if(status) status.textContent = '';
+      onIconsReady();
+      return;
     }
+  } catch(e){}
+
+  const apiKey = localStorage.getItem('d2apikey') || '';
+  if(!apiKey){
+    iconMap['_aspectFragSlots'] = {};
+    _applyAspectSlotFallback(iconMap['_aspectFragSlots']);
+    showApiKeyBanner();
+    return;
+  }
+
+  hideApiKeyBanner();
+  if(status) status.textContent = 'Cargando iconos…';
+
+  try {
+    // 1. Manifiesto
+    const mRes  = await fetch(`${BNET}/Platform/Destiny2/Manifest/`, { headers:{'X-API-Key':apiKey} });
+    const mData = await mRes.json();
+    const compPaths = mData.Response?.jsonWorldComponentContentPaths;
+    const lang  = compPaths?.['es'] ? 'es' : 'en';
+    const paths = compPaths?.[lang] || compPaths?.['en'];
+    if(!paths) throw new Error('Sin rutas de manifiesto');
+
+    // 2. Catálogo de ítems
+    if(status) status.textContent = 'Descargando ítems…';
+    const itemRes  = await fetch(`${BNET}${paths['DestinyInventoryItemLiteDefinition']}`);
+    const itemData = await itemRes.json();
+
+    const icons = {};
+
+    // Nombres de aspectos en ES para fetch individual
+    const aspectEsNames = new Set();
+    if(typeof SUBCLASS_DATA !== 'undefined'){
+      Object.values(SUBCLASS_DATA).forEach(cls => {
+        Object.values(cls).forEach(sub => {
+          (sub.aspects || []).forEach(n => aspectEsNames.add(n.toLowerCase()));
+        });
+      });
+    }
+
+    Object.entries(itemData).forEach(([hash, item]) => {
+      if(!item.displayProperties?.icon) return;
+      const nameEn = (item.displayProperties.name || '').toLowerCase().trim();
+      const entry  = { icon: BNET + item.displayProperties.icon, hash: parseInt(hash) };
+      if(nameEn) icons[nameEn] = entry;
+      if(lang === 'es') icons['es:' + nameEn] = entry;
+      if(aspectEsNames.has(nameEn)) icons['es:' + nameEn] = { ...entry };
+    });
+
+    // 3. Ranuras de fragmentos por aspecto
+    if(status) status.textContent = 'Obteniendo ranuras de fragmentos…';
+    const fragSlots = {};
+    const toFetch   = [];
+    aspectEsNames.forEach(name => {
+      const e = icons['es:'+name];
+      if(e?.hash) toFetch.push({ name, hash: e.hash });
+    });
+
+    for(let i = 0; i < toFetch.length; i += 8){
+      const batch = toFetch.slice(i, i+8);
+      await Promise.all(batch.map(async ({ name, hash }) => {
+        try {
+          const r = await fetch(`${BNET}/Platform/Destiny2/Manifest/DestinyInventoryItemDefinition/${hash}/`, {
+            headers:{'X-API-Key':apiKey}
+          });
+          const d = await r.json();
+          // Fragment slots están en investmentStats como primer valor positivo [1-4]
+          let slots = null;
+          for(const s of (d.Response?.investmentStats || [])){
+            if(!s.isConditionallyActive && s.value >= 1 && s.value <= 4){ slots = s.value; break; }
+          }
+          if(!slots){
+            const cv = d.Response?.plug?.energyCost?.energyCostValue;
+            if(cv >= 1 && cv <= 4) slots = cv;
+          }
+          if(slots !== null) fragSlots[name] = slots;
+        } catch(e){}
+      }));
+    }
+
+    // Aplicar fallback hardcodeado
+    _applyAspectSlotFallback(fragSlots);
+    icons['_aspectFragSlots'] = fragSlots;
+
+    iconMap = icons;
+    localStorage.setItem(ICON_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: iconMap }));
+    if(status) status.textContent = '';
+    onIconsReady();
+
+  } catch(err){
+    console.error('[D2Icons]', err);
+    if(!iconMap['_aspectFragSlots']){ iconMap['_aspectFragSlots'] = {}; }
+    _applyAspectSlotFallback(iconMap['_aspectFragSlots']);
+    if(status) status.textContent = '';
+  }
+}
+
+function onIconsReady(){
+  document.querySelectorAll('[data-wimg]').forEach(img => {
+    const url = iconMap[img.dataset.wimg]?.icon || '';
+    if(url){ img.src = url; img.style.display = ''; }
+  });
+  document.querySelectorAll('[data-pimg]').forEach(img => {
+    const url = iconMap[img.dataset.pimg]?.icon || '';
+    if(url){ img.src = url; img.style.display = ''; }
+  });
+}
+
+// Inicializar fragment slots con hardcoded de inmediato (sin esperar API)
+iconMap['_aspectFragSlots'] = {};
+_applyAspectSlotFallback(iconMap['_aspectFragSlots']);
+
+// Lanzar carga de iconos
+fetchIcons();
+
+
+// ─────────────────────────────────────────────────────────────
+// SESIÓN Y SPLASH
+// ─────────────────────────────────────────────────────────────
+let currentUser = null;
+
+function splashSkip(){
+  const splash = document.getElementById('login-splash');
+  if(!splash) return;
+  splash.classList.add('hiding');
+  setTimeout(()=>{ splash.style.display='none'; }, 500);
+  const btnOpen  = document.getElementById('btn-login-open');
+  const userBadge= document.getElementById('user-badge');
+  if(!currentUser){
+    if(btnOpen)   btnOpen.style.display='';
+    if(userBadge) userBadge.style.display='none';
+  }
+}
+
+function bungieOAuthLogin(){
+  const clientId = localStorage.getItem('d2clientid')||'';
+  if(!clientId){
+    const errEl = document.getElementById('splash-error')||document.getElementById('login-modal-error');
+    if(errEl) errEl.textContent='Introduce tu Client ID de Bungie en el banner de API Key primero';
+    showApiKeyBanner();
+    return;
+  }
+  const redirectUri = encodeURIComponent(window.location.href.split('#')[0].split('?')[0]);
+  window.location.href = `${BNET}/en/OAuth/Authorize?client_id=${clientId}&response_type=token`;
+}
+
+async function handleOAuthCallback(){
+  const hash = window.location.hash;
+  if(!hash.includes('access_token=')) return false;
+  const params = new URLSearchParams(hash.slice(1));
+  const token      = params.get('access_token');
+  const memberId   = params.get('membership_id');
+  const expiresIn  = parseInt(params.get('expires_in')||'3600');
+  if(!token) return false;
+  // Limpiar hash de la URL
+  history.replaceState(null,'', window.location.pathname + window.location.search);
+  localStorage.setItem('d2token', token);
+  localStorage.setItem('d2token_exp', Date.now() + expiresIn*1000);
+  const apiKey = localStorage.getItem('d2apikey')||'';
+  try {
+    // GetMembershipsForCurrentUser con el token
+    const res = await fetch(`${BNET}/Platform/User/GetMembershipsForCurrentUser/`, {
+      headers:{ 'X-API-Key':apiKey, 'Authorization':`Bearer ${token}` }
+    });
+    const data = await res.json();
+    const dest = data.Response?.destinyMemberships||[];
+    // Preferir la plataforma principal
+    const profile = data.Response?.primaryMembershipId
+      ? dest.find(d=>d.membershipId===data.Response.primaryMembershipId)||dest[0]
+      : dest[0];
+    if(!profile) throw new Error('No se encontró perfil de Destiny');
+    const bungieInfo = data.Response?.bungieNetUser;
+    currentUser = {
+      membershipId:   profile.membershipId,
+      membershipType: profile.membershipType,
+      displayName:    profile.bungieGlobalDisplayName || bungieInfo?.displayName || profile.displayName,
+    };
+    localStorage.setItem('d2currentUser', JSON.stringify(currentUser));
+    _applyLoginUI(currentUser.displayName);
+    splashSkip();
+    return true;
+  } catch(e){
+    console.error('OAuth callback error:', e);
+    return false;
+  }
+}
+
+function _applyLoginUI(displayName){
+  const badgeName = document.getElementById('user-badge-name');
+  const userBadge = document.getElementById('user-badge');
+  const btnOpen   = document.getElementById('btn-login-open');
+  if(badgeName) badgeName.textContent = displayName||'';
+  if(userBadge) userBadge.style.display='flex';
+  if(btnOpen)   btnOpen.style.display='none';
+}
+
+// Modal de login del header
+function openLoginModal(){
+  const o = document.getElementById('login-modal-overlay'); if(o) o.classList.add('open');
+}
+function closeLoginModal(){
+  const o = document.getElementById('login-modal-overlay'); if(o) o.classList.remove('open');
+  const e = document.getElementById('login-modal-error'); if(e) e.textContent='';
+}
+function doLogout(){
+  currentUser=null; localStorage.removeItem('d2currentUser');
+  const u=document.getElementById('user-badge'); if(u) u.style.display='none';
+  const b=document.getElementById('btn-login-open'); if(b) b.style.display='';
+}
+
+// ─────────────────────────────────────────────────────────────
+// GUARDAR BUILD
+// ─────────────────────────────────────────────────────────────
+function bcSaveBuild(){
+  const name = (document.getElementById('bc-name')?.value||'').trim()||'Build sin nombre';
+  const g = id => document.getElementById(id)?.value||'';
+  const build = {
+    id:Date.now(), name,
+    cls:g('bc-class'), sub:g('bc-sub'),
+    super:g('bc-super'), classAb:g('bc-class-ab'), melee:g('bc-melee'),
+    grenade:g('bc-grenade'), movement:g('bc-movement'),
+    aspect1:g('bc-aspect1'), aspect2:g('bc-aspect2'),
+    frag1:g('bc-frag1'), frag2:g('bc-frag2'), frag3:g('bc-frag3'), frag4:g('bc-frag4'),
+    w1:g('bc-w1'), w2:g('bc-w2'), w3:g('bc-w3'),
+    aHelm:g('bc-a-helm'), aArms:g('bc-a-arms'), aChest:g('bc-a-chest'),
+    aLegs:g('bc-a-legs'), aClass:g('bc-a-class'),
+    stats:{ mobility:g('bc-stat-mobility'), resilience:g('bc-stat-resilience'),
+            recovery:g('bc-stat-recovery'), discipline:g('bc-stat-discipline'),
+            intellect:g('bc-stat-intellect'), strength:g('bc-stat-strength') },
+    notes:g('bc-notes')
   };
+  bcLoadDb(); _buildsDb.push(build); bcSaveDb();
+  const btn=document.querySelector('.bc-save-btn');
+  if(btn){ const o=btn.textContent; btn.textContent='✓ Guardado'; btn.style.color='#4caf50';
+    setTimeout(()=>{btn.textContent=o;btn.style.color='';},1500); }
+  if(typeof bcRenderSaved==='function') bcRenderSaved();
+}
+
+// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// ARRANQUE DE LA APP
+// ─────────────────────────────────────────────────────────────
+(async function initApp(){
+  // 1. ¿Venimos de un callback OAuth? (hash con access_token)
+  const oauthHandled = await handleOAuthCallback();
+
+  if(!oauthHandled){
+    // 2. Restaurar sesión guardada
+    try {
+      const saved = JSON.parse(localStorage.getItem('d2currentUser')||'null');
+      if(saved?.membershipId){
+        currentUser = saved;
+        _applyLoginUI(currentUser.displayName||'');
+        splashSkip();
+      }
+    } catch(e){}
+  }
+
+  // Pre-rellenar inputs del banner con valores guardados
+  const apiInp = document.getElementById('apikey-input');
+  const cidInp = document.getElementById('clientid-input');
+  if(apiInp) apiInp.value = localStorage.getItem('d2apikey')||'';
+  if(cidInp) cidInp.value = localStorage.getItem('d2clientid')||'';
+
+  // 3. Cargar estado y renderizar
+  loadState();
+  updateHeader();
+  renderCurrentTab();
+
+  // 4. Cargar iconos de Bungie en background
+  fetchIcons();
+})();
+
+
+// ── BUILDS LIST ──────────────────────────────────────────────
+let invLoaded = false;
+let _invItems = [];
+
+function bcRenderSidebar(){
   bcLoadDb();
-  _buildsDb.unshift(build);
-  bcSaveDb();
-  bcResetCreator();
-  // Flash saved message
-  const btn = document.querySelector('.bc-save-btn');
-  if(btn){ btn.textContent='✓ Build Guardada'; btn.style.background='linear-gradient(135deg,#4ccb6e,#2a8a4a)'; setTimeout(()=>{ btn.textContent='⬡ Guardar Build'; btn.style.background=''; },2000); }
 }
 
 function bcRenderList(){
   bcLoadDb();
-  const grid = document.getElementById('bc-builds-grid');
+  const grid  = document.getElementById('bc-builds-grid');
   const empty = document.getElementById('bc-empty-state');
-  const count = document.getElementById('bc-list-count');
+  const cnt   = document.getElementById('bc-list-count');
   if(!grid) return;
+  if(cnt) cnt.textContent = _buildsDb.length + ' guardada' + (_buildsDb.length!==1?'s':'');
   if(!_buildsDb.length){
-    grid.innerHTML=''; grid.style.display='none';
+    grid.innerHTML = '';
     if(empty) empty.style.display='flex';
-    if(count) count.textContent='0 guardadas';
     return;
   }
-  grid.style.display='grid';
   if(empty) empty.style.display='none';
-  if(count) count.textContent=_buildsDb.length+' guardada'+(+_buildsDb.length===1?'':'s');
-  grid.innerHTML = _buildsDb.map(b=>bcBuildCard(b)).join('');
+  const classBadge = {
+    'Titán':    {cls:'titan',   hex:'#a0b8e8'},
+    'Cazador':  {cls:'hunter',  hex:'#e8c080'},
+    'Hechicero':{cls:'warlock', hex:'#c0a0e8'}
+  };
+  const statLabels = {mobility:'MOV',resilience:'RES',recovery:'REC',discipline:'DIS',intellect:'INT',strength:'FUE'};
+  grid.innerHTML = _buildsDb.slice().reverse().map((b,ri)=>{
+    const i = _buildsDb.length - 1 - ri;
+    const cb = classBadge[b.cls]||{cls:'',hex:'#888'};
+    const statsHtml = Object.entries(statLabels).map(([k,lbl])=>`
+      <div class="bc-card-stat">
+        <span class="bc-card-stat-val">${b.stats?.[k]||0}</span>
+        <span class="bc-card-stat-lbl">${lbl}</span>
+      </div>`).join('');
+    const weaponsHtml = [b.w1,b.w2,b.w3].filter(Boolean).map(w=>`<div class="bc-card-weapon">⚔ ${w}</div>`).join('');
+    return `<div class="bc-card">
+      <div class="bc-card-header">
+        <span class="bc-card-name">${b.name||'Sin nombre'}</span>
+        <span class="bc-card-class-badge bc-badge-${cb.cls}" style="color:${cb.hex};border:1px solid ${cb.hex}40">${b.cls||''}</span>
+      </div>
+      <div class="bc-card-body">
+        ${weaponsHtml?`<div class="bc-card-weapons">${weaponsHtml}</div>`:''}
+        <div class="bc-card-stats">${statsHtml}</div>
+        ${b.notes?`<div style="font-size:.68rem;color:#666;border-top:1px solid #1e1e2e;padding-top:6px;margin-top:2px">${b.notes.slice(0,80)}${b.notes.length>80?'…':''}</div>`:''}
+      </div>
+      <div class="bc-card-footer">
+        <button class="bc-card-btn" onclick="bcLoadBuild(${i})">✎ Editar</button>
+        <button class="bc-card-btn danger" onclick="bcDeleteBuild(${i})">✕ Borrar</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function bcBuildCard(b){
-  const clsBadge = b.cls==='Titán'?'badge-titan':b.cls==='Cazador'?'badge-hunter':'badge-warlock';
-  const subCls = b.element?'sub-'+b.element:'';
-  const elColor = ELEMENT_COLORS[b.element]||'#666';
-  const weapons = [
-    b.w1?`<div class="bc-card-weapon"><span class="bc-ammo-dot ammo-primary"></span>${b.w1}</div>`:'',
-    b.w2?`<div class="bc-card-weapon"><span class="bc-ammo-dot ammo-special"></span>${b.w2}</div>`:'',
-    b.w3?`<div class="bc-card-weapon"><span class="bc-ammo-dot ammo-heavy"></span>${b.w3}</div>`:''
-  ].filter(Boolean).join('')||'<span style="color:#444;font-size:.72rem">Sin armas</span>';
-  const stats = ['mob','res','rec','dis','int','for'].map(k=>`
-    <div class="bc-card-stat">
-      <div class="bc-card-stat-val">${b.stats?.[k]||'—'}</div>
-      <div class="bc-card-stat-lbl">${k.toUpperCase()}</div>
-    </div>`).join('');
-  const abilities = [b.super,b.aspect1,b.aspect2].filter(Boolean).map(a=>`<span style="color:#666;font-size:.65rem">${a}</span>`).join(' · ')||'';
-  return `<div class="bc-card">
-    <div class="bc-card-header" style="border-left:3px solid ${elColor}">
-      <span class="bc-card-name">${b.name}</span>
-      ${b.cls?`<span class="bc-card-class-badge ${clsBadge}">${b.cls}</span>`:''}
-      ${b.sub?`<span class="bc-card-sub ${subCls}">${b.sub}</span>`:''}
-    </div>
-    <div class="bc-card-body">
-      <div class="bc-card-weapons">${weapons}</div>
-      ${abilities?`<div style="margin-top:2px;line-height:1.5">${abilities}</div>`:''}
-      <div class="bc-card-stats">${stats}</div>
-    </div>
-    <div class="bc-card-footer">
-      <button class="bc-card-btn" onclick="bcEditBuild('${b.id}')">Editar</button>
-      <button class="bc-card-btn danger" onclick="bcDeleteBuild('${b.id}')">Eliminar</button>
-    </div>
-  </div>`;
+function bcDeleteBuild(idx){
+  if(!confirm('¿Borrar esta build?')) return;
+  bcLoadDb(); _buildsDb.splice(idx,1); bcSaveDb(); bcRenderList();
 }
 
-function bcEditBuild(id){
+function bcLoadBuild(idx){
   bcLoadDb();
-  const b = _buildsDb.find(x=>x.id===id);
-  if(!b) return;
-  switchTab('builds', null); // open creator tab
-  document.getElementById('bc-name').value = b.name||'';
-  const clsSel = document.getElementById('bc-class');
-  clsSel.value = b.cls||'';
-  bcOnClassChange();
+  const b = _buildsDb[idx]; if(!b) return;
+  switchTab('builds', null);
+  if(document.getElementById('bc-name')) document.getElementById('bc-name').value = b.name||'';
+  if(b.cls){
+    const clsBtn = document.querySelector(`.bc-class-btn[onclick*="${b.cls}"]`);
+    if(clsBtn) bcSelectClass(b.cls, clsBtn);
+  }
   setTimeout(()=>{
-    document.getElementById('bc-sub').value = b.sub||'';
-    bcOnSubChange();
-    setTimeout(()=>{
-      // Restore ability slots
-      const abilityMap = {super:'super',melee:'melee',grenade:'grenade',frag1:'frag1',frag2:'frag2',frag3:'frag3',frag4:'frag4',aspect1:'aspect1',aspect2:'aspect2'};
-      Object.entries(abilityMap).forEach(([k,sid])=>{
-        if(b[k]) bcSetSlotFromSave('bc-'+sid, b[k]);
-      });
-      if(b.classAb) bcSetSlotFromSave('bc-class-ab', b.classAb);
-      if(b.movement) bcSetSlotFromSave('bc-movement', b.movement);
-      // Restore weapon/armor slots
-      ['w1','w2','w3'].forEach(k=>{ if(b[k]) bcSetEquipFromSave('bc-'+k, b[k]); });
-      ['helm','arms','chest','legs'].forEach(k=>{ if(b[k]) bcSetEquipFromSave('bc-a-'+k, b[k]); });
-      if(b.classItem) bcSetEquipFromSave('bc-a-class', b.classItem);
-      const notes=document.getElementById('bc-notes'); if(notes) notes.value=b.notes||'';
-      const statsMap={mob:'mob',res:'res',rec:'rec',dis:'dis',int:'int',for:'for'};
-      Object.entries(statsMap).forEach(([k,v])=>{
-        const inp=document.getElementById('bc-stat-'+v);
-        if(inp&&b.stats?.[k]){inp.value=b.stats[k]; bcUpdateBar(v);}
-      });
-      // Remove old build after loading
-      _buildsDb = _buildsDb.filter(x=>x.id!==id);
-      bcSaveDb();
-    },50);
-  },50);
-}
-
-function bcSetSlotFromSave(id, val){
-  const hidIn = document.getElementById(id);
-  if(hidIn) hidIn.value = val;
-  const txtEl = document.getElementById('text-'+id);
-  if(txtEl){ txtEl.textContent = val; }
-  const btn = document.getElementById('btn-'+id);
-  if(btn && val) btn.classList.add('has-val');
-}
-
-function bcSetEquipFromSave(id, val){
-  const hidIn = document.getElementById(id);
-  if(hidIn) hidIn.value = val;
-  const nameEl = document.getElementById('name-'+id);
-  if(nameEl) nameEl.textContent = val;
-  // Try to find icon in iconMap
-  const ekey = val.toLowerCase();
-  const icon = iconMap[ekey]?.icon || iconMap['es:'+ekey]?.icon || '';
-  const imgEl = document.getElementById('img-'+id);
-  if(imgEl && icon){ imgEl.src=icon; imgEl.style.display=''; imgEl.classList.add('has-img'); }
-  const btn = document.getElementById('btn-'+id);
-  if(btn && val) btn.classList.add('has-val');
-}
-
-function bcDeleteBuild(id){
-  if(!confirm('¿Eliminar esta build?')) return;
-  bcLoadDb();
-  _buildsDb = _buildsDb.filter(x=>x.id!==id);
-  bcSaveDb();
-  bcRenderList();
-}
-
-function bcRenderSidebar(){ /* kept for compatibility */ bcLoadDb(); }
-
-
-// =========== INIT ===========
-function debounce(fn, ms) {
-  let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
-}
-const _dRLW = debounce(renderLegWeapons, 120);
-const _dREW = debounce(renderExoWeapons, 120);
-const _dREA = debounce(renderExoArmor, 120);
-const _dRLA = debounce(renderLegArmor, 120);
-
-function applyMobileClass() {
-  const mobile = window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-  document.body.classList.toggle('is-mobile', mobile);
-}
-
-function init() {
-  applyMobileClass();
-  window.addEventListener('resize', applyMobileClass);
-  loadUser();
-  loadState();
-  updateHeader();
-  const setSelect = document.getElementById('f-aleg-set');
-  if (setSelect) {
-    setSelect.innerHTML = '<option value="">Todos los sets</option>' +
-      ARMOR_SETS.map(s => `<option value="${s.id}">[${s.season}] ${s.n}</option>`).join('');
-  }
-  buildAlphaBar(WEAPONS.filter(w=>!w.exotic).map(w=>w.n), 'alpha-bar-wleg', 'selectWLegAlpha', wLegAlpha);
-  buildAlphaBar(WEAPONS.filter(w=>w.exotic).map(w=>w.n),  'alpha-bar-wexo', 'selectWExoAlpha', wExoAlpha);
-  renderLegWeapons();
-  initIcons();
-}
-
-
-// =========== ICON LOADER (Bungie API) ===========
-const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v18';
-const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
-let iconMap = {};
-
-async function initIcons() {
-  if (!localStorage.getItem('d2apikey')) {
-    localStorage.setItem('d2apikey', '550b4880a3864f15babc4ee93ab3133b');
-  }
-  try {
-    const cached = localStorage.getItem(ICON_CACHE_KEY);
-    if (cached) {
-      const {ts, icons} = JSON.parse(cached);
-      if (Date.now() - ts < ICON_CACHE_TTL) {
-        iconMap = icons;
-        applyAllIcons();
-        applyClassIcons();
-        return;
-      }
+    if(b.sub){
+      const subBtn = document.querySelector(`.bc-sub-btn[data-sub="${b.sub}"]`);
+      if(subBtn) bcSelectSub(b.sub, subBtn);
     }
-  } catch(e) { localStorage.removeItem(ICON_CACHE_KEY); }
-  const apiKey = localStorage.getItem('d2apikey');
-  if (!apiKey) {
-    const b = document.getElementById('apikey-banner');
-    if (b) b.style.display = 'flex';
+    ['mobility','resilience','recovery','discipline','intellect','strength'].forEach(s=>{
+      const inp = document.getElementById('bc-stat-'+s);
+      if(inp){ inp.value = b.stats?.[s]||0; if(typeof bcUpdateBar==='function') bcUpdateBar(s); }
+    });
+    const notes = document.getElementById('bc-notes');
+    if(notes) notes.value = b.notes||'';
+  }, 250);
+}
+
+// ── INVENTARIO ───────────────────────────────────────────────
+function initInventario(){
+  const loginPrompt = document.getElementById('inv-login-prompt');
+  const invContent  = document.getElementById('inv-content');
+  if(currentUser){
+    if(loginPrompt) loginPrompt.style.display='none';
+    if(invContent)  invContent.style.display='';
+    if(!invLoaded) loadInventario();
+    else renderInventario();
+  } else {
+    if(loginPrompt) loginPrompt.style.display='';
+    if(invContent)  invContent.style.display='none';
+  }
+}
+
+async function loadInventario(){
+  const statusEl = document.getElementById('inv-status');
+  if(!currentUser){ initInventario(); return; }
+  const apiKey = localStorage.getItem('d2apikey')||'';
+  if(!apiKey){
+    if(statusEl){statusEl.style.display='';statusEl.textContent='Necesitas API Key';}
     return;
   }
-  await fetchIcons(apiKey);
-}
-
-async function fetchIcons(apiKey) {
-  const status = document.getElementById('icon-status');
+  if(statusEl){statusEl.style.display='';statusEl.textContent='Cargando inventario…';}
   try {
-    if (status) status.textContent = 'Conectando con Bungie…';
-    const mRes = await fetch(BNET + '/Platform/Destiny2/Manifest/', {
-      headers: {'X-API-Key': apiKey}
-    });
-    const mData = await mRes.json();
-    if (!mData.Response) {
-      if (status) status.textContent = 'API Key inválida';
-      setTimeout(() => { if(status) status.textContent = ''; }, 3000);
-      return;
-    }
-    const paths_en = mData.Response.jsonWorldComponentContentPaths.en;
-    const paths_es = mData.Response.jsonWorldComponentContentPaths['es'] || paths_en;
-    const litePath_en = paths_en.DestinyInventoryItemLiteDefinition || paths_en.DestinyInventoryItemDefinition;
-    const litePath_es = paths_es.DestinyInventoryItemLiteDefinition || paths_es.DestinyInventoryItemDefinition;
-    const statPath_en = paths_en.DestinyStatDefinition;
-    const classDefPath_en = paths_en.DestinyClassDefinition;
-    const damageDefPath_en = paths_en.DestinyDamageTypeDefinition;
-    if (status) status.textContent = 'Descargando datos de Bungie…';
-    // Fetch EN + ES + Stats + ClassDefs + DamageTypes in parallel
-    const [en_items, es_items, stat_defs, class_defs, damage_defs] = await Promise.all([
-      fetch(BNET + litePath_en).then(r => r.json()),
-      litePath_es !== litePath_en
-        ? fetch(BNET + litePath_es).then(r => r.json())
-        : Promise.resolve(null),
-      statPath_en ? fetch(BNET + statPath_en).then(r => r.json()) : Promise.resolve(null),
-      classDefPath_en ? fetch(BNET + classDefPath_en).then(r => r.json()) : Promise.resolve(null),
-      damageDefPath_en ? fetch(BNET + damageDefPath_en).then(r => r.json()) : Promise.resolve(null)
-    ]);
-    // Build needed set — English names (weapons, armor, perks/traits)
-    const needed = new Set();
-    WEAPONS.forEach(w => { if(w.e) needed.add(w.e.toLowerCase()); });
-    EXOTIC_ARMOR.forEach(a => { if(a.e) needed.add(a.e.toLowerCase()); });
-    Object.values(PERK_DEFS).forEach(p => { if(p.e) needed.add(p.e.toLowerCase()); });
-    ARMOR_SETS.forEach(s => s.slots && s.slots.forEach(sl => sl.n && needed.add(sl.n.toLowerCase())));
-    // Exotic armor intrinsic perk English names (before ":" in ea.perk)
-    EXOTIC_ARMOR.forEach(a => {
-      if(a.perk) { const pn = a.perk.split(':')[0].trim().toLowerCase(); if(pn) needed.add(pn); }
-    });
-    // Spanish-name set — legendary armor pieces (no English name stored)
-    const neededEs = new Set();
-    Object.values(ARMOR_BY_CLASS).forEach(slots =>
-      Object.values(slots).forEach(arr => arr.forEach(p => p.n && neededEs.add(p.n.toLowerCase()))));
-    ARMOR_SETS.forEach(s => s.slots && s.slots.forEach(sl => sl.n && neededEs.add(sl.n.toLowerCase())));
-    // Ability names from SUBCLASS_DATA (for build creator icon grids)
-    if (typeof SUBCLASS_DATA !== 'undefined') {
-      Object.values(SUBCLASS_DATA).forEach(subs => Object.values(subs).forEach(sub => {
-        ['supers','melees','grenades','classAbility','movement','aspects','fragments'].forEach(k => {
-          (sub[k]||[]).forEach(nm => { if(nm && !nm.startsWith('Ranura')) neededEs.add(nm.toLowerCase()); });
+    const res = await fetch(
+      `${BNET}/Platform/Destiny2/${currentUser.membershipType}/Profile/${currentUser.membershipId}/?components=205`,
+      { headers:{'X-API-Key':apiKey} }
+    );
+    const data = await res.json();
+    const chars = data.Response?.characterInventories?.data||{};
+    _invItems = [];
+    Object.values(chars).forEach(ch=>{
+      (ch.items||[]).forEach(item=>{
+        const hash = item.itemHash;
+        const entry = iconMap[hash];
+        _invItems.push({
+          hash, instanceId:item.itemInstanceId,
+          name: entry?(entry.es||entry.name||''):'',
+          icon: entry?.icon?`https://www.bungie.net${entry.icon}`:'',
+          roll:'unmarked'
         });
-      }));
-    }
-    // Bonus perk names (text before ":" in bonus2pc/bonus4pc)
-    ARMOR_SETS.forEach(s => {
-      [s.bonus2pc, s.bonus4pc].forEach(b => {
-        if (b) { const nm = b.split(':')[0].trim().toLowerCase(); if (nm) neededEs.add(nm); }
       });
     });
-    // Helper: strip accents for fuzzy matching
-    const stripAccents = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'');
-    // Build accent-stripped lookup for neededEs
-    const neededEsNorm = new Map();
-    neededEs.forEach(nm => neededEsNorm.set(stripAccents(nm), nm));
-
-    // icons[en_name_lower] = {icon: url, es: official_spanish_name}
-    const icons = {};
-    // SINGLE combined pass over en_items — resolves both EN and ES (via hash cross-ref)
-    for (const [hash, item] of Object.entries(en_items)) {
-      const dp = item.displayProperties;
-      if (!dp?.icon || !dp?.name) continue;
-      const n = dp.name.toLowerCase();
-
-      // English name match (weapons, armor, perks)
-      if (needed.has(n)) {
-        const esEntry = es_items?.[hash]?.displayProperties;
-        icons[n] = { icon: BNET + dp.icon, es: esEntry?.name||null, esDesc: esEntry?.description||null };
-        needed.delete(n);
-      }
-
-      // Spanish name match via hash cross-reference with es_items (covers abilities, armor)
-      if (neededEs.size > 0 && es_items?.[hash]?.displayProperties?.name) {
-        const esN = es_items[hash].displayProperties.name.toLowerCase();
-        const esNnorm = stripAccents(esN);
-        const matchKey = neededEs.has(esN) ? esN : (neededEsNorm.has(esNnorm) ? neededEsNorm.get(esNnorm) : null);
-        if (matchKey) {
-          icons['es:' + matchKey] = { icon: BNET + dp.icon };
-          neededEs.delete(matchKey);
-          neededEsNorm.delete(esNnorm);
-        }
-      }
-
-      if (needed.size === 0 && neededEs.size === 0) break;
-    }
-
-    // Fallback second pass — iterate es_items directly for any remaining Spanish names
-    if (neededEs.size > 0 && es_items) {
-      for (const [hash, item] of Object.entries(es_items)) {
-        const dp = item.displayProperties;
-        if (!dp?.name) continue;
-        const esN = dp.name.toLowerCase();
-        const esNnorm = stripAccents(esN);
-        const matchKey = neededEs.has(esN) ? esN : (neededEsNorm.has(esNnorm) ? neededEsNorm.get(esNnorm) : null);
-        if (matchKey) {
-          const iconPath = dp.icon || en_items[hash]?.displayProperties?.icon;
-          if (iconPath) {
-            icons['es:' + matchKey] = { icon: BNET + iconPath };
-            neededEs.delete(matchKey);
-            neededEsNorm.delete(esNnorm);
-          }
-        }
-        if (neededEs.size === 0) break;
-      }
-    }
-
-    // Stat icons — Armor 3.0 stats (Health, Grenade, Class, Super, Melee, Weapons)
-    const statLookup = {
-      'health':'Health','grenade':'Grenade','class':'Class',
-      'super':'Super','melee':'Melee','weapons':'Weapons'
-    };
-    if (stat_defs) {
-      // Name-based lookup in DestinyStatDefinition
-      const statByName = {};
-      for (const [hash, s] of Object.entries(stat_defs)) {
-        const n = s.displayProperties?.name;
-        if (n) statByName[n] = s.displayProperties;
-      }
-      for (const [id, en] of Object.entries(statLookup)) {
-        const dp = statByName[en];
-        if (dp?.icon) icons['stat:'+id] = { icon: BNET + dp.icon };
-      }
-    }
-    // Fallback: scan en_items for exact or partial name matches
-    const missingStats = Object.entries(statLookup).filter(([id]) => !icons['stat:'+id]).map(([id, en]) => [id, en]);
-    if (missingStats.length > 0) {
-      const missingByName = Object.fromEntries(missingStats.map(([id, en]) => [en, id]));
-      for (const [hash, item] of Object.entries(en_items)) {
-        const dp = item.displayProperties;
-        if (!dp?.icon || !dp?.name) continue;
-        let id = missingByName[dp.name];
-        if (!id) {
-          for (const [statName, statId] of Object.entries(missingByName)) {
-            if (dp.name.startsWith(statName + ' ') || dp.name === statName) { id = statId; break; }
-          }
-        }
-        if (id) {
-          icons['stat:'+id] = { icon: BNET + dp.icon };
-          delete missingByName[dp.name];
-          if (Object.keys(missingByName).length === 0) break;
-        }
-      }
-    }
-
-    // Seasonal champion map — scan ALL items for "Unstoppable/Overload/Anti-Barrier <WeaponType>"
-    const champRx = {
-      unstoppable: /^unstoppable\s+(.+)/i,
-      overload:    /^(?:overload|disrupting)\s+(.+)/i,
-      barrier:     /^(?:anti-barrier|piercing)\s+(.+)/i
-    };
-    const EN_TO_ES_TYPE = {
-      'hand cannon':'Cañón de mano','scout rifle':'Fusil de exploración',
-      'pulse rifle':'Fusil de pulsos','auto rifle':'Rifle automático',
-      'submachine gun':'Subfusil','shotgun':'Escopeta',
-      'sniper rifle':'Fusil de francotirador','fusion rifle':'Fusil de fusión',
-      'grenade launcher':'Lanzagranadas','rocket launcher':'Lanzacohetes',
-      'machine gun':'Ametralladora','sword':'Espada',
-      'linear fusion rifle':'FFL','sidearm':'Pistola lateral',
-      'combat bow':'Arco de combate','glaive':'Ballesta','trace rifle':'Fusil de rastreo',
-      'bow':'Arco de combate'
-    };
-    const seasonalChampMap = {};
-    for (const [hash, item] of Object.entries(en_items)) {
-      const name = item.displayProperties?.name;
-      if (!name) continue;
-      for (const [ctype, rx] of Object.entries(champRx)) {
-        const m = name.match(rx);
-        if (m) {
-          const weapKey = m[1].trim().toLowerCase();
-          const esType = EN_TO_ES_TYPE[weapKey];
-          if (esType) seasonalChampMap[esType] = ctype;
-          seasonalChampMap[weapKey] = ctype; // also store English key as fallback
-        }
-      }
-    }
-    icons['seasonal:champions'] = { data: seasonalChampMap };
-
-    // Champion type icons — search by English perk name in en_items
-    const champNames = {
-      unstoppable: ['Unstoppable Rounds','Unstoppable Force','Unstoppable Hand Cannon','Unstoppable Bow'],
-      overload: ['Disrupting Rounds','Overload Rounds','Overload Auto Rifle','Overload Machine Gun','Overload Submachine Gun'],
-      barrier: ['Anti-Barrier Rounds','Anti-Barrier Scout Rifle','Piercing Sidearms','Anti-Barrier Auto Rifle','Anti-Barrier Hand Cannon']
-    };
-    for (const [champType, names] of Object.entries(champNames)) {
-      if (icons['champ:'+champType]) continue;
-      for (const [hash, item] of Object.entries(en_items)) {
-        const dp = item.displayProperties;
-        if (!dp?.name || !dp?.icon) continue;
-        if (names.includes(dp.name) || names.some(n => dp.name.startsWith(n))) {
-          icons['champ:'+champType] = { icon: BNET + dp.icon };
-          break;
-        }
-      }
-    }
-    // Element/Damage type icons for subclass buttons
-    // DestinyDamageTypeDefinition: Solar, Arc, Void, Stasis, Strand
-    if (damage_defs) {
-      const elemNameMap = {
-        'Solar':'solar','Arc':'arc','Void':'void',
-        'Stasis':'stasis','Strand':'strand','Kinetic':'kinetic','Prismatic':'prismatic'
-      };
-      for (const [hash, dmg] of Object.entries(damage_defs)) {
-        const n = dmg.displayProperties?.name;
-        if (n && elemNameMap[n] && dmg.displayProperties?.icon) {
-          icons['element:'+elemNameMap[n]] = { icon: BNET + dmg.displayProperties.icon, color: dmg.color };
-        }
-      }
-    }
-    // Prismatic: scan items for the Prismatic element icon
-    if (!icons['element:prismatic']) {
-      // Try en_items: item named exactly "Prismatic" with an icon (prefer subclass-type items)
-      let prisHit = null;
-      for (const [hash, item] of Object.entries(en_items)) {
-        const dp = item.displayProperties;
-        if (!dp?.name || !dp?.icon) continue;
-        if (dp.name === 'Prismatic') {
-          // Prefer items that look like a subclass/element icon (not a weapon perk etc.)
-          if (!prisHit || (item.itemType >= 19)) { prisHit = BNET + dp.icon; }
-        }
-      }
-      if (prisHit) icons['element:prismatic'] = { icon: prisHit };
-    }
-    // Also try es_items for "prismático" if still missing
-    if (!icons['element:prismatic'] && es_items) {
-      for (const [hash, item] of Object.entries(es_items)) {
-        const dp = item.displayProperties;
-        if (!dp?.name || !dp?.icon) continue;
-        if (dp.name.toLowerCase() === 'prismático') {
-          icons['element:prismatic'] = { icon: BNET + dp.icon };
-          break;
-        }
-      }
-    }
-    localStorage.setItem(ICON_CACHE_KEY, JSON.stringify({ts: Date.now(), icons}));
-    iconMap = icons;
-    applyAllIcons();
-    applyClassIcons();
-    if (status) status.textContent = Object.keys(icons).length + ' nombres e iconos actualizados ✓';
-    setTimeout(() => { if(status) status.textContent = ''; }, 4000);
-  } catch(e) {
-    console.warn('Icon fetch:', e);
-    if (status) status.textContent = '';
-  }
-}
-
-function applyAllIcons() {
-  document.querySelectorAll('[data-wimg]').forEach(img => {
-    const entry = iconMap[img.dataset.wimg];
-    if (!entry) return;
-    const url = typeof entry === 'string' ? entry : entry.icon;
-    if (url && img.src !== url) img.src = url;
-  });
-  // Update official Spanish names
-  document.querySelectorAll('[data-wkey]').forEach(span => {
-    const entry = iconMap[span.dataset.wkey];
-    if (!entry) return;
-    const esName = typeof entry === 'object' ? entry.es : null;
-    if (esName && span.textContent !== esName) span.textContent = esName;
-  });
-  // Exotic armor perk descriptions in Spanish
-  document.querySelectorAll('[data-ea-perk]').forEach(el => {
-    const perkKey = el.dataset.eaPerk;
-    if (!perkKey) return;
-    const entry = iconMap[perkKey];
-    if (entry?.esDesc && el.textContent !== entry.esDesc) el.textContent = entry.esDesc;
-  });
-  document.querySelectorAll('[data-pimg]').forEach(img => {
-    const key = img.getAttribute('data-pimg'); if (!key) return;
-    const entry = iconMap[key];
-    if (!entry) return;
-    const url = typeof entry === 'object' ? entry.icon : entry;
-    if (url && img.getAttribute('src') !== url) {
-      img.setAttribute('src', url);
-      img.style.display = '';
-      const next = img.nextElementSibling;
-      if (next?.classList.contains('astat-fb')) next.style.display = 'none';
-    }
-  });
-}
-
-function applyClassIcons() { /* Class icons are static SVGs — nothing to do */ }
-
-function saveApiKey() {
-  const k = document.getElementById('apikey-input')?.value?.trim();
-  if (!k) return;
-  localStorage.setItem('d2apikey', k);
-  const b = document.getElementById('apikey-banner');
-  if (b) b.style.display = 'none';
-  fetchIcons(k);
-}
-
-function clearIconCache() {
-  localStorage.removeItem(ICON_CACHE_KEY);
-  iconMap = {};
-  const s = document.getElementById('icon-status');
-  if (s) s.textContent = 'Recargando iconos…';
-  initIcons();
-}
-
-function updateMobileStats() {
-  const map = {
-    'mstat-armas':     'stat-armas',
-    'mstat-armor-leg': 'stat-armor-leg',
-    'mstat-armor':     'stat-sets-leg',
-    'mstat-exo':       'stat-exoarmas',
-    'mstat-armor-exo': 'stat-armor-exo',
-    'mstat-titan':     'stat-titan',
-    'mstat-hunter':    'stat-hunter',
-    'mstat-warlock':   'stat-warlock'
-  };
-  Object.entries(map).forEach(([mob, desk]) => {
-    const m = document.getElementById(mob);
-    const d = document.getElementById(desk);
-    if (m && d) m.textContent = d.textContent;
-  });
-}
-
-// ═══════════════ BUNGIE OAUTH ═══════════════
-const OAUTH_CLIENT_ID = '52718';
-const OAUTH_AUTH_URL  = 'https://www.bungie.net/en/OAuth/Authorize';
-const OAUTH_TOKEN_URL = 'https://www.bungie.net/platform/app/oauth/token/';
-const OAUTH_API_KEY   = '550b4880a3864f15babc4ee93ab3133b';
-
-let currentUser = null;
-
-function getRedirectUri() {
-  const h = window.location.hostname;
-  if (h === '127.0.0.1' || h === 'localhost') return window.location.origin + '/';
-  return 'https://skrrrpion.github.io/Guardian-Tracker/';
-}
-
-// ── Step 1: redirect to Bungie OAuth ──────────────────────────────────────────
-function splashDoLogin(btn) {
-  if (btn) { btn.textContent = 'Conectando…'; btn.disabled = true; }
-  const state = Math.random().toString(36).slice(2, 12);
-  sessionStorage.setItem('oauth_state', state);
-  const params = new URLSearchParams({
-    client_id: OAUTH_CLIENT_ID,
-    response_type: 'code',
-    state,
-    redirect_uri: getRedirectUri()
-  });
-  window.location.href = OAUTH_AUTH_URL + '?' + params.toString();
-}
-function splashSelectPlatform(p, b) { splashDoLogin(b); }
-
-// ── Step 2: code → token → profile ────────────────────────────────────────────
-async function handleOAuthCallback() {
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get('code');
-  const state = params.get('state');
-  if (!code) return;
-
-  const savedState = sessionStorage.getItem('oauth_state');
-  if (savedState && state !== savedState) { showSplashError('Estado OAuth inválido.'); return; }
-  sessionStorage.removeItem('oauth_state');
-  window.history.replaceState({}, document.title, window.location.pathname);
-
-  showSplashLoading('Autenticando con Bungie…');
-  try {
-    const tokenRes = await fetch(OAUTH_TOKEN_URL, {
-      method: 'POST',
-      headers: { 'X-API-Key': OAUTH_API_KEY, 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'grant_type=authorization_code&code=' + encodeURIComponent(code) + '&client_id=' + OAUTH_CLIENT_ID
-    });
-    if (!tokenRes.ok) throw new Error('Error token: ' + tokenRes.status);
-    const tokenData = await tokenRes.json();
-    if (tokenData.error) throw new Error(tokenData.error_description || tokenData.error);
-
-    showSplashLoading('Cargando perfil…');
-    const profileRes = await fetch('https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/', {
-      headers: { 'X-API-Key': OAUTH_API_KEY, 'Authorization': 'Bearer ' + tokenData.access_token }
-    });
-    if (!profileRes.ok) throw new Error('Error perfil: ' + profileRes.status);
-    const profileData = await profileRes.json();
-    if (profileData.ErrorCode && profileData.ErrorCode !== 1) throw new Error('Bungie error ' + profileData.ErrorCode);
-
-    const bungieUser = profileData.Response?.bungieNetUser;
-    const memberships = profileData.Response?.destinyMemberships || [];
-    const primary = profileData.Response?.primaryMembershipId
-      ? (memberships.find(m => m.membershipId === profileData.Response.primaryMembershipId) || memberships[0])
-      : memberships[0];
-    if (!primary) throw new Error('No se encontraron personajes de Destiny 2.');
-
-    const code4 = String(primary.bungieGlobalDisplayNameCode || 0).padStart(4, '0');
-    const dName = bungieUser?.uniqueName
-      || (primary.bungieGlobalDisplayName ? primary.bungieGlobalDisplayName + '#' + code4 : null)
-      || primary.displayName
-      || 'Guardián';
-
-    currentUser = {
-      membershipId: primary.membershipId,
-      membershipType: primary.membershipType,
-      displayName: dName,
-      accessToken: tokenData.access_token
-    };
-    localStorage.setItem('d2user', JSON.stringify(currentUser));
-    loadState(); updateHeader(); renderCurrentTab(); showUserBadge(); hideSplash();
-  } catch(e) {
-    console.error('[OAuth]', e);
-    showSplashError('Error: ' + (e.message || e));
-  }
-}
-
-function showSplashLoading(msg) {
-  const el = document.getElementById('splash-loading');
-  if (el) { el.textContent = msg; el.style.display = msg ? '' : 'none'; }
-}
-function showSplashError(msg) {
-  const el = document.getElementById('splash-error');
-  if (el) el.textContent = msg;
-  showSplashLoading('');
-}
-
-function loadUser() {
-  if (window.location.search.includes('code=')) { handleOAuthCallback(); return; }
-  try {
-    const raw = localStorage.getItem('d2user');
-    if (raw) { currentUser = JSON.parse(raw); showUserBadge(); hideSplash(); }
-  } catch(e) { currentUser = null; }
-}
-
-function showUserBadge() {
-  const badge = document.getElementById('user-badge');
-  const nameEl = document.getElementById('user-badge-name');
-  const loginBtn = document.getElementById('btn-login-open');
-  if (badge && currentUser) { badge.style.display = 'flex'; if (nameEl) nameEl.textContent = currentUser.displayName || ''; }
-  if (loginBtn) loginBtn.style.display = currentUser ? 'none' : '';
-}
-
-function hideSplash() {
-  const splash = document.getElementById('login-splash');
-  if (splash) { splash.classList.add('hiding'); setTimeout(() => splash.remove(), 600); }
-}
-
-function splashSkip() { hideSplash(); }
-
-function openLoginModal() {
-  // Trigger OAuth directly
-  splashDoLogin({ textContent: '', disabled: false });
-}
-function closeLoginModal() {
-  const overlay = document.getElementById('login-modal-overlay');
-  if (overlay) overlay.classList.remove('open');
-}
-
-async function doLoginModal() {
-  const input = document.getElementById('login-modal-input');
-  const btn = document.getElementById('login-modal-btn');
-  const err = document.getElementById('login-modal-error');
-  if (!input || !input.value.trim()) return;
-  if (btn) btn.disabled = true;
-  if (err) err.textContent = '';
-  try { await loginByName(input.value.trim()); closeLoginModal(); }
-  catch(e) { if (err) err.textContent = e.message || 'Error'; }
-  finally { if (btn) btn.disabled = false; }
-}
-
-async function doLogin() {
-  const input = document.getElementById('login-input');
-  const err = document.getElementById('login-error');
-  if (!input || !input.value.trim()) return;
-  if (err) err.textContent = '';
-  try { await loginByName(input.value.trim()); }
-  catch(e) { if (err) err.textContent = e.message || 'Error'; }
-}
-
-async function loginByName(nameAndCode) {
-  const hashIdx = nameAndCode.indexOf('#');
-  const displayName = nameAndCode.substring(0, hashIdx).trim();
-  const codePart = nameAndCode.substring(hashIdx + 1).trim();
-  const code = parseInt(codePart, 10);
-  if (isNaN(code)) throw new Error('Código inválido (ej: Guardian#1234)');
-  let res, data;
-  try {
-    res = await fetch('https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayerByBungieName/-1/', {
-      method: 'POST',
-      headers: { 'X-API-Key': OAUTH_API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ displayName, displayNameCode: code })
-    });
-  } catch(e) { throw new Error('Sin conexión a Bungie.'); }
-  if (!res.ok) throw new Error('Error Bungie: ' + res.status);
-  try { data = await res.json(); } catch(e) { throw new Error('Respuesta inválida'); }
-  if (data.ErrorCode && data.ErrorCode !== 1) throw new Error('Bungie error ' + data.ErrorCode);
-  if (!data.Response?.length) throw new Error('Guardián "' + nameAndCode + '" no encontrado.');
-  const p = data.Response[0];
-  currentUser = { membershipId: p.membershipId, membershipType: p.membershipType, displayName: nameAndCode };
-  localStorage.setItem('d2user', JSON.stringify(currentUser));
-  loadState(); updateHeader(); renderCurrentTab(); showUserBadge();
-}
-
-function doLogout() {
-  if (!confirm('¿Cerrar sesión?')) return;
-  currentUser = null;
-  localStorage.removeItem('d2user');
-  invLoaded = false;
-  loadState(); updateHeader(); renderCurrentTab();
-  const badge = document.getElementById('user-badge');
-  const loginBtn = document.getElementById('btn-login-open');
-  if (badge) badge.style.display = 'none';
-  if (loginBtn) loginBtn.style.display = '';
-}
-
-// Isolate bottom-nav horizontal scroll from page vertical scroll
-(function(){
-  const nav = document.getElementById('tabs-nav');
-  if (!nav) return;
-  nav.addEventListener('touchmove', function(e) {
-    e.stopPropagation();
-  }, { passive: true });
-})();
-
-// ═══════════════════════════════════════════
-// INVENTARIO — variables & functions
-// ═══════════════════════════════════════════
-const COLLECTIBLE_CACHE_KEY = 'd2coll.v7';
-const PLUG_DEF_CACHE_KEY    = 'd2plugdefs.v1';
-let invCollectibles       = {};
-let invCollectibleMap     = {};
-let invItemHashToWeaponId = {};
-let invPerkNameToKey      = {};
-let invSandboxPerkDefs    = {};
-let invPlugItemCache      = {};
-let invWeaponRolls        = [];
-let invLoaded             = false;
-
-async function initInventario() {
-  const prompt  = document.getElementById('inv-login-prompt');
-  const content = document.getElementById('inv-content');
-  if (!currentUser) {
-    if (prompt)  prompt.style.display  = 'block';
-    if (content) content.style.display = 'none';
-    return;
-  }
-  if (invLoaded) { renderInventario(); return; }
-  if (prompt)  prompt.style.display  = 'none';
-  if (content) content.style.display = 'block';
-
-  setInvStatus('Cargando manifiesto de Bungie…');
-  try {
-    await loadCollectibleMap();
-    setInvStatus('Cargando inventario del guardián…');
-    await fetchUserInventoryWithPerks();
-    renderInventario();
-    setInvStatus('');
     invLoaded = true;
-  } catch(e) {
-    setInvStatus('Error: ' + e.message);
-    console.error('[Inventario]', e);
+    if(statusEl) statusEl.style.display='none';
+    renderInventario();
+  } catch(e){
+    if(statusEl){statusEl.style.display='';statusEl.textContent='Error al cargar inventario';}
+    console.error('loadInventario:',e);
   }
 }
 
-function setInvStatus(msg) {
-  const el = document.getElementById('inv-status');
-  if (!el) return;
-  el.textContent = msg;
-  el.style.display = msg ? 'block' : 'none';
-}
-
-async function loadCollectibleMap() {
-  invPerkNameToKey = {};
-  Object.entries(PERK_DEFS).forEach(([key, def]) => {
-    if (def.e) invPerkNameToKey[def.e.trim().toLowerCase()] = key;
+function renderInventario(){
+  const filter = document.getElementById('inv-filter-type')?.value||'';
+  ['inv-grid-god','inv-grid-semi','inv-grid-normal','inv-grid-unmarked'].forEach(id=>{
+    const g=document.getElementById(id); if(g) g.innerHTML='';
   });
-
-  try {
-    const cached = localStorage.getItem(COLLECTIBLE_CACHE_KEY);
-    if (cached) {
-      const {ts, map, itemHashMap} = JSON.parse(cached);
-      if (Date.now() - ts < 24*60*60*1000) {
-        invCollectibleMap = map;
-        invItemHashToWeaponId = itemHashMap || {};
-        try { const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY); if (pc) invPlugItemCache = JSON.parse(pc); } catch(e2) {}
-        return;
-      }
-    }
-  } catch(e) {}
-
-  const apiKey = OAUTH_API_KEY;
-  const safeJson = async (url, hdrs) => {
-    const r = await fetch(url, hdrs ? {headers: hdrs} : undefined);
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const ct = r.headers.get('content-type') || '';
-    if (!ct.includes('json') && !ct.includes('octet-stream'))
-      throw new Error('La URL devolvio HTML en lugar de JSON.');
-    return r.json();
-  };
-
-  const mData = await safeJson(BNET + '/Platform/Destiny2/Manifest/', {'X-API-Key': apiKey});
-  if (!mData.Response) throw new Error('Manifiesto no disponible (ErrorStatus: ' + (mData.ErrorStatus || '?') + ')');
-  const paths = mData.Response.jsonWorldComponentContentPaths.en;
-  if (!paths || !paths.DestinyCollectibleDefinition) throw new Error('Path de coleccionables no encontrado');
-
-  const cData = await safeJson(BNET + paths.DestinyCollectibleDefinition);
-
-  const weaponByName = {};
-  WEAPONS.forEach(function(w) { if (w && !w.exotic && w.e) weaponByName[w.e.trim().toLowerCase()] = w.id; });
-  if (typeof ARMOR_SETS !== 'undefined') {
-    ARMOR_SETS.forEach(function(set) {
-      (set.slots || []).forEach(function(slot) { if (slot.n) weaponByName[slot.n.trim().toLowerCase()] = slot.id; });
-    });
-  }
-
-  const map = {}, itemHashMap = {};
-  Object.entries(cData).forEach(function([hash, def]) {
-    const name = def.displayProperties && def.displayProperties.name ? def.displayProperties.name.trim().toLowerCase() : '';
-    if (!name) return;
-    map[name] = parseInt(hash);
-    if (def.itemHash && weaponByName[name]) itemHashMap[def.itemHash] = weaponByName[name];
-  });
-
-  invCollectibleMap = map;
-  invItemHashToWeaponId = itemHashMap;
-  try { localStorage.setItem(COLLECTIBLE_CACHE_KEY, JSON.stringify({ts: Date.now(), map: map, itemHashMap: itemHashMap})); } catch(e) {}
-  try { const pc = localStorage.getItem(PLUG_DEF_CACHE_KEY); if (pc) invPlugItemCache = JSON.parse(pc); } catch(e) {}
-}
-
-async function fetchUserInventoryWithPerks() {
-  const membershipType = currentUser.membershipType;
-  const membershipId   = currentUser.membershipId;
-  const accessToken    = currentUser.accessToken;
-  if (!membershipType || !membershipId) throw new Error('Sesion incompleta — vuelve a iniciar sesion.');
-  const apiKey = OAUTH_API_KEY;
-  const headers = {'X-API-Key': apiKey};
-  if (accessToken) headers['Authorization'] = 'Bearer ' + accessToken;
-
-  const profileUrl = BNET + '/Platform/Destiny2/' + membershipType + '/Profile/' + membershipId + '/?components=102,201,205,302';
-  const res = await fetch(profileUrl, {headers: headers});
-  if (!res.ok) throw new Error('Error HTTP ' + res.status + ' al cargar el perfil');
-  const ct = res.headers.get('content-type') || '';
-  if (!ct.includes('json')) throw new Error('El perfil devolvio HTML. Vuelve a iniciar sesion.');
-  const data = await res.json();
-  if (!data.Response) throw new Error('Perfil privado o token caducado (ErrorStatus: ' + (data.ErrorStatus || '?') + ').');
-
-  const allItems = [];
-  const vaultItems = (data.Response.profileInventory && data.Response.profileInventory.data && data.Response.profileInventory.data.items) ? data.Response.profileInventory.data.items : [];
-  vaultItems.forEach(function(item) { allItems.push(Object.assign({}, item, {location:'vault'})); });
-  const charInv = (data.Response.characterInventories && data.Response.characterInventories.data) ? data.Response.characterInventories.data : {};
-  const charEq  = (data.Response.characterEquipment  && data.Response.characterEquipment.data)  ? data.Response.characterEquipment.data  : {};
-  Object.values(charInv).forEach(function(c) { (c.items||[]).forEach(function(item) { allItems.push(Object.assign({}, item, {location:'inventory'})); }); });
-  Object.values(charEq).forEach(function(c)  { (c.items||[]).forEach(function(item) { allItems.push(Object.assign({}, item, {location:'equipped'})); }); });
-
-  const socketsData = (data.Response.itemComponents && data.Response.itemComponents.sockets && data.Response.itemComponents.sockets.data) ? data.Response.itemComponents.sockets.data : {};
-
-  const plugHashesNeeded = new Set();
-  allItems.forEach(function(item) {
-    if (!invItemHashToWeaponId[item.itemHash]) return;
-    const socks = socketsData[item.itemInstanceId] ? socketsData[item.itemInstanceId].sockets || [] : [];
-    socks.forEach(function(s) { if (s.plugHash) plugHashesNeeded.add(s.plugHash); });
-  });
-  const toResolve = Array.from(plugHashesNeeded).filter(function(h) { return invPlugItemCache[h] === undefined; });
-  if (toResolve.length > 0) {
-    setInvStatus('Resolviendo ' + toResolve.length + ' perks del manifiesto…');
-    await resolvePlugHashes(toResolve, apiKey);
-  }
-
-  invWeaponRolls = [];
-  allItems.forEach(function(item) {
-    const weaponId = invItemHashToWeaponId[item.itemHash];
-    if (!weaponId) return;
-    const socks = socketsData[item.itemInstanceId] ? socketsData[item.itemInstanceId].sockets || [] : [];
-    const perkKeys = socks.map(function(s) { return invPlugItemCache[s.plugHash]; }).filter(Boolean);
-    invWeaponRolls.push({weaponId: weaponId, location: item.location, itemHash: item.itemHash, instanceId: item.itemInstanceId, perkKeys: perkKeys});
+  const counts={god:0,semi:0,normal:0,unmarked:0};
+  _invItems.forEach(item=>{
+    const roll=item.roll||'unmarked';
+    counts[roll]=(counts[roll]||0)+1;
+    if(filter&&filter!==roll) return;
+    const gridId = {god:'inv-grid-god',semi:'inv-grid-semi',normal:'inv-grid-normal',unmarked:'inv-grid-unmarked'}[roll];
+    const grid=document.getElementById(gridId); if(!grid) return;
+    grid.insertAdjacentHTML('beforeend',`
+      <div class="inv-card ${roll}">
+        ${item.icon?`<img class="inv-card-icon" src="${item.icon}" onerror="this.style.opacity='.3'">`:'<div class="inv-card-icon" style="background:#1a1a2a"></div>'}
+        <div class="inv-card-name">${item.name||'#'+item.hash}</div>
+      </div>`);
   });
 }
-
-async function resolvePlugHashes(hashes, apiKey) {
-  const BATCH = 12;
-  for (let i = 0; i < hashes.length; i += BATCH) {
-    const batch = hashes.slice(i, i + BATCH);
-    await Promise.all(batch.map(async function(hash) {
-      try {
-        const r = await fetch(BNET + '/Platform/Destiny2/Manifest/DestinyInventoryItemDefinition/' + hash + '/', {headers: {'X-API-Key': apiKey}});
-        if (!r.ok) { invPlugItemCache[hash] = null; return; }
-        const d = await r.json();
-        const name = d.Response && d.Response.displayProperties && d.Response.displayProperties.name ? d.Response.displayProperties.name.trim().toLowerCase() : '';
-        invPlugItemCache[hash] = name ? (invPerkNameToKey[name] !== undefined ? invPerkNameToKey[name] : null) : null;
-      } catch(e) { invPlugItemCache[hash] = null; }
-    }));
-  }
-  try { localStorage.setItem(PLUG_DEF_CACHE_KEY, JSON.stringify(invPlugItemCache)); } catch(e) {}
-}
-
-function classifyGodRoll(weaponId, instancePerkKeys) {
-  const ws    = state.weapons[weaponId];
-  const w     = WEAPONS.find(function(x) { return x && !x.exotic && x.id === weaponId; });
-  const col23 = w ? (w.col2||[]).concat(w.col3||[]) : [];
-  if (!ws || col23.length === 0) return 'unmarked';
-  const anyGod  = col23.some(function(pk) { return ws.perks && ws.perks[pk] && ws.perks[pk].marker === 1; });
-  const anySemi = col23.some(function(pk) { return ws.perks && ws.perks[pk] && ws.perks[pk].marker === 2; });
-  if (!anyGod && !anySemi) return 'unmarked';
-  if (instancePerkKeys && instancePerkKeys.length > 0) {
-    const pks = new Set(instancePerkKeys);
-    if (col23.some(function(pk) { return ws.perks && ws.perks[pk] && ws.perks[pk].marker === 1 && pks.has(pk); })) return 'god';
-    if (col23.some(function(pk) { return ws.perks && ws.perks[pk] && ws.perks[pk].marker === 2 && pks.has(pk); })) return 'semi';
-    return 'normal';
-  }
-  if (anyGod)  return 'god';
-  if (anySemi) return 'semi';
-  return 'normal';
-}
-
-function renderInventario() {
-  const godGrid      = document.getElementById('inv-grid-god');
-  const semiGrid     = document.getElementById('inv-grid-semi');
-  const normalGrid   = document.getElementById('inv-grid-normal');
-  const unmarkedGrid = document.getElementById('inv-grid-unmarked');
-  if (!godGrid) return;
-
-  godGrid.innerHTML = semiGrid.innerHTML = normalGrid.innerHTML = unmarkedGrid.innerHTML = '';
-  let godCount = 0, semiCount = 0, normalCount = 0, unmarkedCount = 0;
-
-  invWeaponRolls.forEach(function(roll) {
-    let w = WEAPONS.find(function(x) { return x && !x.exotic && x.id === roll.weaponId; });
-    if (!w && typeof ARMOR_SETS !== 'undefined') {
-      for (let si = 0; si < ARMOR_SETS.length; si++) {
-        const slot = (ARMOR_SETS[si].slots||[]).find(function(sl) { return sl.id === roll.weaponId; });
-        if (slot) { w = {id: slot.id, n: slot.n, e: slot.n, type: slot.slot+' - '+ARMOR_SETS[si].n, frame:'', col2:[], col3:[]}; break; }
-      }
-    }
-    if (!w) return;
-    const cls  = classifyGodRoll(roll.weaponId, roll.perkKeys);
-    const card = buildInvCard(w, cls);
-    if      (cls === 'god')    { godCount++;      godGrid.appendChild(card); }
-    else if (cls === 'semi')   { semiCount++;     semiGrid.appendChild(card); }
-    else if (cls === 'normal') { normalCount++;   normalGrid.appendChild(card); }
-    else                       { unmarkedCount++; unmarkedGrid.appendChild(card); }
-  });
-
-  const total = godCount + semiCount + normalCount + unmarkedCount;
-  const elById = function(id) { return document.getElementById(id); };
-  if (elById('inv-total-count'))  elById('inv-total-count').textContent  = total;
-  if (elById('inv-god-count'))    elById('inv-god-count').textContent    = godCount;
-  if (elById('inv-semi-count'))   elById('inv-semi-count').textContent   = semiCount;
-  if (elById('inv-normal-count')) elById('inv-normal-count').textContent = normalCount;
-
-  var sections = [
-    {sec:'inv-sec-god',     grid:'inv-grid-god',     count:godCount},
-    {sec:'inv-sec-semi',    grid:'inv-grid-semi',    count:semiCount},
-    {sec:'inv-sec-normal',  grid:'inv-grid-normal',  count:normalCount},
-    {sec:'inv-sec-unmarked',grid:'inv-grid-unmarked',count:unmarkedCount}
-  ];
-  sections.forEach(function(item) {
-    const d  = item.count > 0 ? '' : 'none';
-    const sEl = document.getElementById(item.sec);
-    const gEl = document.getElementById(item.grid);
-    if (sEl) sEl.style.display = d;
-    if (gEl) gEl.style.display = d;
-  });
-
-  applyAllIcons();
-  filterInventario();
-}
-
-function buildInvCard(w, cls) {
-  const ws       = state.weapons[w.id];
-  const obtained = ws && ws.obtained ? true : false;
-
-  const card = document.createElement('div');
-  card.className      = 'inv-card ' + cls + (obtained ? ' inv-obtained' : '');
-  card.dataset.invCls = cls;
-  card.dataset.wid    = w.id;
-
-  const img = document.createElement('img');
-  img.className = 'inv-card-icon';
-  const imgKey  = (w.e || w.n || '').toLowerCase();
-  img.setAttribute('data-wimg', imgKey);
-  const iconEntry = iconMap[imgKey];
-  const iconUrl   = iconEntry ? (typeof iconEntry === 'object' ? iconEntry.icon : iconEntry) : '';
-  img.src = iconUrl || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-  if (!iconUrl) img.style.display = 'none';
-  img.onerror = function(){ this.style.display='none'; };
-  img.onload  = function(){ this.style.display=''; };
-
-  const nameEl = document.createElement('div');
-  nameEl.className   = 'inv-card-name';
-  nameEl.title       = w.e || w.n;
-  nameEl.textContent = w.n;
-
-  const bottom = document.createElement('div');
-  bottom.className = 'inv-card-bottom';
-
-  const star = document.createElement('span');
-  star.className   = 'inv-card-star' + (cls==='god' ? ' active' : cls==='semi' ? ' semi-active' : '');
-  star.textContent = String.fromCharCode(9733);
-
-  const chkWrap = document.createElement('label');
-  chkWrap.className = 'inv-obtained-label' + (obtained ? ' checked' : '');
-  chkWrap.title     = obtained ? 'Obtenida' : 'Marcar como obtenida';
-  const chk = document.createElement('input');
-  chk.type      = 'checkbox';
-  chk.className = 'inv-obtained-chk';
-  if (obtained) chk.checked = true;
-  const chkText = document.createElement('span');
-  chkText.textContent = obtained ? String.fromCharCode(10003) : 'Obtener';
-  chkWrap.appendChild(chk);
-  chkWrap.appendChild(chkText);
-
-  chk.addEventListener('change', function() {
-    if (!state.weapons[w.id]) state.weapons[w.id] = {perks:{}, obtained:false};
-    state.weapons[w.id].obtained = this.checked;
-    saveState();
-    card.classList.toggle('inv-obtained', this.checked);
-    chkWrap.classList.toggle('checked', this.checked);
-    chkText.textContent = this.checked ? String.fromCharCode(10003) : 'Obtener';
-  });
-
-  bottom.appendChild(star);
-  bottom.appendChild(chkWrap);
-  card.appendChild(img);
-  card.appendChild(nameEl);
-  card.appendChild(bottom);
-  return card;
-}
-
-function filterInventario() {
-  const val = document.getElementById('inv-filter-type') ? document.getElementById('inv-filter-type').value : '';
-  document.querySelectorAll('#inv-content .inv-card').forEach(function(card) {
-    card.style.display = (!val || card.dataset.invCls === val) ? '' : 'none';
-  });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  init();
-});
-
+function filterInventario(){ renderInventario(); }
 </script>
 </body>
 </html>
