@@ -8546,7 +8546,12 @@ async function fetchIcons(){
   try {
     const cached = JSON.parse(localStorage.getItem(ICON_CACHE_KEY) || 'null');
     if(cached && cached.ts && (Date.now() - cached.ts < ICON_CACHE_TTL)){
-      iconMap = cached.data || {};
+      // Reconstruir URLs completas desde rutas relativas guardadas
+      const raw = cached.data || {};
+      Object.entries(raw).forEach(([k,v]) => {
+        if(v && typeof v === 'object' && v.icon && !v.icon.startsWith('http')) v.icon = BNET + v.icon;
+      });
+      iconMap = raw;
       if(!iconMap['_aspectFragSlots']) iconMap['_aspectFragSlots'] = {};
       _applyAspectSlotFallback(iconMap['_aspectFragSlots']);
       if(status) status.textContent = '';
@@ -8556,11 +8561,40 @@ async function fetchIcons(){
   } catch(e){}
 
   const apiKey = BUNGIE_API_KEY;
-
   hideApiKeyBanner();
   if(status) status.textContent = 'Cargando iconos…';
 
   try {
+    // ── Construir Set de nombres necesarios ────────────────────────
+    const needed = new Set();
+    const aspectEsNames = new Set();
+
+    if(typeof WEAPONS !== 'undefined') WEAPONS.forEach(w => {
+      if(w.e) needed.add(w.e.toLowerCase());
+      if(w.n) needed.add(w.n.toLowerCase());
+    });
+    if(typeof ARMOR_SETS !== 'undefined') ARMOR_SETS.forEach(s => s.slots.forEach(sl => {
+      if(sl.n) needed.add(sl.n.toLowerCase());
+    }));
+    if(typeof EXOTIC_ARMOR !== 'undefined') EXOTIC_ARMOR.forEach(ea => {
+      if(ea.e) needed.add(ea.e.toLowerCase());
+      if(ea.n) needed.add(ea.n.toLowerCase());
+    });
+    if(typeof PERK_DEFS !== 'undefined') Object.values(PERK_DEFS).forEach(pd => {
+      if(pd.e) needed.add(pd.e.toLowerCase());
+    });
+    if(typeof SUBCLASS_DATA !== 'undefined'){
+      Object.values(SUBCLASS_DATA).forEach(cls => Object.values(cls).forEach(sub => {
+        ['aspects','fragments','supers','melees','grenades','classAbility','movement'].forEach(key => {
+          (sub[key]||[]).forEach(n => {
+            const nl = n.toLowerCase();
+            needed.add(nl);
+            if(key === 'aspects') aspectEsNames.add(nl);
+          });
+        });
+      }));
+    }
+
     // 1. Manifiesto
     const mRes  = await fetch(`${BNET}/Platform/Destiny2/Manifest/`, { headers:{'X-API-Key':apiKey} });
     const mData = await mRes.json();
@@ -8569,30 +8603,25 @@ async function fetchIcons(){
     const paths = compPaths?.[lang] || compPaths?.['en'];
     if(!paths) throw new Error('Sin rutas de manifiesto');
 
-    // 2. Catálogo de ítems
+    // 2. Catálogo filtrado — solo ítems necesarios
     if(status) status.textContent = 'Descargando ítems…';
     const itemRes  = await fetch(`${BNET}${paths['DestinyInventoryItemLiteDefinition']}`);
     const itemData = await itemRes.json();
 
     const icons = {};
-
-    // Nombres de aspectos en ES para fetch individual
-    const aspectEsNames = new Set();
-    if(typeof SUBCLASS_DATA !== 'undefined'){
-      Object.values(SUBCLASS_DATA).forEach(cls => {
-        Object.values(cls).forEach(sub => {
-          (sub.aspects || []).forEach(n => aspectEsNames.add(n.toLowerCase()));
-        });
-      });
-    }
-
     Object.entries(itemData).forEach(([hash, item]) => {
       if(!item.displayProperties?.icon) return;
       const nameEn = (item.displayProperties.name || '').toLowerCase().trim();
-      const entry  = { icon: BNET + item.displayProperties.icon, hash: parseInt(hash) };
-      if(nameEn) icons[nameEn] = entry;
+      if(!nameEn || !needed.has(nameEn)) return;
+      const entry = { icon: item.displayProperties.icon, hash: parseInt(hash) };
+      icons[nameEn] = entry;
       if(lang === 'es') icons['es:' + nameEn] = entry;
       if(aspectEsNames.has(nameEn)) icons['es:' + nameEn] = { ...entry };
+    });
+
+    // Reconstruir URLs completas en memoria
+    Object.values(icons).forEach(v => {
+      if(v && typeof v === 'object' && v.icon && !v.icon.startsWith('http')) v.icon = BNET + v.icon;
     });
 
     // 3. Ranuras de fragmentos por aspecto
@@ -8612,7 +8641,6 @@ async function fetchIcons(){
             headers:{'X-API-Key':apiKey}
           });
           const d = await r.json();
-          // Fragment slots están en investmentStats como primer valor positivo [1-4]
           let slots = null;
           for(const s of (d.Response?.investmentStats || [])){
             if(!s.isConditionallyActive && s.value >= 1 && s.value <= 4){ slots = s.value; break; }
@@ -8626,12 +8654,24 @@ async function fetchIcons(){
       }));
     }
 
-    // Aplicar fallback hardcodeado
     _applyAspectSlotFallback(fragSlots);
     icons['_aspectFragSlots'] = fragSlots;
-
     iconMap = icons;
-    localStorage.setItem(ICON_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: iconMap }));
+
+    // Guardar en caché con rutas relativas para minimizar tamaño
+    const toCache = {};
+    Object.entries(iconMap).forEach(([k,v]) => {
+      if(k === '_aspectFragSlots'){ toCache[k] = v; return; }
+      if(v && typeof v === 'object' && v.icon){
+        toCache[k] = { icon: v.icon.replace(BNET,''), hash: v.hash };
+      }
+    });
+    try {
+      localStorage.setItem(ICON_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: toCache }));
+    } catch(qe){
+      console.warn('[D2Icons] No se pudo guardar caché:', qe.message);
+    }
+
     if(status) status.textContent = '';
     onIconsReady();
 
