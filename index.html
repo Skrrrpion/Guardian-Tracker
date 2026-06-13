@@ -956,19 +956,19 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
 /* ─── CREATOR VIEW ─── */
 #bc-creator{flex-direction:column}
-.bc-creator-top{display:flex;align-items:center;gap:16px;padding:12px 20px;background:#0d0d18;border-bottom:1px solid #2a2a3a;flex-shrink:0;flex-wrap:wrap}
+.bc-creator-top{display:flex;align-items:center;gap:10px;padding:8px 14px;background:#0d0d18;border-bottom:1px solid #2a2a3a;flex-shrink:0;flex-wrap:wrap}
 .bc-creator-top label{color:#888;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase}
 .bc-creator-top input[type=text]{background:#111;border:1px solid #3a3a4a;color:#e8e8f0;padding:6px 12px;font-size:.9rem;outline:none;width:200px}
 .bc-creator-top input[type=text]:focus{border-color:#c8a84b}
 .bc-top-select{background:#111;border:1px solid #3a3a4a;color:#e8e8f0;padding:6px 10px;font-size:.8rem;outline:none;cursor:pointer}
 .bc-top-select:focus{border-color:#c8a84b}
 
-.bc-canvas{display:grid;grid-template-columns:300px 1fr 300px;flex:1;overflow:hidden;gap:0;min-height:0}
+.bc-canvas{display:grid;grid-template-columns:260px 1fr 260px;flex:1;overflow:hidden;gap:0;min-height:0}
 
 /* Left panel */
-.bc-panel-left{background:#0d0d18;border-right:1px solid #1e1e2e;padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.bc-panel-left{background:#0d0d18;border-right:1px solid #1e1e2e;padding:10px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
 /* Right panel */
-.bc-panel-right{background:#0d0d18;border-left:1px solid #1e1e2e;padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.bc-panel-right{background:#0d0d18;border-left:1px solid #1e1e2e;padding:10px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
 
 /* Center mannequin */
 .bc-center{background:radial-gradient(ellipse at center,#0f0f20 0%,#08080f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
@@ -1007,7 +1007,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-center.el-strand .bc-guardian-svg{filter:drop-shadow(0 0 22px rgba(76,203,110,.45))}
 
 /* Section headers */
-.bc-section-title{color:#c8a84b;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid #2a2a3a;padding-bottom:6px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.bc-section-title{color:#c8a84b;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;border-bottom:1px solid #1e1e2e;padding-bottom:3px;margin-bottom:2px;display:flex;align-items:center;gap:5px}
 .bc-section-title svg{opacity:.7}
 
 /* Ability slots */
@@ -1083,6 +1083,41 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-panel-left::-webkit-scrollbar-thumb,.bc-panel-right::-webkit-scrollbar-thumb,#bc-list::-webkit-scrollbar-thumb{background:#2a2a3a}
 
 @media(max-width:900px){.bc-canvas{grid-template-columns:1fr}.bc-center{min-height:300px}.bc-panel-left,.bc-panel-right{max-height:400px}}
+
+/* ── AMMO FILTER BUTTONS ── */
+.ammo-filter-btns{display:flex;gap:4px;align-items:center}
+.ammo-fb{display:flex;align-items:center;gap:4px;padding:4px 10px;background:#111;border:1px solid #2a2a3a;color:#666;cursor:pointer;font-size:.68rem;letter-spacing:.06em;transition:all .15s}
+.ammo-fb:hover{border-color:#5a5a7a;color:#aaa}
+.ammo-fb.active{border-color:#c8a84b;color:#c8a84b;background:rgba(200,168,75,.08)}
+.ammo-fb.primary.active{border-color:#78c878;color:#78c878;background:rgba(120,200,120,.08)}
+.ammo-fb.special.active{border-color:#78b4c8;color:#78b4c8;background:rgba(120,180,200,.08)}
+.ammo-fb.heavy.active{border-color:#c87878;color:#c87878;background:rgba(200,120,120,.08)}
+
+/* ── ABILITY ICON GRIDS ── */
+.ab-row{display:flex;align-items:flex-start;gap:5px;margin-bottom:5px}
+.ab-lbl{color:#555;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;width:40px;flex-shrink:0;padding-top:5px;line-height:1.2}
+.ab-row-icons,.ab-grid-icons{display:flex;flex-wrap:wrap;gap:3px;flex:1}
+.ab-icon{width:36px;height:36px;border:1px solid #2a2a3a;background:#0d0d15;cursor:pointer;position:relative;overflow:hidden;transition:all .14s;flex-shrink:0}
+.ab-icon:hover{border-color:#5a5a7a;background:#141422}
+.ab-icon.ab-selected{border-color:#c8a84b!important;box-shadow:0 0 7px rgba(200,168,75,.45)}
+.ab-icon.ab-selected::after{content:attr(data-badge);position:absolute;top:1px;right:2px;font-size:7px;color:#c8a84b;font-weight:900;text-shadow:0 0 3px #000;pointer-events:none}
+.ab-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.ab-icon .ab-fb{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:8px;color:#444;text-align:center;padding:2px;line-height:1.1}
+/* Element-colored borders when selected by element */
+.el-solar .ab-icon.ab-selected{border-color:#f7a73a!important;box-shadow:0 0 7px rgba(247,167,58,.4)!important}
+.el-arc .ab-icon.ab-selected{border-color:#79d4f0!important;box-shadow:0 0 7px rgba(121,212,240,.4)!important}
+.el-void .ab-icon.ab-selected{border-color:#a96fd6!important;box-shadow:0 0 7px rgba(169,111,214,.4)!important}
+.el-stasis .ab-icon.ab-selected{border-color:#4d88ff!important;box-shadow:0 0 7px rgba(77,136,255,.4)!important}
+.el-strand .ab-icon.ab-selected{border-color:#00c894!important;box-shadow:0 0 7px rgba(0,200,148,.4)!important}
+.el-prismatic .ab-icon.ab-selected{border-color:#c87fff!important;box-shadow:0 0 7px rgba(200,127,255,.4)!important}
+/* Compact stats */
+.bc-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.bc-stat-row-c{display:flex;align-items:center;gap:4px;font-size:.68rem}
+.bc-stat-name-c{color:#666;width:24px;font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;flex-shrink:0}
+.bc-stat-bar-bg-c{flex:1;background:#1a1a2a;height:3px;border-radius:2px;overflow:hidden;min-width:30px}
+.bc-stat-bar-fill-c{height:100%;background:linear-gradient(90deg,#c8a84b,#f0d080);border-radius:2px;transition:width .3s}
+.bc-stat-input-c{background:#111;border:1px solid #1e1e2e;color:#aaa;width:28px;padding:1px 3px;font-size:.65rem;text-align:center}
+.bc-stat-input-c:focus{border-color:#c8a84b;outline:none}
 
 /* ── CLASS BUTTONS ── */
 .bc-class-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -1461,7 +1496,13 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         <option value="exótico">Exótico</option>
       </select>
     </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      <div class="ammo-filter-btns">
+        <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wleg',this)">Todas</button>
+        <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-primary"></span>Primaria</button>
+        <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-special"></span>Especial</button>
+        <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</button>
+      </div>
       <div id="f-wleg-missing" class="filter-toggle" onclick="toggleWLegMissing(this)">
         <span class="dot"></span>Solo me falta
       </div>
@@ -1469,6 +1510,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         <span class="dot"></span>⚒ Fabricables
       </div>
     </div>
+    <input type="hidden" id="f-wleg-ammo" value="">
   <span id="wleg-count" class="results-count"></span>
   </div>
   <div id="weapons-leg-grid"></div>
@@ -1506,10 +1548,17 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         <option>Espada</option><option>Arco</option><option>Ballesta</option>
       </select>
     </div>
+    <div class="ammo-filter-btns">
+      <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wexo',this)">Todas</button>
+      <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-primary"></span>Primaria</button>
+      <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-special"></span>Especial</button>
+      <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</button>
+    </div>
     <div id="f-wexo-missing" class="filter-toggle" onclick="toggleWExoMissing(this)">
       <span class="dot"></span>Solo me falta
     </div>
   <span id="wexo-count" class="results-count"></span>
+  <input type="hidden" id="f-wexo-ammo" value="">
   </div>
   <div id="weapons-exo-grid"></div>
 </div>
@@ -1633,137 +1682,69 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
     <!-- Canvas -->
     <div class="bc-canvas">
 
-      <!-- LEFT: Abilities -->
+      <!-- LEFT: Abilities (inline icon grids) -->
       <div class="bc-panel-left">
+
         <div class="bc-section-title">
           <svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="6" r="2" fill="currentColor"/></svg>
           Habilidades
         </div>
 
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Super</div>
-          <button class="bc-slot-btn" id="btn-bc-super" onclick="bcPickAbility('bc-super','Súper',this)" disabled>
-            <span class="slot-icon" id="icon-bc-super" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-super">— Selecciona clase —</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-super" value="">
+        <div class="ab-row"><span class="ab-lbl">Super</span>
+          <div class="ab-row-icons" id="icons-bc-super"></div>
         </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Melee</div>
-          <button class="bc-slot-btn" id="btn-bc-melee" onclick="bcPickAbility('bc-melee','Melee',this)" disabled>
-            <span class="slot-icon" id="icon-bc-melee" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-melee">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-melee" value="">
+        <div class="ab-row"><span class="ab-lbl">Melee</span>
+          <div class="ab-row-icons" id="icons-bc-melee"></div>
         </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Granada</div>
-          <button class="bc-slot-btn" id="btn-bc-grenade" onclick="bcPickAbility('bc-grenade','Granada',this)" disabled>
-            <span class="slot-icon" id="icon-bc-grenade" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-grenade">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-grenade" value="">
+        <div class="ab-row"><span class="ab-lbl">Granada</span>
+          <div class="ab-row-icons" id="icons-bc-grenade"></div>
         </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Hab. de Clase</div>
-          <button class="bc-slot-btn" id="btn-bc-class-ab" onclick="bcPickAbility('bc-class-ab','Habilidad de Clase',this)" disabled>
-            <span class="slot-icon" id="icon-bc-class-ab" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-class-ab">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-class-ab" value="">
+        <div class="ab-row"><span class="ab-lbl">Clase</span>
+          <div class="ab-row-icons" id="icons-bc-class-ab"></div>
         </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Movimiento</div>
-          <button class="bc-slot-btn" id="btn-bc-movement" onclick="bcPickAbility('bc-movement','Movimiento',this)" disabled>
-            <span class="slot-icon" id="icon-bc-movement" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-movement">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-movement" value="">
+        <div class="ab-row"><span class="ab-lbl">Mov.</span>
+          <div class="ab-row-icons" id="icons-bc-movement"></div>
         </div>
 
-        <div class="bc-section-title" style="margin-top:4px">
-          <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="5" x2="11" y2="5" stroke="currentColor" stroke-width="1"/><line x1="1" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1"/></svg>
-          Aspectos
-        </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Aspecto 1</div>
-          <button class="bc-slot-btn" id="btn-bc-aspect1" onclick="bcPickAbility('bc-aspect1','Aspecto 1',this)" disabled>
-            <span class="slot-icon" id="icon-bc-aspect1" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-aspect1">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-aspect1" value="">
-        </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Aspecto 2</div>
-          <button class="bc-slot-btn" id="btn-bc-aspect2" onclick="bcPickAbility('bc-aspect2','Aspecto 2',this)" disabled>
-            <span class="slot-icon" id="icon-bc-aspect2" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-aspect2">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-aspect2" value="">
-        </div>
+        <!-- Hidden inputs for ability values -->
+        <input type="hidden" id="bc-super" value="">
+        <input type="hidden" id="bc-melee" value="">
+        <input type="hidden" id="bc-grenade" value="">
+        <input type="hidden" id="bc-class-ab" value="">
+        <input type="hidden" id="bc-movement" value="">
 
-        <div class="bc-section-title" style="margin-top:4px">
+        <div class="bc-section-title" style="margin-top:6px">
+          <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          Aspectos <span style="color:#444;font-size:.6rem;margin-left:4px" id="asp-count">0/2</span>
+        </div>
+        <div class="ab-grid-icons" id="icons-bc-aspects"></div>
+        <input type="hidden" id="bc-aspect1" value="">
+        <input type="hidden" id="bc-aspect2" value="">
+
+        <div class="bc-section-title" style="margin-top:6px">
           <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
-          Fragmentos
+          Fragmentos <span style="color:#444;font-size:.6rem;margin-left:4px" id="frag-count">0/4</span>
         </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Fragmento 1</div>
-          <button class="bc-slot-btn" id="btn-bc-frag1" onclick="bcPickAbility('bc-frag1','Fragmento 1',this)" disabled>
-            <span class="slot-icon" id="icon-bc-frag1" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-frag1">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-frag1" value="">
-        </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Fragmento 2</div>
-          <button class="bc-slot-btn" id="btn-bc-frag2" onclick="bcPickAbility('bc-frag2','Fragmento 2',this)" disabled>
-            <span class="slot-icon" id="icon-bc-frag2" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-frag2">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-frag2" value="">
-        </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Fragmento 3</div>
-          <button class="bc-slot-btn" id="btn-bc-frag3" onclick="bcPickAbility('bc-frag3','Fragmento 3',this)" disabled>
-            <span class="slot-icon" id="icon-bc-frag3" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-frag3">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-frag3" value="">
-        </div>
-        <div class="bc-ability-row">
-          <div class="bc-ability-label">Fragmento 4</div>
-          <button class="bc-slot-btn" id="btn-bc-frag4" onclick="bcPickAbility('bc-frag4','Fragmento 4',this)" disabled>
-            <span class="slot-icon" id="icon-bc-frag4" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
-            <span class="slot-text" id="text-bc-frag4">—</span>
-            <span class="slot-arr">▾</span>
-          </button>
-          <input type="hidden" id="bc-frag4" value="">
-        </div>
+        <div class="ab-grid-icons" id="icons-bc-fragments"></div>
+        <input type="hidden" id="bc-frag1" value="">
+        <input type="hidden" id="bc-frag2" value="">
+        <input type="hidden" id="bc-frag3" value="">
+        <input type="hidden" id="bc-frag4" value="">
 
-        <div class="bc-section-title" style="margin-top:4px">
+        <div class="bc-section-title" style="margin-top:6px">
           <svg width="12" height="12" viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
           Estadísticas
         </div>
-        <div style="display:flex;flex-direction:column;gap:6px" id="bc-stats-block">
-          <div class="bc-stat-row"><span class="bc-stat-name">MOV</span><div class="bc-stat-bar-bg"><div class="bc-stat-bar-fill" id="bar-mob" style="width:50%"></div></div><input class="bc-stat-input" type="number" id="bc-stat-mob" min="0" max="100" value="50" oninput="bcUpdateBar('mob')"></div>
-          <div class="bc-stat-row"><span class="bc-stat-name">RES</span><div class="bc-stat-bar-bg"><div class="bc-stat-bar-fill" id="bar-res" style="width:50%"></div></div><input class="bc-stat-input" type="number" id="bc-stat-res" min="0" max="100" value="50" oninput="bcUpdateBar('res')"></div>
-          <div class="bc-stat-row"><span class="bc-stat-name">REC</span><div class="bc-stat-bar-bg"><div class="bc-stat-bar-fill" id="bar-rec" style="width:50%"></div></div><input class="bc-stat-input" type="number" id="bc-stat-rec" min="0" max="100" value="50" oninput="bcUpdateBar('rec')"></div>
-          <div class="bc-stat-row"><span class="bc-stat-name">DIS</span><div class="bc-stat-bar-bg"><div class="bc-stat-bar-fill" id="bar-dis" style="width:50%"></div></div><input class="bc-stat-input" type="number" id="bc-stat-dis" min="0" max="100" value="50" oninput="bcUpdateBar('dis')"></div>
-          <div class="bc-stat-row"><span class="bc-stat-name">INT</span><div class="bc-stat-bar-bg"><div class="bc-stat-bar-fill" id="bar-int" style="width:50%"></div></div><input class="bc-stat-input" type="number" id="bc-stat-int" min="0" max="100" value="50" oninput="bcUpdateBar('int')"></div>
-          <div class="bc-stat-row"><span class="bc-stat-name">FOR</span><div class="bc-stat-bar-bg"><div class="bc-stat-bar-fill" id="bar-for" style="width:50%"></div></div><input class="bc-stat-input" type="number" id="bc-stat-for" min="0" max="100" value="50" oninput="bcUpdateBar('for')"></div>
+        <div class="bc-stats-grid" id="bc-stats-block">
+          <div class="bc-stat-row-c"><span class="bc-stat-name-c">MOV</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-mob" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-mob" min="0" max="100" value="50" oninput="bcUpdateBar('mob')"></div>
+          <div class="bc-stat-row-c"><span class="bc-stat-name-c">RES</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-res" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-res" min="0" max="100" value="50" oninput="bcUpdateBar('res')"></div>
+          <div class="bc-stat-row-c"><span class="bc-stat-name-c">REC</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-rec" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-rec" min="0" max="100" value="50" oninput="bcUpdateBar('rec')"></div>
+          <div class="bc-stat-row-c"><span class="bc-stat-name-c">DIS</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-dis" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-dis" min="0" max="100" value="50" oninput="bcUpdateBar('dis')"></div>
+          <div class="bc-stat-row-c"><span class="bc-stat-name-c">INT</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-int" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-int" min="0" max="100" value="50" oninput="bcUpdateBar('int')"></div>
+          <div class="bc-stat-row-c"><span class="bc-stat-name-c">FOR</span><div class="bc-stat-bar-bg-c"><div class="bc-stat-bar-fill-c" id="bar-for" style="width:50%"></div></div><input class="bc-stat-input-c" type="number" id="bc-stat-for" min="0" max="100" value="50" oninput="bcUpdateBar('for')"></div>
         </div>
 
-        <button class="bc-save-btn" onclick="bcSaveBuild()" style="margin-top:12px">
+        <button class="bc-save-btn" onclick="bcSaveBuild()" style="margin-top:8px">
           ⬡ Guardar Build
         </button>
       </div>
@@ -1771,7 +1752,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
       <!-- CENTER: Guardian -->
       <div class="bc-center" id="bc-center-stage">
         <!-- Guardian SVG -->
-        <svg class="bc-guardian-svg" id="bc-guardian" width="200" height="320" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+        <svg class="bc-guardian-svg" id="bc-guardian" width="280" height="420" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;height:auto">
           <!-- Outer glow ring -->
           <ellipse class="guardian-aura-outer" cx="100" cy="200" rx="90" ry="115" fill="none" stroke-width="1" stroke-dasharray="8 6" opacity=".3" style="animation:aura-rotate 12s linear infinite;transform-origin:100px 200px"/>
           <!-- Aura -->
@@ -3899,6 +3880,24 @@ function toggleWExoMissing(el) { wExoMissing=!wExoMissing; el.classList.toggle('
 function toggleALegMissing(el) { aLegMissing=!aLegMissing; el.classList.toggle('active',aLegMissing); renderLegArmor(); }
 function toggleAExoMissing(el) { aExoMissing=!aExoMissing; el.classList.toggle('active',aExoMissing); renderExoArmor(); }
 
+// ── AMMO FILTER ──
+function setAmmoFilter(prefix, btn){
+  const ammo = btn.dataset.ammo;
+  document.getElementById('f-'+prefix+'-ammo').value = ammo;
+  btn.closest('.ammo-filter-btns').querySelectorAll('.ammo-fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(prefix==='wleg') renderLegWeapons();
+  else if(prefix==='wexo') renderExoWeapons();
+}
+
+// Helper: get ammo slot for a weapon by its Spanish type
+function _wAmmoSlot(w){
+  const t = (w.type||'').toLowerCase();
+  if(t.includes('lanzacohetes')||t.includes('fusión lineal')||t.includes('ametralladora')||t.includes('espada')||t.includes('lanzagranadas pesado')) return 'heavy';
+  if(t.includes('escopeta')||t.includes('francotirador')||t.includes('fusión')||t.includes('lanzagranadas')) return 'special';
+  return 'primary';
+}
+
 function renderLegWeapons() {
   const get = id => { const e=document.getElementById(id); return e?e.value:''; };
   const search = get('f-wleg-search').toLowerCase();
@@ -3906,8 +3905,10 @@ function renderLegWeapons() {
   const season = get('f-wleg-season');
   const type   = get('f-wleg-type');
   const arch   = get('f-wleg-arch');
+  const ammo   = get('f-wleg-ammo');
   const list = WEAPONS.filter(w => {
     if (w.exotic) return false;
+    if (ammo && _wAmmoSlot(w) !== ammo) return false;
     if (search) {
       const inName = w.n.toLowerCase().includes(search);
       const inPerks = [...(w.col2||[]),...(w.col3||[])].some(pid => PERK_DEFS[pid] && PERK_DEFS[pid].n.toLowerCase().includes(search));
@@ -3933,8 +3934,10 @@ function renderExoWeapons() {
   const elem   = get('f-wexo-elem');
   const season = get('f-wexo-season');
   const type   = get('f-wexo-type');
+  const ammo   = get('f-wexo-ammo');
   const list = WEAPONS.filter(w => {
     if (!w.exotic) return false;
+    if (ammo && _wAmmoSlot(w) !== ammo) return false;
     if (search && !w.n.toLowerCase().includes(search) && !(w.e&&w.e.toLowerCase().includes(search)) && !((iconMap[(w.e||w.n).toLowerCase()]||{}).es||'').toLowerCase().includes(search)) return false;
     if (elem   && w.elem !== elem) return false;
     if (season && w.season !== season) return false;
@@ -8351,18 +8354,14 @@ function bcSelectSub(sub, btn){
   center.className = 'bc-center el-' + d.element;
   document.getElementById('bc-element-label').textContent = sub;
   document.getElementById('bc-element-label').style.color = ELEMENT_COLORS[d.element]||'#888';
-  // Populate slot data
-  bcFillSlot('bc-super', d.supers);
-  bcFillSlot('bc-melee', d.melees);
-  bcFillSlot('bc-grenade', d.grenades);
-  bcFillSlot('bc-class-ab', d.classAbility);
-  bcFillSlot('bc-movement', d.movement);
-  bcFillSlot('bc-aspect1', d.aspects);
-  bcFillSlot('bc-aspect2', d.aspects);
-  bcFillSlot('bc-frag1', d.fragments);
-  bcFillSlot('bc-frag2', d.fragments);
-  bcFillSlot('bc-frag3', d.fragments);
-  bcFillSlot('bc-frag4', d.fragments);
+  // Render inline icon grids
+  bcRenderAbilityIcons('bc-super',   d.supers,       d.element, 'single');
+  bcRenderAbilityIcons('bc-melee',   d.melees,       d.element, 'single');
+  bcRenderAbilityIcons('bc-grenade', d.grenades,     d.element, 'single');
+  bcRenderAbilityIcons('bc-class-ab',d.classAbility, d.element, 'single');
+  bcRenderAbilityIcons('bc-movement',d.movement,     d.element, 'single');
+  bcRenderAbilityIcons('bc-aspects', d.aspects,      d.element, 'multi2');
+  bcRenderAbilityIcons('bc-fragments',d.fragments,   d.element, 'multi4');
 }
 
 // Compatibility shims for old code that calls bcOnClassChange/bcOnSubChange
@@ -8378,39 +8377,109 @@ function bcOnSubChange(){
   bcSelectSub(sub, btn);
 }
 
-function bcFillSlot(id, arr){
-  _bcSlotData[id] = arr || [];
-  const btn = document.getElementById('btn-' + id);
-  if(btn){ btn.disabled = false; btn.style.opacity = '1'; }
-  // If current value no longer in options, clear it
-  const hidIn = document.getElementById(id);
-  if(hidIn && hidIn.value && arr && !arr.includes(hidIn.value)){
-    bcClearSlot(id);
+// ── INLINE ABILITY ICON GRIDS ──
+// mode: 'single' = one selection; 'multi2' = max 2; 'multi4' = max 4
+function bcRenderAbilityIcons(containerId, arr, element, mode){
+  const container = document.getElementById('icons-'+containerId);
+  if(!container) return;
+  container.innerHTML = '';
+  if(!arr || !arr.length){
+    container.innerHTML = '<span style="color:#333;font-size:.6rem">—</span>';
+    return;
+  }
+  arr.forEach(name=>{
+    if(!name) return;
+    const ekey = 'es:' + name.toLowerCase();
+    const iconUrl = (iconMap && iconMap[ekey]) ? iconMap[ekey].icon : '';
+    const div = document.createElement('div');
+    div.className = 'ab-icon';
+    div.title = name;
+    div.dataset.val = name;
+    div.dataset.container = containerId;
+    div.dataset.mode = mode;
+    div.style.borderColor = element ? (ELEMENT_COLORS[element]+'44') : '#2a2a3a';
+    if(iconUrl){
+      div.innerHTML = `<img src="https://www.bungie.net${iconUrl}" alt="${name}" onerror="this.parentNode.innerHTML='<span class=ab-fb>${name.substring(0,8)}</span>'">`;
+    } else {
+      div.innerHTML = `<span class="ab-fb">${name.substring(0,10)}</span>`;
+    }
+    div.onclick = function(){ bcClickAbilityIcon(this); };
+    container.appendChild(div);
+  });
+}
+
+function bcClickAbilityIcon(el){
+  const containerId = el.dataset.container;
+  const mode = el.dataset.mode;
+  const val = el.dataset.val;
+  const container = document.getElementById('icons-'+containerId);
+  if(!container) return;
+
+  if(mode === 'single'){
+    container.querySelectorAll('.ab-icon').forEach(i=>{ i.classList.remove('ab-selected'); delete i.dataset.badge; });
+    el.classList.add('ab-selected');
+    const hidIn = document.getElementById(containerId);
+    if(hidIn) hidIn.value = val;
+
+  } else if(mode === 'multi2'){
+    const selected = Array.from(container.querySelectorAll('.ab-icon.ab-selected'));
+    if(el.classList.contains('ab-selected')){
+      el.classList.remove('ab-selected');
+      delete el.dataset.badge;
+    } else {
+      if(selected.length >= 2) return; // max 2
+      el.classList.add('ab-selected');
+      el.dataset.badge = '✓';
+    }
+    const newSel = Array.from(container.querySelectorAll('.ab-icon.ab-selected')).map(i=>i.dataset.val);
+    const h1 = document.getElementById('bc-aspect1'); if(h1) h1.value = newSel[0]||'';
+    const h2 = document.getElementById('bc-aspect2'); if(h2) h2.value = newSel[1]||'';
+    const cnt = document.getElementById('asp-count'); if(cnt) cnt.textContent = newSel.length+'/2';
+
+  } else if(mode === 'multi4'){
+    const selected = Array.from(container.querySelectorAll('.ab-icon.ab-selected'));
+    if(el.classList.contains('ab-selected')){
+      el.classList.remove('ab-selected');
+      delete el.dataset.badge;
+    } else {
+      if(selected.length >= 4) return; // max 4
+      el.classList.add('ab-selected');
+      el.dataset.badge = '✓';
+    }
+    const newSel = Array.from(container.querySelectorAll('.ab-icon.ab-selected')).map(i=>i.dataset.val);
+    ['bc-frag1','bc-frag2','bc-frag3','bc-frag4'].forEach((id,i)=>{
+      const h = document.getElementById(id); if(h) h.value = newSel[i]||'';
+    });
+    const cnt = document.getElementById('frag-count'); if(cnt) cnt.textContent = newSel.length+'/4';
   }
 }
 
-function bcFillSelect(id, arr){
-  // Kept as shim — just calls bcFillSlot
-  bcFillSlot(id, arr);
+function bcFillSlot(id, arr){
+  // Shim — inline icon grids handle the display; just store data
+  _bcSlotData[id] = arr || [];
 }
+
+function bcFillSelect(id, arr){ bcFillSlot(id, arr); }
 
 function bcClearSlot(id){
   const hidIn = document.getElementById(id);
   if(hidIn) hidIn.value = '';
-  const txt = document.getElementById('text-'+id);
-  if(txt){ txt.textContent = '—'; txt.style.color=''; }
-  const icon = document.getElementById('icon-'+id);
-  if(icon){ icon.innerHTML='<span style="color:#333;font-size:10px">⬡</span>'; }
-  const btn = document.getElementById('btn-'+id);
-  if(btn){ btn.classList.remove('has-val'); btn.disabled = !(_bcSlotData[id]?.length); }
 }
 
 function bcClearAbilities(){
+  // Clear hidden values
   ['bc-super','bc-melee','bc-grenade','bc-class-ab','bc-movement',
    'bc-aspect1','bc-aspect2','bc-frag1','bc-frag2','bc-frag3','bc-frag4'].forEach(id=>{
     _bcSlotData[id] = [];
-    bcClearSlot(id);
+    const h = document.getElementById(id); if(h) h.value='';
   });
+  // Clear icon grid containers
+  ['bc-super','bc-melee','bc-grenade','bc-class-ab','bc-movement','bc-aspects','bc-fragments'].forEach(id=>{
+    const c = document.getElementById('icons-'+id);
+    if(c) c.innerHTML = '';
+  });
+  const asp = document.getElementById('asp-count'); if(asp) asp.textContent='0/2';
+  const frg = document.getElementById('frag-count'); if(frg) frg.textContent='0/4';
 }
 
 function bcUpdateGuardian(){
@@ -8537,24 +8606,39 @@ function bcClosePicker(){
 
 // ── ABILITY PICKER ──
 function bcPickAbility(id, title, btn){
+  // Legacy fallback — icon grids now handle abilities directly
   const items = _bcSlotData[id] || [];
   if(!items.length) return;
   bcOpenPicker(id, title, items, null);
 }
 
 // ── WEAPON PICKER ──
-const AMMO_PRIMARY = new Set(['Hand Cannon','Auto Rifle','Scout Rifle','Pulse Rifle','Sidearm','Submachine Gun','Bow','Glaive','Trace Rifle']);
-const AMMO_SPECIAL = new Set(['Shotgun','Sniper Rifle','Fusion Rifle','Grenade Launcher','Trace Rifle','Glaive']);
-const AMMO_HEAVY   = new Set(['Rocket Launcher','Linear Fusion Rifle','Machine Gun','Sword','Heavy Grenade Launcher']);
+// Spanish weapon type → ammo slot mapping
+const AMMO_PRIMARY_ES = new Set([
+  'Cañón de mano','Rifle automático','Rifle explorador','Rifle de pulso',
+  'Sidearm','Subfusil','Arco','Guadaña','Rifle de traza'
+]);
+const AMMO_SPECIAL_ES = new Set([
+  'Escopeta','Rifle de francotirador','Rifle de fusión','Lanzagranadas',
+  'Rifle de traza','Guadaña'
+]);
+const AMMO_HEAVY_ES = new Set([
+  'Lanzacohetes','Rifle de fusión lineal','Ametralladora','Espada',
+  'Lanzagranadas pesado'
+]);
+
+function bcGetWeaponAmmoSlot(wp){
+  const t = (wp.type||wp.t||'').toLowerCase();
+  if(['lanzacohetes','rifle de fusión lineal','ametralladora','espada','lanzagranadas pesado'].some(x=>t.includes(x)||x.includes(t))) return 'heavy';
+  if(['escopeta','rifle de francotirador','rifle de fusión','lanzagranadas'].some(x=>t.includes(x)||x.includes(t))) return 'special';
+  return 'primary';
+}
 
 function bcPickWeapon(slotId, ammoType, btn){
   if(typeof WEAPONS === 'undefined') return;
   const items = [];
   WEAPONS.forEach(wp=>{
-    let slot;
-    if(AMMO_HEAVY.has(wp.t)) slot='heavy';
-    else if(AMMO_SPECIAL.has(wp.t)) slot='special';
-    else slot='primary';
+    const slot = bcGetWeaponAmmoSlot(wp);
     if(slot !== ammoType) return;
     const ekey = (wp.e||wp.n||'').toLowerCase();
     const icon = iconMap[ekey]?.icon || '';
@@ -8565,25 +8649,48 @@ function bcPickWeapon(slotId, ammoType, btn){
 }
 
 // ── ARMOR PICKER ──
+// Slot label map: HTML button label → actual data key in ARMOR_BY_CLASS and EXOTIC_ARMOR
+const _armorSlotMap = {
+  'Casco'       :{ leg:'Casco',      exo:'Casco'       },
+  'Brazos'      :{ leg:'Brazales',   exo:'Guanteletes' },
+  'Brazales'    :{ leg:'Brazales',   exo:'Guanteletes' },
+  'Guanteletes' :{ leg:'Brazales',   exo:'Guanteletes' },
+  'Pecho'       :{ leg:'Pecho',      exo:'Pecho'       },
+  'Piernas'     :{ leg:'Piernas',    exo:'Piernas'     },
+  'Ítem de Clase':{ leg:null,        exo:null          }, // no class items in data
+};
+
 function bcPickArmor(slotId, slotLabel, btn){
   const cls = document.getElementById('bc-class').value;
+  const slotKeys = _armorSlotMap[slotLabel] || { leg:slotLabel, exo:slotLabel };
   const items = [];
-  if(typeof EXOTIC_ARMOR !== 'undefined'){
-    EXOTIC_ARMOR.filter(a=>(!cls||a.class===cls) && a.slot===slotLabel).forEach(a=>{
+
+  // Exotic armors
+  if(typeof EXOTIC_ARMOR !== 'undefined' && slotKeys.exo){
+    EXOTIC_ARMOR.filter(a=>(!cls||a.class===cls) && a.slot===slotKeys.exo).forEach(a=>{
       const ekey = (a.e||a.n||'').toLowerCase();
       const icon = iconMap[ekey]?.icon || '';
       items.push({ val:a.n, label:a.n, icon, tag:'★' });
     });
   }
-  if(typeof ARMOR_BY_CLASS !== 'undefined' && cls && ARMOR_BY_CLASS[cls]){
-    const slotKey = {Casco:'Casco',Brazos:'Brazos',Pecho:'Pecho',Piernas:'Piernas','Ítem de Clase':'Ítem de Clase'}[slotLabel]||slotLabel;
-    const pieces = ARMOR_BY_CLASS[cls][slotKey] || [];
+
+  // Legendary armors
+  if(typeof ARMOR_BY_CLASS !== 'undefined' && cls && ARMOR_BY_CLASS[cls] && slotKeys.leg){
+    const pieces = ARMOR_BY_CLASS[cls][slotKeys.leg] || [];
     pieces.forEach(p=>{
-      const nm = (p.n||p.name||'').toLowerCase();
+      const name = p.n||p.name||'';
+      const nm = name.toLowerCase();
       const icon = iconMap['es:'+nm]?.icon || iconMap[nm]?.icon || '';
-      items.push({ val:p.n||p.name, label:p.n||p.name, icon, tag:'' });
+      items.push({ val:name, label:name, icon, tag:'' });
     });
   }
+
+  if(!items.length && slotLabel === 'Ítem de Clase'){
+    // No class items in data — inform via popup title
+    bcOpenPicker(slotId, 'No hay ítems de clase disponibles', [], null);
+    return;
+  }
+
   bcOpenPicker(slotId, slotLabel, items, null);
 }
 
@@ -8837,7 +8944,7 @@ function init() {
 
 // =========== ICON LOADER (Bungie API) ===========
 const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v14';
+const ICON_CACHE_KEY = 'd2icons.v15';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
 let iconMap = {};
 
@@ -8907,6 +9014,14 @@ async function fetchIcons(apiKey) {
     Object.values(ARMOR_BY_CLASS).forEach(slots =>
       Object.values(slots).forEach(arr => arr.forEach(p => p.n && neededEs.add(p.n.toLowerCase()))));
     ARMOR_SETS.forEach(s => s.slots && s.slots.forEach(sl => sl.n && neededEs.add(sl.n.toLowerCase())));
+    // Ability names from SUBCLASS_DATA (for build creator icon grids)
+    if (typeof SUBCLASS_DATA !== 'undefined') {
+      Object.values(SUBCLASS_DATA).forEach(subs => Object.values(subs).forEach(sub => {
+        ['supers','melees','grenades','classAbility','movement','aspects','fragments'].forEach(k => {
+          (sub[k]||[]).forEach(nm => { if(nm && !nm.startsWith('Ranura')) neededEs.add(nm.toLowerCase()); });
+        });
+      }));
+    }
     // Bonus perk names (text before ":" in bonus2pc/bonus4pc)
     ARMOR_SETS.forEach(s => {
       [s.bonus2pc, s.bonus4pc].forEach(b => {
