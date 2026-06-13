@@ -939,7 +939,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 .arch-cell{display:flex;align-items:center;justify-content:center;gap:2px;padding:5px 3px;border:1px solid var(--border);background:var(--bg-card);cursor:pointer;transition:all .18s;min-height:42px;aspect-ratio:1;}
 .arch-cell:hover{border-color:rgba(142,103,216,.5);background:rgba(142,103,216,.06);}
 .arch-icons{display:flex;gap:2px;align-items:center;justify-content:center;}
-.arch-icons img{width:18px;height:18px;object-fit:contain;flex-shrink:0;}
+.arch-icons img{width:22px;height:22px;object-fit:contain;flex-shrink:0;border-radius:3px;}
 .arch-fb{font-size:12px;color:var(--text-muted);}
 /* Godroll = gold */
 .arch-cell.a-god{border-color:var(--accent-gold) !important;background:rgba(201,168,76,.13) !important;box-shadow:0 0 7px rgba(201,168,76,.35) !important;}
@@ -3043,18 +3043,18 @@ const WEAPONS = [
 // 12 arquetipos reales de Destiny 2 (Armadura 3.0 / Edge of Fate)
 // Stats: Salud, Granada, Clase, Super, Cuerpo, Armas
 const ARCHETYPES = [
-  {id:'siegebreaker',   n:'Rompedor de asedios', stat:'Salud + Granada',  primary:'Salud',   secondary:'Granada', desc:'Salud primaria con Granada secundaria.'},
-  {id:'bulwark',        n:'Bastión',        stat:'Salud + Clase',    primary:'Salud',   secondary:'Clase',   desc:'Salud primaria con Clase secundaria.'},
-  {id:'brawler',        n:'Camorrista',      stat:'Cuerpo a cuerpo + Salud',   primary:'Cuerpo a cuerpo',  secondary:'Salud',   desc:'Cuerpo a cuerpo primario con Salud secundaria.'},
-  {id:'skirmisher',     n:'Escaramuzador',      stat:'Cuerpo a cuerpo + Armas',   primary:'Cuerpo a cuerpo',  secondary:'Armas',   desc:'Cuerpo a cuerpo primario con Armas secundarias.'},
-  {id:'grenadier',      n:'Granadero',       stat:'Granada + Súper',  primary:'Granada', secondary:'Súper',   desc:'Granada primaria con Superpoder secundario.'},
-  {id:'demolitionist',  n:'Demoledor',       stat:'Granada + Clase',  primary:'Granada', secondary:'Clase',   desc:'Granada primaria con Clase secundaria.'},
-  {id:'colossus',       n:'Coloso',          stat:'Súper + Salud',    primary:'Súper',   secondary:'Salud',   desc:'Superpoder primario con Salud secundaria.'},
-  {id:'paragon',        n:'Parangón',         stat:'Súper + Cuerpo a cuerpo',   primary:'Súper',   secondary:'Cuerpo a cuerpo',  desc:'Superpoder primario con Cuerpo a cuerpo secundario.'},
-  {id:'reaver',         n:'Saqueador',      stat:'Clase + Cuerpo a cuerpo',   primary:'Clase',   secondary:'Cuerpo a cuerpo',  desc:'Clase primaria con Cuerpo a cuerpo secundario.'},
-  {id:'specialist',     n:'Especialista',    stat:'Clase + Armas',    primary:'Clase',   secondary:'Armas',   desc:'Clase primaria con Armas secundarias.'},
-  {id:'gunner',         n:'Artillero',       stat:'Armas + Granada',  primary:'Armas',   secondary:'Granada', desc:'Armas primarias con Granada secundaria.'},
-  {id:'powerhouse',     n:'Portento',        stat:'Armas + Súper',    primary:'Armas',   secondary:'Súper',   desc:'Armas primarias con Superpoder secundario.'}
+  {id:'siegebreaker', icon:'https://www.bungie.net/common/destiny2_content/icons/c557664d96730b597b61e22bf06b66a4.png',   n:'Rompedor de asedios', stat:'Salud + Granada',  primary:'Salud',   secondary:'Granada', desc:'Salud primaria con Granada secundaria.'},
+  {id:'bulwark', icon:'https://www.bungie.net/common/destiny2_content/icons/c40222a4030330d3d179c7ff4e5a1550.png',        n:'Bastión',        stat:'Salud + Clase',    primary:'Salud',   secondary:'Clase',   desc:'Salud primaria con Clase secundaria.'},
+  {id:'brawler', icon:'https://www.bungie.net/common/destiny2_content/icons/ed512b4646e4c5f848bac3de3756f63c.png',        n:'Camorrista',      stat:'Cuerpo a cuerpo + Salud',   primary:'Cuerpo a cuerpo',  secondary:'Salud',   desc:'Cuerpo a cuerpo primario con Salud secundaria.'},
+  {id:'skirmisher', icon:'https://www.bungie.net/common/destiny2_content/icons/bc98aeba33ecaaf152af49aee09b4e6b.png',     n:'Escaramuzador',      stat:'Cuerpo a cuerpo + Armas',   primary:'Cuerpo a cuerpo',  secondary:'Armas',   desc:'Cuerpo a cuerpo primario con Armas secundarias.'},
+  {id:'grenadier', icon:'https://www.bungie.net/common/destiny2_content/icons/a0484b8ffe0b380ddfa6f85d7ce95832.png',      n:'Granadero',       stat:'Granada + Súper',  primary:'Granada', secondary:'Súper',   desc:'Granada primaria con Superpoder secundario.'},
+  {id:'demolitionist', icon:'https://www.bungie.net/common/destiny2_content/icons/3162aa86c4f68abc3b7d8e6c56c2f11e.png',  n:'Demoledor',       stat:'Granada + Clase',  primary:'Granada', secondary:'Clase',   desc:'Granada primaria con Clase secundaria.'},
+  {id:'colossus', icon:'https://www.bungie.net/common/destiny2_content/icons/ac754aba77cddfe9f8dc51155ec4b5cb.png',       n:'Coloso',          stat:'Súper + Salud',    primary:'Súper',   secondary:'Salud',   desc:'Superpoder primario con Salud secundaria.'},
+  {id:'paragon', icon:'https://www.bungie.net/common/destiny2_content/icons/d2587aeeb7b8acf2a0e8490435c4454a.png',        n:'Parangón',         stat:'Súper + Cuerpo a cuerpo',   primary:'Súper',   secondary:'Cuerpo a cuerpo',  desc:'Superpoder primario con Cuerpo a cuerpo secundario.'},
+  {id:'reaver', icon:'https://www.bungie.net/common/destiny2_content/icons/0d42a829ca2ef00ef12278ea58cef312.png',         n:'Saqueador',      stat:'Clase + Cuerpo a cuerpo',   primary:'Clase',   secondary:'Cuerpo a cuerpo',  desc:'Clase primaria con Cuerpo a cuerpo secundario.'},
+  {id:'specialist', icon:'https://www.bungie.net/common/destiny2_content/icons/90e58295ad8394ea517714a954ee0d4c.png',     n:'Especialista',    stat:'Clase + Armas',    primary:'Clase',   secondary:'Armas',   desc:'Clase primaria con Armas secundarias.'},
+  {id:'gunner', icon:'https://www.bungie.net/common/destiny2_content/icons/3fa4677b5fdb2fc64051f158a2807de9.png',         n:'Artillero',       stat:'Armas + Granada',  primary:'Armas',   secondary:'Granada', desc:'Armas primarias con Granada secundaria.'},
+  {id:'powerhouse', icon:'https://www.bungie.net/common/destiny2_content/icons/2ededd08a18ed71551b98953648d8d26.png',     n:'Portento',        stat:'Armas + Súper',    primary:'Armas',   secondary:'Súper',   desc:'Armas primarias con Superpoder secundario.'}
 ];
 
 
@@ -4247,8 +4247,7 @@ function buildArmorSlotCard(set, slotDef, cls) {
     const stateCls = v===1 ? ' a-god' : v===2 ? ' a-semi' : '';
     return `<div class="arch-cell${stateCls}" id="lgod_${sid}_${a.id}" title="${a.n} — ${a.stat}" onclick="cycleArmorStat('${sid}','${a.id}')">
       <span class="arch-icons">
-        ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" style="${ic1?'':'display:none'}" onerror="this.style.display='none'"><span class="arch-fb" style="${ic1?'display:none':''}">◈</span>`:''}
-        ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" style="${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>
+        ${a.icon?`<img src="${a.icon}" style="width:22px;height:22px;object-fit:contain" onerror="this.style.opacity=0">`:'<span class="arch-fb">◈</span>'}</span>
     </div>`;
   }).join('');
   // slot label: class item gets class-specific name
@@ -4327,8 +4326,7 @@ function buildExoticArmorCard(ea) {
     const stateCls = v===1 ? ' a-god' : v===2 ? ' a-semi' : '';
     return `<div class="arch-cell${stateCls}" id="egod_${ea.id}_${a.id}" title="${a.n} — ${a.stat}" onclick="cycleExoticStat('${ea.id}','${a.id}')">
       <span class="arch-icons">
-        ${primId?`<img src="${ic1||''}" data-pimg="stat:${primId}" style="${ic1?'':'display:none'}" onerror="this.style.display='none'"><span class="arch-fb" style="${ic1?'display:none':''}">◈</span>`:''}
-        ${secId?`<img src="${ic2||''}" data-pimg="stat:${secId}" style="${ic2?'':'display:none'}" onerror="this.style.display='none'">`:''}</span>
+        ${a.icon?`<img src="${a.icon}" style="width:22px;height:22px;object-fit:contain" onerror="this.style.opacity=0">`:'<span class="arch-fb">◈</span>'}</span>
     </div>`;
   }).join('');
   return `<div class="eacard ${obtained?'aobt':''}" id="eacard_${ea.id}">
