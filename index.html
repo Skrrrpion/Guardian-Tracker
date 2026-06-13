@@ -3836,7 +3836,7 @@ function buildWeaponCard(w) {
   return `<div class="${cardCls}" id="wcard_${w.id}">
     <div class="whdr">
       <div class="wtitle">
-        ${(()=>{const _e=(w.e||w.n).toLowerCase();const _u=(iconMap[_e]?.icon)||'';return _u?`<img class="wimg" src="${_u}" data-wimg="${_e}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`:`<img class="wimg" data-wimg="${_e}" src="" style="display:none;width:52px;height:52px;" onerror="this.style.display='none'">`;})()}
+        ${(()=>{const _e=(w.n||w.e).toLowerCase();const _u=(iconMap[_e]?.icon)||'';return _u?`<img class="wimg" src="${_u}" data-wimg="${_e}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`:`<img class="wimg" data-wimg="${_e}" src="" style="display:none;width:52px;height:52px;" onerror="this.style.display='none'">`;})()}
         <span class="wname ${exotic?'wname-exo':''}" data-wkey="${(w.e||w.n).toLowerCase()}">${w.n}${(()=>{const g0=(w.col0||[]).some(pk=>ws.perks[pk]?.marker===1);const g1=(w.col1||[]).some(pk=>ws.perks[pk]?.marker===1);const g2=(w.col2||[]).some(pk=>ws.perks[pk]?.marker===1);const g3=(w.col3||[]).some(pk=>ws.perks[pk]?.marker===1);return `<span class="wname-godstar${g0&&g1&&g2&&g3?' active':''}" title="God Roll completo en los 4 slots">★</span>`;})()}</span>
 
       </div>
@@ -3992,7 +3992,7 @@ function renderExoWeapons() {
   const list = WEAPONS.filter(w => {
     if (!w.exotic) return false;
     if (ammo && _wAmmoSlot(w) !== ammo) return false;
-    if (search && !w.n.toLowerCase().includes(search) && !(w.e&&w.e.toLowerCase().includes(search)) && !((iconMap[(w.e||w.n).toLowerCase()]||{}).es||'').toLowerCase().includes(search)) return false;
+    if (search && !w.n.toLowerCase().includes(search) && !(w.e&&w.e.toLowerCase().includes(search)) && !((iconMap[(w.n||w.e).toLowerCase()]||{}).es||'').toLowerCase().includes(search)) return false;
     if (elem   && w.elem !== elem) return false;
     if (season && w.season !== season) return false;
     if (type   && !w.type.toLowerCase().includes(type.toLowerCase())) return false;
@@ -4132,9 +4132,9 @@ function buildExoticArmorCard(ea) {
   return `<div class="eacard ${obtained?'aobt':''}" id="eacard_${ea.id}">
     <div class="whdr">
       <div class="wtitle">
-        ${iconMap[(ea.e||ea.n).toLowerCase()]?.icon
-          ? `<img class="wimg" data-wimg="${(ea.e||ea.n).toLowerCase()}" src="${iconMap[(ea.e||ea.n).toLowerCase()].icon}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
-          : `<img class="wimg" data-wimg="${(ea.e||ea.n).toLowerCase()}" src="" style="display:none;width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`}
+        ${iconMap[(ea.n||ea.e).toLowerCase()]?.icon
+          ? `<img class="wimg" data-wimg="${(ea.n||ea.e).toLowerCase()}" src="${iconMap[(ea.n||ea.e).toLowerCase()]?.icon||''}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
+          : `<img class="wimg" data-wimg="${(ea.n||ea.e).toLowerCase()}" src="" style="display:none;width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`}
         <span class="wname wname-exo" data-wkey="${(ea.e||ea.n).toLowerCase()}">${ea.n}</span>
       </div>
       <div class="wtags">
