@@ -2089,6 +2089,20 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 </div>
 
 <script>
+
+// ── DETECCIÓN MÓVIL ──────────────────────────────────────────────────────
+// Añade/quita clase 'is-mobile' al body según el ancho de pantalla.
+// Todo el CSS móvil depende de body.is-mobile — sin esto, no se aplica nada.
+function _checkMobile(){
+  const mob = window.innerWidth <= 768;
+  document.body.classList.toggle('is-mobile', mob);
+}
+// Ejecutar inmediatamente (body ya existe porque el script está al final)
+_checkMobile();
+// Reactivo al rotar/redimensionar
+window.addEventListener('resize', _checkMobile, {passive:true});
+// ─────────────────────────────────────────────────────────────────────────
+
 // ═══════════════════════════════════════════
 // PERK DEFINITIONS
 // ═══════════════════════════════════════════
