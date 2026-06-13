@@ -1694,32 +1694,34 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
           <div class="bc-class-btns">
             <button class="bc-class-btn titan" onclick="bcSelectClass('Titán',this)" title="Titán">
               <!-- Titan: three mountain peaks (D2 class emblem) -->
-              <svg width="34" height="46" viewBox="0 0 34 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2h30v34l-15 8L2 36V2z" fill="#0d0d18" stroke="#333350" stroke-width="1.2" stroke-linejoin="round"/>
-                <polygon points="3,32 10,14 17,32" fill="#7070a0" opacity="0.85"/>
-                <polygon points="17,32 24,12 31,32" fill="#7070a0" opacity="0.85"/>
-                <polygon points="10,32 17,8 24,32" fill="#c0c0d8"/>
+              <svg width="38" height="50" viewBox="0 0 38 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4" stroke-linejoin="round"/>
+                <polygon points="2,34 11,13 20,34" fill="#606080" opacity="0.75"/>
+                <polygon points="18,34 27,11 36,34" fill="#606080" opacity="0.75"/>
+                <polygon points="10,34 19,7 28,34" fill="#d0d0e8"/>
               </svg>
               <span>Titán</span>
             </button>
             <button class="bc-class-btn hunter" onclick="bcSelectClass('Cazador',this)" title="Cazador">
-              <!-- Hunter: three upward feathers/arrows (D2 class emblem) -->
-              <svg width="34" height="46" viewBox="0 0 34 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2h30v34l-15 8L2 36V2z" fill="#0d0d18" stroke="#333350" stroke-width="1.2" stroke-linejoin="round"/>
-                <line x1="17" y1="33" x2="8" y2="10" stroke="#7070a0" stroke-width="2.8" stroke-linecap="round"/>
-                <line x1="17" y1="33" x2="17" y2="7" stroke="#c0c0d8" stroke-width="2.8" stroke-linecap="round"/>
-                <line x1="17" y1="33" x2="26" y2="10" stroke="#7070a0" stroke-width="2.8" stroke-linecap="round"/>
+              <!-- Hunter: three upward feathers fanning out (D2 class emblem) -->
+              <svg width="38" height="50" viewBox="0 0 38 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4" stroke-linejoin="round"/>
+                <line x1="19" y1="35" x2="6" y2="9" stroke="#606080" stroke-width="3" stroke-linecap="round"/>
+                <line x1="19" y1="35" x2="19" y2="6" stroke="#d0d0e8" stroke-width="3" stroke-linecap="round"/>
+                <line x1="19" y1="35" x2="32" y2="9" stroke="#606080" stroke-width="3" stroke-linecap="round"/>
               </svg>
               <span>Cazador</span>
             </button>
             <button class="bc-class-btn warlock" onclick="bcSelectClass('Hechicero',this)" title="Hechicero">
-              <!-- Warlock: angular diamond bond (D2 class emblem) -->
-              <svg width="34" height="46" viewBox="0 0 34 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2h30v34l-15 8L2 36V2z" fill="#0d0d18" stroke="#333350" stroke-width="1.2" stroke-linejoin="round"/>
-                <polygon points="17,8 30,20 17,32 4,20" fill="none" stroke="#c0c0d8" stroke-width="1.8" stroke-linejoin="round"/>
-                <polygon points="17,13 25,20 17,27 9,20" fill="#7070a0"/>
-                <line x1="17" y1="8" x2="17" y2="32" stroke="#404060" stroke-width="0.8"/>
-                <line x1="4" y1="20" x2="30" y2="20" stroke="#404060" stroke-width="0.8"/>
+              <!-- Warlock: hexagonal ring bond (D2 class emblem) -->
+              <svg width="38" height="50" viewBox="0 0 38 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2h34v37l-17 9L2 39V2z" fill="#0c0c1a" stroke="#30304c" stroke-width="1.4" stroke-linejoin="round"/>
+                <!-- Outer hexagon ring -->
+                <polygon points="19,7 31,14 31,28 19,35 7,28 7,14" fill="none" stroke="#d0d0e8" stroke-width="2.2" stroke-linejoin="round"/>
+                <!-- Inner hexagon filled -->
+                <polygon points="19,12 27,17 27,25 19,30 11,25 11,17" fill="#585878"/>
+                <!-- Center detail -->
+                <circle cx="19" cy="21" r="3" fill="#d0d0e8"/>
               </svg>
               <span>Hechicero</span>
             </button>
@@ -8847,7 +8849,7 @@ function init() {
 
 // =========== ICON LOADER (Bungie API) ===========
 const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v17';
+const ICON_CACHE_KEY = 'd2icons.v18';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
 let iconMap = {};
 
@@ -8936,34 +8938,49 @@ async function fetchIcons(apiKey) {
         if (b) { const nm = b.split(':')[0].trim().toLowerCase(); if (nm) neededEs.add(nm); }
       });
     });
+    // Helper: strip accents for fuzzy matching
+    const stripAccents = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'');
+    // Build accent-stripped lookup for neededEs
+    const neededEsNorm = new Map();
+    neededEs.forEach(nm => neededEsNorm.set(stripAccents(nm), nm));
+
     // icons[en_name_lower] = {icon: url, es: official_spanish_name}
     const icons = {};
+    // SINGLE combined pass over en_items — resolves both EN and ES (via hash cross-ref)
     for (const [hash, item] of Object.entries(en_items)) {
       const dp = item.displayProperties;
       if (!dp?.icon || !dp?.name) continue;
       const n = dp.name.toLowerCase();
+
+      // English name match (weapons, armor, perks)
       if (needed.has(n)) {
-        const esName = es_items?.[hash]?.displayProperties?.name || null;
-        const esDesc = es_items?.[hash]?.displayProperties?.description || null;
-        icons[n] = { icon: BNET + dp.icon, es: esName, esDesc };
+        const esEntry = es_items?.[hash]?.displayProperties;
+        icons[n] = { icon: BNET + dp.icon, es: esEntry?.name||null, esDesc: esEntry?.description||null };
         needed.delete(n);
       }
+
+      // Spanish name match via hash cross-reference with es_items (covers abilities, armor)
+      if (neededEs.size > 0 && es_items?.[hash]?.displayProperties?.name) {
+        const esN = es_items[hash].displayProperties.name.toLowerCase();
+        const esNnorm = stripAccents(esN);
+        const matchKey = neededEs.has(esN) ? esN : (neededEsNorm.has(esNnorm) ? neededEsNorm.get(esNnorm) : null);
+        if (matchKey) {
+          icons['es:' + matchKey] = { icon: BNET + dp.icon };
+          neededEs.delete(matchKey);
+          neededEsNorm.delete(esNnorm);
+        }
+      }
+
       if (needed.size === 0 && neededEs.size === 0) break;
     }
-    // Helper: strip accents for fuzzy matching
-    const stripAccents = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'');
-    // Build accent-stripped version of neededEs for fallback matching
-    const neededEsNorm = new Map(); // normalized → original
-    neededEs.forEach(nm => neededEsNorm.set(stripAccents(nm), nm));
 
-    // Second pass — match Spanish names via es manifest
+    // Fallback second pass — iterate es_items directly for any remaining Spanish names
     if (neededEs.size > 0 && es_items) {
       for (const [hash, item] of Object.entries(es_items)) {
         const dp = item.displayProperties;
         if (!dp?.name) continue;
         const esN = dp.name.toLowerCase();
         const esNnorm = stripAccents(esN);
-        // Exact match first, then accent-stripped fallback
         const matchKey = neededEs.has(esN) ? esN : (neededEsNorm.has(esNnorm) ? neededEsNorm.get(esNnorm) : null);
         if (matchKey) {
           const iconPath = dp.icon || en_items[hash]?.displayProperties?.icon;
@@ -9070,7 +9087,7 @@ async function fetchIcons(apiKey) {
     if (damage_defs) {
       const elemNameMap = {
         'Solar':'solar','Arc':'arc','Void':'void',
-        'Stasis':'stasis','Strand':'strand','Kinetic':'kinetic'
+        'Stasis':'stasis','Strand':'strand','Kinetic':'kinetic','Prismatic':'prismatic'
       };
       for (const [hash, dmg] of Object.entries(damage_defs)) {
         const n = dmg.displayProperties?.name;
@@ -9079,12 +9096,26 @@ async function fetchIcons(apiKey) {
         }
       }
     }
-    // Prismatic: scan en_items for a Prismatic subclass icon (search by name)
+    // Prismatic: scan items for the Prismatic element icon
     if (!icons['element:prismatic']) {
+      // Try en_items: item named exactly "Prismatic" with an icon (prefer subclass-type items)
+      let prisHit = null;
       for (const [hash, item] of Object.entries(en_items)) {
         const dp = item.displayProperties;
         if (!dp?.name || !dp?.icon) continue;
-        if (dp.name === 'Prismatic' && dp.icon) {
+        if (dp.name === 'Prismatic') {
+          // Prefer items that look like a subclass/element icon (not a weapon perk etc.)
+          if (!prisHit || (item.itemType >= 19)) { prisHit = BNET + dp.icon; }
+        }
+      }
+      if (prisHit) icons['element:prismatic'] = { icon: prisHit };
+    }
+    // Also try es_items for "prismático" if still missing
+    if (!icons['element:prismatic'] && es_items) {
+      for (const [hash, item] of Object.entries(es_items)) {
+        const dp = item.displayProperties;
+        if (!dp?.name || !dp?.icon) continue;
+        if (dp.name.toLowerCase() === 'prismático') {
           icons['element:prismatic'] = { icon: BNET + dp.icon };
           break;
         }
