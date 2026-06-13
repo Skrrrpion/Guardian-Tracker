@@ -1434,13 +1434,13 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
 <!-- TABS -->
 <nav id="tabs-nav">
-  <button class="tab-btn active" onclick="switchTab('armas-leg',this)"><span class="tb-icon">⚔</span><span class="tb-label">Arm. Leg.</span></button>
-  <button class="tab-btn" onclick="switchTab('armas-exo',this)"><span class="tb-icon">💠</span><span class="tb-label">Arm. Exó.</span></button>
-  <button class="tab-btn" onclick="switchTab('armor-leg',this)"><span class="tb-icon">🛡</span><span class="tb-label">Armadura</span></button>
-  <button class="tab-btn" onclick="switchTab('armor-exo',this)"><span class="tb-icon">✨</span><span class="tb-label">Arm. Exó.</span></button>
+  <button class="tab-btn active" onclick="switchTab('armas-leg',this)"><span class="tb-icon">⚔</span><span class="tb-label">Armas Legendarias</span></button>
+  <button class="tab-btn" onclick="switchTab('armas-exo',this)"><span class="tb-icon">💠</span><span class="tb-label">Armas Exóticas</span></button>
+  <button class="tab-btn" onclick="switchTab('armor-leg',this)"><span class="tb-icon">🛡</span><span class="tb-label">Armadura Legendaria</span></button>
+  <button class="tab-btn" onclick="switchTab('armor-exo',this)"><span class="tb-icon">✨</span><span class="tb-label">Armadura Exótica</span></button>
   <button class="tab-btn" onclick="switchTab('glosario',this)"><span class="tb-icon">📖</span><span class="tb-label">Glosario</span></button>
-  <button class="tab-btn" onclick="switchTab('builds',this)"><span class="tb-icon">🔧</span><span class="tb-label">Creador</span></button>
-<button class="tab-btn" onclick="switchTab('builds-saved',this)"><span class="tb-icon">💾</span><span class="tb-label">Builds</span></button>
+  <button class="tab-btn" onclick="switchTab('builds',this)"><span class="tb-icon">🔧</span><span class="tb-label">Creador de Builds</span></button>
+<button class="tab-btn" onclick="switchTab('builds-saved',this)"><span class="tb-icon">💾</span><span class="tb-label">Mis Builds</span></button>
 <button class="tab-btn" onclick="switchTab('inventario',this);initInventario()"><span class="tb-icon">🎒</span><span class="tb-label">Inventario</span></button>
 </nav>
 
@@ -1496,19 +1496,20 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         <option value="exótico">Exótico</option>
       </select>
     </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+    <div class="filter-group">
+      <label>Munición</label>
       <div class="ammo-filter-btns">
         <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wleg',this)">Todas</button>
         <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-primary"></span>Primaria</button>
         <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-special"></span>Especial</button>
         <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</button>
       </div>
-      <div id="f-wleg-missing" class="filter-toggle" onclick="toggleWLegMissing(this)">
-        <span class="dot"></span>Solo me falta
-      </div>
-      <div id="f-wleg-craft" class="filter-toggle craft-toggle" onclick="toggleWLegCraft(this)">
-        <span class="dot"></span>⚒ Fabricables
-      </div>
+    </div>
+    <div id="f-wleg-missing" class="filter-toggle" onclick="toggleWLegMissing(this)">
+      <span class="dot"></span>Solo me falta
+    </div>
+    <div id="f-wleg-craft" class="filter-toggle craft-toggle" onclick="toggleWLegCraft(this)">
+      <span class="dot"></span>⚒ Fabricables
     </div>
     <input type="hidden" id="f-wleg-ammo" value="">
   <span id="wleg-count" class="results-count"></span>
@@ -1548,11 +1549,14 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         <option>Espada</option><option>Arco</option><option>Ballesta</option>
       </select>
     </div>
-    <div class="ammo-filter-btns">
-      <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wexo',this)">Todas</button>
-      <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-primary"></span>Primaria</button>
-      <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-special"></span>Especial</button>
-      <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</button>
+    <div class="filter-group">
+      <label>Munición</label>
+      <div class="ammo-filter-btns">
+        <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wexo',this)">Todas</button>
+        <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-primary"></span>Primaria</button>
+        <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-special"></span>Especial</button>
+        <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</button>
+      </div>
     </div>
     <div id="f-wexo-missing" class="filter-toggle" onclick="toggleWExoMissing(this)">
       <span class="dot"></span>Solo me falta
