@@ -983,9 +983,26 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-center.el-prismatic .guardian-aura{fill:rgba(200,168,75,.08);stroke:#c8a84b}
 .guardian-aura{fill:rgba(200,168,75,.04);stroke:#c8a84b;stroke-width:1;transition:fill .4s,stroke .4s}
 .bc-guardian-svg{filter:drop-shadow(0 0 18px rgba(200,168,75,.25));transition:filter .4s}
-.bc-center.el-solar .bc-guardian-svg{filter:drop-shadow(0 0 22px rgba(247,167,58,.45))}
-.bc-center.el-arc .bc-guardian-svg{filter:drop-shadow(0 0 22px rgba(121,212,240,.45))}
-.bc-center.el-void .bc-guardian-svg{filter:drop-shadow(0 0 22px rgba(169,111,214,.45))}
+.bc-center.el-solar .bc-guardian-svg{filter:drop-shadow(0 0 28px rgba(247,167,58,.55))}
+.bc-center.el-arc .bc-guardian-svg{filter:drop-shadow(0 0 28px rgba(121,212,240,.55))}
+.bc-center.el-void .bc-guardian-svg{filter:drop-shadow(0 0 28px rgba(169,111,214,.55))}
+.bc-center.el-stasis .bc-guardian-svg{filter:drop-shadow(0 0 28px rgba(77,136,255,.55))}
+.bc-center.el-strand .bc-guardian-svg{filter:drop-shadow(0 0 28px rgba(0,200,148,.55))}
+.bc-center.el-prismatic .bc-guardian-svg{filter:drop-shadow(0 0 28px rgba(200,127,255,.5))}
+.guardian-aura-outer{stroke:#c8a84b;transition:stroke .4s}
+.bc-center.el-solar .guardian-aura-outer{stroke:#f7a73a}
+.bc-center.el-arc .guardian-aura-outer{stroke:#79d4f0}
+.bc-center.el-void .guardian-aura-outer{stroke:#a96fd6}
+.bc-center.el-stasis .guardian-aura-outer{stroke:#4d88ff}
+.bc-center.el-strand .guardian-aura-outer{stroke:#00c894}
+.bc-center.el-prismatic .guardian-aura-outer{stroke:#c87fff}
+.guardian-aura-inner{fill:#c8a84b;transition:fill .4s}
+.bc-center.el-solar .guardian-aura-inner{fill:#f7a73a}
+.bc-center.el-arc .guardian-aura-inner{fill:#79d4f0}
+.bc-center.el-void .guardian-aura-inner{fill:#a96fd6}
+.bc-center.el-stasis .guardian-aura-inner{fill:#4d88ff}
+.bc-center.el-strand .guardian-aura-inner{fill:#00c894}
+.bc-center.el-prismatic .guardian-aura-inner{fill:#c87fff}
 .bc-center.el-stasis .bc-guardian-svg{filter:drop-shadow(0 0 22px rgba(93,160,230,.45))}
 .bc-center.el-strand .bc-guardian-svg{filter:drop-shadow(0 0 22px rgba(76,203,110,.45))}
 
@@ -1066,6 +1083,94 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-panel-left::-webkit-scrollbar-thumb,.bc-panel-right::-webkit-scrollbar-thumb,#bc-list::-webkit-scrollbar-thumb{background:#2a2a3a}
 
 @media(max-width:900px){.bc-canvas{grid-template-columns:1fr}.bc-center{min-height:300px}.bc-panel-left,.bc-panel-right{max-height:400px}}
+
+/* ── CLASS BUTTONS ── */
+.bc-class-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bc-class-btns{display:flex;gap:6px}
+.bc-class-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 14px;background:#111;border:1px solid #2a2a3a;color:#666;cursor:pointer;transition:all .18s;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;min-width:64px}
+.bc-class-btn:hover{border-color:#888;color:#aaa;background:#181828}
+.bc-class-btn.titan.active{border-color:#c8a84b;color:#c8a84b;background:rgba(200,168,75,.08)}
+.bc-class-btn.hunter.active{border-color:#4ccb6e;color:#4ccb6e;background:rgba(76,203,110,.08)}
+.bc-class-btn.warlock.active{border-color:#a96fd6;color:#a96fd6;background:rgba(169,111,214,.08)}
+.bc-class-btn svg{opacity:.6;transition:opacity .18s}
+.bc-class-btn.active svg{opacity:1}
+
+/* ── SUBCLASS ELEMENT BUTTONS ── */
+.bc-sub-row{display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap}
+.bc-sub-btns{display:flex;gap:5px;flex-wrap:wrap}
+.bc-sub-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 10px;background:#111;border:1px solid #2a2a3a;color:#666;cursor:pointer;transition:all .18s;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase}
+.bc-sub-btn:hover{opacity:.8}
+.bc-sub-btn.active{color:#fff}
+.bc-sub-btn[data-el=solar]{border-color:#f7a73a44}
+.bc-sub-btn[data-el=solar]:hover,.bc-sub-btn[data-el=solar].active{border-color:#f7a73a;background:rgba(247,167,58,.12);color:#f7a73a}
+.bc-sub-btn[data-el=arc]{border-color:#79d4f044}
+.bc-sub-btn[data-el=arc]:hover,.bc-sub-btn[data-el=arc].active{border-color:#79d4f0;background:rgba(121,212,240,.10);color:#79d4f0}
+.bc-sub-btn[data-el=void]{border-color:#a96fd644}
+.bc-sub-btn[data-el=void]:hover,.bc-sub-btn[data-el=void].active{border-color:#a96fd6;background:rgba(169,111,214,.12);color:#a96fd6}
+.bc-sub-btn[data-el=stasis]{border-color:#4d88ff44}
+.bc-sub-btn[data-el=stasis]:hover,.bc-sub-btn[data-el=stasis].active{border-color:#4d88ff;background:rgba(77,136,255,.10);color:#4d88ff}
+.bc-sub-btn[data-el=strand]{border-color:#00c89444}
+.bc-sub-btn[data-el=strand]:hover,.bc-sub-btn[data-el=strand].active{border-color:#00c894;background:rgba(0,200,148,.10);color:#00c894}
+.bc-sub-btn[data-el=prismatic]{border-color:#c87fff44}
+.bc-sub-btn[data-el=prismatic]:hover,.bc-sub-btn[data-el=prismatic].active{border-color:#c87fff;background:linear-gradient(135deg,rgba(247,167,58,.08),rgba(169,111,214,.08));color:#c87fff}
+.bc-sub-btn .el-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── ABILITY SLOT BUTTONS ── */
+.bc-slot-btn{display:flex;align-items:center;gap:7px;padding:5px 8px;background:#111;border:1px solid #2a2a3a;color:#999;cursor:pointer;transition:all .15s;width:100%;text-align:left;font-size:.76rem;min-height:34px;position:relative}
+.bc-slot-btn:hover{border-color:#5a5a7a;background:#161620;color:#ccc}
+.bc-slot-btn.has-val{border-color:#3a3a5a;color:#ddd}
+.bc-slot-btn .slot-icon{width:26px;height:26px;border-radius:3px;object-fit:cover;flex-shrink:0;background:#0a0a15;border:1px solid #222}
+.bc-slot-btn .slot-icon.has-img{border:none;background:transparent}
+.bc-slot-btn .slot-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.74rem}
+.bc-slot-btn .slot-arr{color:#444;font-size:.6rem;flex-shrink:0;margin-left:auto}
+
+/* ── EQUIP IMAGE SLOT BUTTONS ── */
+.bc-equip-slot-btn{display:flex;align-items:center;gap:8px;padding:5px 8px;background:#111;border:1px solid #2a2a3a;color:#888;cursor:pointer;transition:all .15s;width:100%;text-align:left;min-height:38px}
+.bc-equip-slot-btn:hover{border-color:#5a6a8a;background:#161620;color:#ccc}
+.bc-equip-slot-btn.has-val{border-color:#3a4a6a}
+.bc-equip-slot-btn.exotic.has-val{border-color:#c8a84b}
+.bc-equip-slot-btn .equip-thumb{width:32px;height:32px;border-radius:3px;object-fit:cover;flex-shrink:0;background:#0a0a15;border:1px solid #1e1e2e}
+.bc-equip-slot-btn .equip-thumb.has-img{border:none}
+.bc-equip-slot-btn .equip-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.75rem}
+.bc-equip-slot-btn .equip-tag{font-size:.6rem;color:#c8a84b;flex-shrink:0}
+
+/* ── PICKER POPUP ── */
+#bc-picker-popup{position:fixed;z-index:9000;background:#0d0d18;border:1px solid #3a3a5a;box-shadow:0 8px 32px rgba(0,0,0,.7);min-width:260px;max-width:380px;max-height:380px;overflow:hidden;display:flex;flex-direction:column}
+#bc-picker-popup.hidden{display:none}
+.bc-pick-header{padding:8px 12px;background:#111;border-bottom:1px solid #2a2a3a;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:#888;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.bc-pick-search{background:#0a0a12;border:1px solid #2a2a3a;color:#ccc;padding:4px 8px;font-size:.75rem;width:100%;outline:none;flex-shrink:0}
+.bc-pick-search:focus{border-color:#4a4a7a}
+.bc-pick-list{overflow-y:auto;flex:1}
+.bc-pick-list::-webkit-scrollbar{width:4px}
+.bc-pick-list::-webkit-scrollbar-track{background:#0a0a12}
+.bc-pick-list::-webkit-scrollbar-thumb{background:#2a2a4a}
+.bc-pick-item{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;transition:background .12s;border-bottom:1px solid #141420}
+.bc-pick-item:hover,.bc-pick-item.focused{background:#1a1a2e}
+.bc-pick-item.selected{background:rgba(200,168,75,.08);border-left:2px solid #c8a84b}
+.bc-pick-item.selected:not(.eq-pick){padding-left:10px}
+.bc-pick-item .pi-img{width:32px;height:32px;border-radius:3px;object-fit:cover;flex-shrink:0;background:#0a0a15}
+.bc-pick-item .pi-name{flex:1;font-size:.76rem;color:#ccc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bc-pick-item .pi-tag{font-size:.6rem;color:#c8a84b;flex-shrink:0}
+.bc-pick-item .pi-type{font-size:.6rem;color:#666;flex-shrink:0}
+.bc-pick-overlay{position:fixed;inset:0;z-index:8999}
+
+/* ── GUARDIAN AURA ANIMATION ── */
+@keyframes aura-pulse{0%,100%{opacity:.6;r:85px}50%{opacity:.9;r:90px}}
+@keyframes aura-rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes guardian-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.guardian-aura{animation:aura-pulse 3s ease-in-out infinite}
+.bc-center.el-solar .guardian-aura{stroke:#f7a73a;fill:rgba(255,140,0,.10)}
+.bc-center.el-arc .guardian-aura{stroke:#79d4f0;fill:rgba(100,200,255,.08)}
+.bc-center.el-void .guardian-aura{stroke:#a96fd6;fill:rgba(140,80,200,.10)}
+.bc-center.el-stasis .guardian-aura{stroke:#4d88ff;fill:rgba(77,136,255,.08)}
+.bc-center.el-strand .guardian-aura{stroke:#00c894;fill:rgba(0,200,148,.08)}
+.bc-center.el-prismatic .guardian-aura{stroke:#c87fff;fill:rgba(200,127,255,.07)}
+#bc-guardian{animation:guardian-float 4s ease-in-out infinite}
+.bc-guardian-inner{transform-origin:100px 160px}
+
+/* ── TOP BAR REDESIGN ── */
+.bc-top-class-area{display:flex;flex-direction:column;gap:6px;flex:1}
+.bc-top-label{color:#666;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
 
 
 /* ════════════════ MANDATORY LOGIN SPLASH ════════════════ */
@@ -1490,25 +1595,38 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
   <!-- ── CREATOR VIEW ── -->
   <div id="bc-creator" class="bc-view active">
     <!-- Top bar -->
-    <div class="bc-creator-top">
-      <div style="display:flex;flex-direction:column;gap:2px">
+    <div class="bc-creator-top" style="flex-wrap:wrap;gap:14px">
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:160px">
         <label>Nombre</label>
         <input type="text" id="bc-name" placeholder="Mi Build..." maxlength="40">
       </div>
-      <div style="display:flex;flex-direction:column;gap:2px">
-        <label>Clase</label>
-        <select id="bc-class" class="bc-top-select" onchange="bcOnClassChange()">
-          <option value="">— Clase —</option>
-          <option value="Titán">Titán</option>
-          <option value="Cazador">Cazador</option>
-          <option value="Hechicero">Hechicero</option>
-        </select>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:2px">
-        <label>Subclase</label>
-        <select id="bc-sub" class="bc-top-select" onchange="bcOnSubChange()">
-          <option value="">— Subclase —</option>
-        </select>
+      <div class="bc-top-class-area">
+        <!-- Class row -->
+        <div class="bc-class-row">
+          <span class="bc-top-label">Clase</span>
+          <div class="bc-class-btns">
+            <button class="bc-class-btn titan" onclick="bcSelectClass('Titán',this)" title="Titán">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="14" width="8" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><line x1="4" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1"/></svg>
+              <span>Titán</span>
+            </button>
+            <button class="bc-class-btn hunter" onclick="bcSelectClass('Cazador',this)" title="Cazador">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><ellipse cx="11" cy="8" rx="5" ry="5" stroke="currentColor" stroke-width="1.5"/><path d="M4,18 Q7,13 11,12 Q15,13 18,18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6,8 Q4,6 5,4" stroke="currentColor" stroke-width="1" fill="none"/><path d="M16,8 Q18,6 17,4" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+              <span>Cazador</span>
+            </button>
+            <button class="bc-class-btn warlock" onclick="bcSelectClass('Hechicero',this)" title="Hechicero">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M5,18 C5,14 17,14 17,18" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="17" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="21" cy="10" r="1.5" fill="currentColor"/></svg>
+              <span>Hechicero</span>
+            </button>
+          </div>
+        </div>
+        <!-- Subclass row -->
+        <div class="bc-sub-row" id="bc-sub-row" style="opacity:.35;pointer-events:none">
+          <span class="bc-top-label">Subclase</span>
+          <div class="bc-sub-btns" id="bc-sub-btns"></div>
+        </div>
+        <!-- Hidden inputs for value storage -->
+        <input type="hidden" id="bc-class" value="">
+        <input type="hidden" id="bc-sub" value="">
       </div>
     </div>
 
@@ -1524,23 +1642,48 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
         <div class="bc-ability-row">
           <div class="bc-ability-label">Super</div>
-          <select id="bc-super" class="bc-ability-select"><option value="">— Selecciona clase —</option></select>
+          <button class="bc-slot-btn" id="btn-bc-super" onclick="bcPickAbility('bc-super','Súper',this)" disabled>
+            <span class="slot-icon" id="icon-bc-super" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-super">— Selecciona clase —</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-super" value="">
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Melee</div>
-          <select id="bc-melee" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-melee" onclick="bcPickAbility('bc-melee','Melee',this)" disabled>
+            <span class="slot-icon" id="icon-bc-melee" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-melee">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-melee" value="">
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Granada</div>
-          <select id="bc-grenade" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-grenade" onclick="bcPickAbility('bc-grenade','Granada',this)" disabled>
+            <span class="slot-icon" id="icon-bc-grenade" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-grenade">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-grenade" value="">
         </div>
         <div class="bc-ability-row">
-          <div class="bc-ability-label">Habilidad de Clase</div>
-          <select id="bc-class-ab" class="bc-ability-select"><option value="">—</option></select>
+          <div class="bc-ability-label">Hab. de Clase</div>
+          <button class="bc-slot-btn" id="btn-bc-class-ab" onclick="bcPickAbility('bc-class-ab','Habilidad de Clase',this)" disabled>
+            <span class="slot-icon" id="icon-bc-class-ab" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-class-ab">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-class-ab" value="">
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Movimiento</div>
-          <select id="bc-movement" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-movement" onclick="bcPickAbility('bc-movement','Movimiento',this)" disabled>
+            <span class="slot-icon" id="icon-bc-movement" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-movement">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-movement" value="">
         </div>
 
         <div class="bc-section-title" style="margin-top:4px">
@@ -1549,11 +1692,21 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Aspecto 1</div>
-          <select id="bc-aspect1" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-aspect1" onclick="bcPickAbility('bc-aspect1','Aspecto 1',this)" disabled>
+            <span class="slot-icon" id="icon-bc-aspect1" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-aspect1">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-aspect1" value="">
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Aspecto 2</div>
-          <select id="bc-aspect2" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-aspect2" onclick="bcPickAbility('bc-aspect2','Aspecto 2',this)" disabled>
+            <span class="slot-icon" id="icon-bc-aspect2" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-aspect2">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-aspect2" value="">
         </div>
 
         <div class="bc-section-title" style="margin-top:4px">
@@ -1562,19 +1715,39 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Fragmento 1</div>
-          <select id="bc-frag1" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-frag1" onclick="bcPickAbility('bc-frag1','Fragmento 1',this)" disabled>
+            <span class="slot-icon" id="icon-bc-frag1" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-frag1">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-frag1" value="">
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Fragmento 2</div>
-          <select id="bc-frag2" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-frag2" onclick="bcPickAbility('bc-frag2','Fragmento 2',this)" disabled>
+            <span class="slot-icon" id="icon-bc-frag2" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-frag2">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-frag2" value="">
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Fragmento 3</div>
-          <select id="bc-frag3" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-frag3" onclick="bcPickAbility('bc-frag3','Fragmento 3',this)" disabled>
+            <span class="slot-icon" id="icon-bc-frag3" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-frag3">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-frag3" value="">
         </div>
         <div class="bc-ability-row">
           <div class="bc-ability-label">Fragmento 4</div>
-          <select id="bc-frag4" class="bc-ability-select"><option value="">—</option></select>
+          <button class="bc-slot-btn" id="btn-bc-frag4" onclick="bcPickAbility('bc-frag4','Fragmento 4',this)" disabled>
+            <span class="slot-icon" id="icon-bc-frag4" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:10px">⬡</span>
+            <span class="slot-text" id="text-bc-frag4">—</span>
+            <span class="slot-arr">▾</span>
+          </button>
+          <input type="hidden" id="bc-frag4" value="">
         </div>
 
         <div class="bc-section-title" style="margin-top:4px">
@@ -1599,8 +1772,12 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
       <div class="bc-center" id="bc-center-stage">
         <!-- Guardian SVG -->
         <svg class="bc-guardian-svg" id="bc-guardian" width="200" height="320" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer glow ring -->
+          <ellipse class="guardian-aura-outer" cx="100" cy="200" rx="90" ry="115" fill="none" stroke-width="1" stroke-dasharray="8 6" opacity=".3" style="animation:aura-rotate 12s linear infinite;transform-origin:100px 200px"/>
           <!-- Aura -->
-          <ellipse class="guardian-aura" cx="100" cy="200" rx="85" ry="110"/>
+          <ellipse class="guardian-aura" cx="100" cy="200" rx="82" ry="108"/>
+          <!-- Inner light -->
+          <ellipse cx="100" cy="200" rx="50" ry="70" fill="none" class="guardian-aura-inner" opacity=".12"/>
 
           <!-- Titan silhouette -->
           <g id="guardian-titan" style="display:none">
@@ -1731,15 +1908,30 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
         <div class="bc-equip-row">
           <div class="bc-equip-label"><span class="bc-ammo-dot ammo-primary"></span>Primaria</div>
-          <select id="bc-w1" class="bc-equip-select"><option value="">— Arma primaria —</option></select>
+          <button class="bc-equip-slot-btn" id="btn-bc-w1" onclick="bcPickWeapon('bc-w1','primary',this)">
+            <img class="equip-thumb" id="img-bc-w1" src="" onerror="this.style.display='none'">
+            <span class="equip-name" id="name-bc-w1">— Arma primaria —</span>
+            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+          </button>
+          <input type="hidden" id="bc-w1" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label"><span class="bc-ammo-dot ammo-special"></span>Especial</div>
-          <select id="bc-w2" class="bc-equip-select"><option value="">— Arma especial —</option></select>
+          <button class="bc-equip-slot-btn" id="btn-bc-w2" onclick="bcPickWeapon('bc-w2','special',this)">
+            <img class="equip-thumb" id="img-bc-w2" src="" onerror="this.style.display='none'">
+            <span class="equip-name" id="name-bc-w2">— Arma especial —</span>
+            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+          </button>
+          <input type="hidden" id="bc-w2" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</div>
-          <select id="bc-w3" class="bc-equip-select"><option value="">— Arma pesada —</option></select>
+          <button class="bc-equip-slot-btn" id="btn-bc-w3" onclick="bcPickWeapon('bc-w3','heavy',this)">
+            <img class="equip-thumb" id="img-bc-w3" src="" onerror="this.style.display='none'">
+            <span class="equip-name" id="name-bc-w3">— Arma pesada —</span>
+            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+          </button>
+          <input type="hidden" id="bc-w3" value="">
         </div>
 
         <div class="bc-section-title" style="margin-top:8px">
@@ -1749,23 +1941,48 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 
         <div class="bc-equip-row">
           <div class="bc-equip-label">Casco</div>
-          <select id="bc-a-helm" class="bc-equip-select"><option value="">— Casco —</option></select>
+          <button class="bc-equip-slot-btn" id="btn-bc-a-helm" onclick="bcPickArmor('bc-a-helm','Casco',this)">
+            <img class="equip-thumb" id="img-bc-a-helm" src="" onerror="this.style.display='none'">
+            <span class="equip-name" id="name-bc-a-helm">— Casco —</span>
+            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+          </button>
+          <input type="hidden" id="bc-a-helm" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label">Brazos</div>
-          <select id="bc-a-arms" class="bc-equip-select"><option value="">— Brazos —</option></select>
+          <button class="bc-equip-slot-btn" id="btn-bc-a-arms" onclick="bcPickArmor('bc-a-arms','Brazos',this)">
+            <img class="equip-thumb" id="img-bc-a-arms" src="" onerror="this.style.display='none'">
+            <span class="equip-name" id="name-bc-a-arms">— Brazos —</span>
+            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+          </button>
+          <input type="hidden" id="bc-a-arms" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label">Pecho</div>
-          <select id="bc-a-chest" class="bc-equip-select"><option value="">— Pecho —</option></select>
+          <button class="bc-equip-slot-btn" id="btn-bc-a-chest" onclick="bcPickArmor('bc-a-chest','Pecho',this)">
+            <img class="equip-thumb" id="img-bc-a-chest" src="" onerror="this.style.display='none'">
+            <span class="equip-name" id="name-bc-a-chest">— Pecho —</span>
+            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+          </button>
+          <input type="hidden" id="bc-a-chest" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label">Piernas</div>
-          <select id="bc-a-legs" class="bc-equip-select"><option value="">— Piernas —</option></select>
+          <button class="bc-equip-slot-btn" id="btn-bc-a-legs" onclick="bcPickArmor('bc-a-legs','Piernas',this)">
+            <img class="equip-thumb" id="img-bc-a-legs" src="" onerror="this.style.display='none'">
+            <span class="equip-name" id="name-bc-a-legs">— Piernas —</span>
+            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+          </button>
+          <input type="hidden" id="bc-a-legs" value="">
         </div>
         <div class="bc-equip-row">
           <div class="bc-equip-label">Ítem de Clase</div>
-          <select id="bc-a-class" class="bc-equip-select"><option value="">— Ítem de Clase —</option></select>
+          <button class="bc-equip-slot-btn" id="btn-bc-a-class" onclick="bcPickArmor('bc-a-class','Ítem de Clase',this)">
+            <img class="equip-thumb" id="img-bc-a-class" src="" onerror="this.style.display='none'">
+            <span class="equip-name" id="name-bc-a-class">— Ítem de Clase —</span>
+            <span class="slot-arr" style="color:#444;font-size:.6rem">▾</span>
+          </button>
+          <input type="hidden" id="bc-a-class" value="">
         </div>
 
         <div class="bc-section-title" style="margin-top:8px">
@@ -1778,6 +1995,18 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
         </div>
       </div>
     </div><!-- /bc-canvas -->
+
+    <!-- Picker popup (shared) -->
+    <div id="bc-picker-popup" class="hidden">
+      <div class="bc-pick-header">
+        <span id="bc-pick-title">Seleccionar</span>
+        <span onclick="bcClosePicker()" style="cursor:pointer;color:#555;font-size:.8rem">✕</span>
+      </div>
+      <input class="bc-pick-search" id="bc-pick-search" placeholder="Buscar..." oninput="bcFilterPicker(this.value)">
+      <div class="bc-pick-list" id="bc-pick-list"></div>
+    </div>
+    <div id="bc-pick-overlay" class="bc-pick-overlay" style="display:none" onclick="bcClosePicker()"></div>
+
   </div><!-- /bc-creator -->
 
   <!-- ── LIST VIEW ── -->
@@ -8041,7 +8270,7 @@ const ARMOR_BY_CLASS = {
 
 const ELEMENT_COLORS = {
   solar:'#f7a73a', arc:'#79d4f0', void:'#a96fd6',
-  stasis:'#5da0e6', strand:'#4ccb6e', prismatic:'#c8a84b'
+  stasis:'#4d88ff', strand:'#00c894', prismatic:'#c87fff'
 };
 
 let _buildsDb = [];
@@ -8062,24 +8291,57 @@ function bcSwitchView(view, btn){
   if(view==='list') bcRenderList();
 }
 
-function bcOnClassChange(){
-  const cls = document.getElementById('bc-class').value;
-  const subSel = document.getElementById('bc-sub');
-  subSel.innerHTML = '<option value="">— Subclase —</option>';
-  if(!cls || !SUBCLASS_DATA[cls]) return;
-  Object.keys(SUBCLASS_DATA[cls]).forEach(sub=>{
-    const o = document.createElement('option');
-    o.value = sub; o.textContent = sub;
-    subSel.appendChild(o);
-  });
+// ── ELEMENT ICON SVGs ──
+const ELEMENT_ICONS = {
+  solar: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="3" fill="currentColor"/><line x1="7" y1="1" x2="7" y2="2.5" stroke="currentColor" stroke-width="1.2"/><line x1="7" y1="11.5" x2="7" y2="13" stroke="currentColor" stroke-width="1.2"/><line x1="1" y1="7" x2="2.5" y2="7" stroke="currentColor" stroke-width="1.2"/><line x1="11.5" y1="7" x2="13" y2="7" stroke="currentColor" stroke-width="1.2"/><line x1="2.93" y1="2.93" x2="4.06" y2="4.06" stroke="currentColor" stroke-width="1.2"/><line x1="9.94" y1="9.94" x2="11.07" y2="11.07" stroke="currentColor" stroke-width="1.2"/><line x1="11.07" y1="2.93" x2="9.94" y2="4.06" stroke="currentColor" stroke-width="1.2"/><line x1="4.06" y1="9.94" x2="2.93" y2="11.07" stroke="currentColor" stroke-width="1.2"/></svg>',
+  arc:   '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M8,1 L4,7.5 L7,7.5 L6,13 L10,6.5 L7,6.5 Z" fill="currentColor"/></svg>',
+  void:  '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>',
+  stasis:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="1" x2="7" y2="13" stroke="currentColor" stroke-width="1.2"/><line x1="1" y1="7" x2="13" y2="7" stroke="currentColor" stroke-width="1.2"/><line x1="2.93" y1="2.93" x2="11.07" y2="11.07" stroke="currentColor" stroke-width="1.2"/><line x1="11.07" y1="2.93" x2="2.93" y2="11.07" stroke="currentColor" stroke-width="1.2"/></svg>',
+  strand:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2,4 Q7,1 12,4 Q7,7 2,10 Q7,13 12,10" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>',
+  prismatic:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="7,1 13,10 1,10" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="7" y1="1" x2="7" y2="10" stroke="currentColor" stroke-width=".8" opacity=".5"/></svg>'
+};
+
+// Slot picker data store: slotId → array of option values
+const _bcSlotData = {};
+
+function bcSelectClass(cls, btn){
+  document.getElementById('bc-class').value = cls;
+  // Update button states
+  document.querySelectorAll('.bc-class-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  // Reset subclass
+  document.getElementById('bc-sub').value = '';
+  const subRow = document.getElementById('bc-sub-row');
+  const subBtns = document.getElementById('bc-sub-btns');
+  subBtns.innerHTML = '';
+  if(cls && SUBCLASS_DATA[cls]){
+    const elMap = {Solar:'solar',Arco:'arc',Vacío:'void',Estasis:'stasis',Cuerdas:'strand',Prismático:'prismatic'};
+    Object.keys(SUBCLASS_DATA[cls]).forEach(sub=>{
+      const el = SUBCLASS_DATA[cls][sub].element || elMap[sub] || 'solar';
+      const b = document.createElement('button');
+      b.className = 'bc-sub-btn';
+      b.setAttribute('data-el', el);
+      b.setAttribute('data-val', sub);
+      b.innerHTML = `<span class="el-dot" style="background:${ELEMENT_COLORS[el]||'#888'}"></span>${sub}`;
+      b.onclick = function(){ bcSelectSub(sub, this); };
+      subBtns.appendChild(b);
+    });
+    subRow.style.opacity = '1';
+    subRow.style.pointerEvents = 'auto';
+  } else {
+    subRow.style.opacity = '.35';
+    subRow.style.pointerEvents = 'none';
+  }
   bcUpdateGuardian();
   bcClearAbilities();
   bcUpdateArmorDropdowns();
 }
 
-function bcOnSubChange(){
+function bcSelectSub(sub, btn){
+  document.getElementById('bc-sub').value = sub;
+  document.querySelectorAll('.bc-sub-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
   const cls = document.getElementById('bc-class').value;
-  const sub = document.getElementById('bc-sub').value;
   bcClearAbilities();
   bcUpdateGuardian();
   if(!cls||!sub) return;
@@ -8089,33 +8351,65 @@ function bcOnSubChange(){
   center.className = 'bc-center el-' + d.element;
   document.getElementById('bc-element-label').textContent = sub;
   document.getElementById('bc-element-label').style.color = ELEMENT_COLORS[d.element]||'#888';
-  bcFillSelect('bc-super', d.supers);
-  bcFillSelect('bc-melee', d.melees);
-  bcFillSelect('bc-grenade', d.grenades);
-  bcFillSelect('bc-class-ab', d.classAbility);
-  bcFillSelect('bc-movement', d.movement);
-  bcFillSelect('bc-aspect1', d.aspects);
-  bcFillSelect('bc-aspect2', d.aspects);
-  bcFillSelect('bc-frag1', d.fragments);
-  bcFillSelect('bc-frag2', d.fragments);
-  bcFillSelect('bc-frag3', d.fragments);
-  bcFillSelect('bc-frag4', d.fragments);
+  // Populate slot data
+  bcFillSlot('bc-super', d.supers);
+  bcFillSlot('bc-melee', d.melees);
+  bcFillSlot('bc-grenade', d.grenades);
+  bcFillSlot('bc-class-ab', d.classAbility);
+  bcFillSlot('bc-movement', d.movement);
+  bcFillSlot('bc-aspect1', d.aspects);
+  bcFillSlot('bc-aspect2', d.aspects);
+  bcFillSlot('bc-frag1', d.fragments);
+  bcFillSlot('bc-frag2', d.fragments);
+  bcFillSlot('bc-frag3', d.fragments);
+  bcFillSlot('bc-frag4', d.fragments);
+}
+
+// Compatibility shims for old code that calls bcOnClassChange/bcOnSubChange
+function bcOnClassChange(){
+  const cls = document.getElementById('bc-class').value;
+  // Find matching class button
+  const btn = document.querySelector(`.bc-class-btn[title="${cls==='Titán'?'Titán':cls==='Cazador'?'Cazador':'Hechicero'}"]`);
+  bcSelectClass(cls, btn);
+}
+function bcOnSubChange(){
+  const sub = document.getElementById('bc-sub').value;
+  const btn = document.querySelector(`.bc-sub-btn[data-val="${sub}"]`);
+  bcSelectSub(sub, btn);
+}
+
+function bcFillSlot(id, arr){
+  _bcSlotData[id] = arr || [];
+  const btn = document.getElementById('btn-' + id);
+  if(btn){ btn.disabled = false; btn.style.opacity = '1'; }
+  // If current value no longer in options, clear it
+  const hidIn = document.getElementById(id);
+  if(hidIn && hidIn.value && arr && !arr.includes(hidIn.value)){
+    bcClearSlot(id);
+  }
 }
 
 function bcFillSelect(id, arr){
-  const sel = document.getElementById(id);
-  if(!sel) return;
-  const prev = sel.value;
-  sel.innerHTML = '<option value="">—</option>';
-  (arr||[]).forEach(v=>{ const o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o); });
-  if(prev && arr && arr.includes(prev)) sel.value = prev;
+  // Kept as shim — just calls bcFillSlot
+  bcFillSlot(id, arr);
+}
+
+function bcClearSlot(id){
+  const hidIn = document.getElementById(id);
+  if(hidIn) hidIn.value = '';
+  const txt = document.getElementById('text-'+id);
+  if(txt){ txt.textContent = '—'; txt.style.color=''; }
+  const icon = document.getElementById('icon-'+id);
+  if(icon){ icon.innerHTML='<span style="color:#333;font-size:10px">⬡</span>'; }
+  const btn = document.getElementById('btn-'+id);
+  if(btn){ btn.classList.remove('has-val'); btn.disabled = !(_bcSlotData[id]?.length); }
 }
 
 function bcClearAbilities(){
   ['bc-super','bc-melee','bc-grenade','bc-class-ab','bc-movement',
    'bc-aspect1','bc-aspect2','bc-frag1','bc-frag2','bc-frag3','bc-frag4'].forEach(id=>{
-    const s = document.getElementById(id);
-    if(s){ s.innerHTML='<option value="">—</option>'; }
+    _bcSlotData[id] = [];
+    bcClearSlot(id);
   });
 }
 
@@ -8131,49 +8425,176 @@ function bcUpdateGuardian(){
   }
 }
 
-function bcPopulateWeapons(){
-  const w1=document.getElementById('bc-w1'), w2=document.getElementById('bc-w2'), w3=document.getElementById('bc-w3');
-  if(!w1||!w2||!w3) return;
-  w1.innerHTML='<option value="">— Arma primaria —</option>';
-  w2.innerHTML='<option value="">— Arma especial —</option>';
-  w3.innerHTML='<option value="">— Arma pesada —</option>';
-  if(typeof WEAPONS !== 'undefined'){
-    WEAPONS.forEach(wp=>{
-      const o=document.createElement('option');
-      o.value=wp.n; o.textContent=(wp.e?'★ ':'')+wp.n+' ('+wp.t+')';
-      if(typeof AMMO_PRIMARY!=='undefined' && AMMO_PRIMARY.has(wp.t)) w1.appendChild(o.cloneNode(true));
-      else if(typeof AMMO_SPECIAL!=='undefined' && AMMO_SPECIAL.has(wp.t)) w2.appendChild(o.cloneNode(true));
-      else if(typeof AMMO_HEAVY!=='undefined' && AMMO_HEAVY.has(wp.t)) w3.appendChild(o.cloneNode(true));
-      else w1.appendChild(o.cloneNode(true));
+// ── PICKER POPUP ──
+let _bcPickerTarget = null;
+let _bcPickerItems = [];
+let _bcPickerCallback = null;
+
+function bcOpenPicker(targetId, title, items, onSelect){
+  _bcPickerTarget = targetId;
+  _bcPickerItems = items;
+  _bcPickerCallback = onSelect;
+  const popup = document.getElementById('bc-picker-popup');
+  const overlay = document.getElementById('bc-pick-overlay');
+  const titleEl = document.getElementById('bc-pick-title');
+  const searchEl = document.getElementById('bc-pick-search');
+  const listEl = document.getElementById('bc-pick-list');
+  if(!popup) return;
+  titleEl.textContent = title;
+  searchEl.value = '';
+  popup.classList.remove('hidden');
+  overlay.style.display = 'block';
+  // Position near trigger button
+  const triggerBtn = document.getElementById('btn-'+targetId) || document.getElementById('btn-bc-'+targetId.replace('bc-',''));
+  if(triggerBtn){
+    const rect = triggerBtn.getBoundingClientRect();
+    const popW = 320;
+    let left = rect.left;
+    if(left + popW > window.innerWidth) left = window.innerWidth - popW - 8;
+    if(left < 4) left = 4;
+    let top = rect.bottom + 4;
+    if(top + 360 > window.innerHeight) top = rect.top - 364;
+    popup.style.left = left + 'px';
+    popup.style.top = top + 'px';
+    popup.style.width = Math.min(popW, window.innerWidth - 16) + 'px';
+  }
+  bcRenderPickerList(items, document.getElementById(targetId)?.value || '');
+  searchEl.focus();
+}
+
+function bcRenderPickerList(items, currentVal){
+  const listEl = document.getElementById('bc-pick-list');
+  if(!listEl) return;
+  const curHid = document.getElementById(_bcPickerTarget);
+  const curVal = curHid?.value || currentVal;
+  listEl.innerHTML = '';
+  // Clear option
+  const clearItem = document.createElement('div');
+  clearItem.className = 'bc-pick-item' + (curVal===''?' selected':'');
+  clearItem.innerHTML = '<span class="pi-name" style="color:#555;font-style:italic">— Ninguno —</span>';
+  clearItem.onclick = ()=>{ bcPickerSelect('',''); };
+  listEl.appendChild(clearItem);
+  items.forEach(item=>{
+    const val = typeof item === 'string' ? item : item.val;
+    const label = typeof item === 'string' ? item : item.label;
+    const icon = typeof item === 'object' ? item.icon : null;
+    const tag = typeof item === 'object' ? item.tag : null;
+    const el = document.createElement('div');
+    el.className = 'bc-pick-item eq-pick' + (val===curVal?' selected':'');
+    let imgHtml = '';
+    if(icon) imgHtml = `<img class="pi-img" src="${icon}" onerror="this.style.display='none'">`;
+    else imgHtml = `<span class="pi-img" style="display:flex;align-items:center;justify-content:center;background:#0a0a15;border:1px solid #1e1e2e;color:#444;font-size:10px;border-radius:3px">⬡</span>`;
+    el.innerHTML = `${imgHtml}<span class="pi-name">${label}</span>${tag?`<span class="pi-tag">${tag}</span>`:''}`;
+    el.onclick = ()=>{ bcPickerSelect(val, label, icon, tag); };
+    listEl.appendChild(el);
+  });
+}
+
+function bcFilterPicker(q){
+  const items = q ? _bcPickerItems.filter(item=>{
+    const label = typeof item === 'string' ? item : item.label;
+    return label.toLowerCase().includes(q.toLowerCase());
+  }) : _bcPickerItems;
+  bcRenderPickerList(items, '');
+}
+
+function bcPickerSelect(val, label, icon, tag){
+  if(_bcPickerTarget){
+    const hidIn = document.getElementById(_bcPickerTarget);
+    if(hidIn) hidIn.value = val;
+    // Update slot button display
+    const txtEl = document.getElementById('text-'+_bcPickerTarget);
+    const iconEl = document.getElementById('icon-'+_bcPickerTarget);
+    const btn = document.getElementById('btn-'+_bcPickerTarget);
+    if(txtEl){ txtEl.textContent = val || '—'; }
+    if(iconEl){
+      if(icon) iconEl.innerHTML = `<img src="${icon}" style="width:26px;height:26px;border-radius:3px;object-fit:cover;" onerror="this.innerHTML='⬡'">`;
+      else iconEl.innerHTML = val ? `<span style="font-size:9px;color:#888;overflow:hidden;text-overflow:ellipsis;display:block;width:26px;text-align:center">${val.slice(0,3)}</span>` : '<span style="color:#333;font-size:10px">⬡</span>';
+    }
+    if(btn){ if(val) btn.classList.add('has-val'); else btn.classList.remove('has-val'); }
+    // For equip slots (weapon/armor)
+    const imgEl = document.getElementById('img-'+_bcPickerTarget);
+    const nameEl = document.getElementById('name-'+_bcPickerTarget);
+    if(imgEl){
+      if(icon){ imgEl.src=icon; imgEl.style.display=''; imgEl.classList.add('has-img'); }
+      else { imgEl.src=''; imgEl.style.display='none'; imgEl.classList.remove('has-img'); }
+    }
+    if(nameEl) nameEl.textContent = val || '—';
+    if(btn && val && tag==='★') btn.classList.add('exotic');
+    else if(btn) btn.classList.remove('exotic');
+    if(_bcPickerCallback) _bcPickerCallback(val, label, icon, tag);
+  }
+  bcClosePicker();
+}
+
+function bcClosePicker(){
+  const popup = document.getElementById('bc-picker-popup');
+  const overlay = document.getElementById('bc-pick-overlay');
+  if(popup) popup.classList.add('hidden');
+  if(overlay) overlay.style.display='none';
+  _bcPickerTarget = null;
+}
+
+// ── ABILITY PICKER ──
+function bcPickAbility(id, title, btn){
+  const items = _bcSlotData[id] || [];
+  if(!items.length) return;
+  bcOpenPicker(id, title, items, null);
+}
+
+// ── WEAPON PICKER ──
+const AMMO_PRIMARY = new Set(['Hand Cannon','Auto Rifle','Scout Rifle','Pulse Rifle','Sidearm','Submachine Gun','Bow','Glaive','Trace Rifle']);
+const AMMO_SPECIAL = new Set(['Shotgun','Sniper Rifle','Fusion Rifle','Grenade Launcher','Trace Rifle','Glaive']);
+const AMMO_HEAVY   = new Set(['Rocket Launcher','Linear Fusion Rifle','Machine Gun','Sword','Heavy Grenade Launcher']);
+
+function bcPickWeapon(slotId, ammoType, btn){
+  if(typeof WEAPONS === 'undefined') return;
+  const items = [];
+  WEAPONS.forEach(wp=>{
+    let slot;
+    if(AMMO_HEAVY.has(wp.t)) slot='heavy';
+    else if(AMMO_SPECIAL.has(wp.t)) slot='special';
+    else slot='primary';
+    if(slot !== ammoType) return;
+    const ekey = (wp.e||wp.n||'').toLowerCase();
+    const icon = iconMap[ekey]?.icon || '';
+    items.push({ val: wp.n, label: (iconMap[ekey]?.es||wp.n), icon, tag: wp.e?'★':'' });
+  });
+  items.sort((a,b)=>{ if(a.tag&&!b.tag) return -1; if(!a.tag&&b.tag) return 1; return a.label.localeCompare(b.label); });
+  bcOpenPicker(slotId, {primary:'Primaria',special:'Especial',heavy:'Pesada'}[ammoType]||'Arma', items, null);
+}
+
+// ── ARMOR PICKER ──
+function bcPickArmor(slotId, slotLabel, btn){
+  const cls = document.getElementById('bc-class').value;
+  const items = [];
+  if(typeof EXOTIC_ARMOR !== 'undefined'){
+    EXOTIC_ARMOR.filter(a=>(!cls||a.class===cls) && a.slot===slotLabel).forEach(a=>{
+      const ekey = (a.e||a.n||'').toLowerCase();
+      const icon = iconMap[ekey]?.icon || '';
+      items.push({ val:a.n, label:a.n, icon, tag:'★' });
     });
   }
+  if(typeof ARMOR_BY_CLASS !== 'undefined' && cls && ARMOR_BY_CLASS[cls]){
+    const slotKey = {Casco:'Casco',Brazos:'Brazos',Pecho:'Pecho',Piernas:'Piernas','Ítem de Clase':'Ítem de Clase'}[slotLabel]||slotLabel;
+    const pieces = ARMOR_BY_CLASS[cls][slotKey] || [];
+    pieces.forEach(p=>{
+      const nm = (p.n||p.name||'').toLowerCase();
+      const icon = iconMap['es:'+nm]?.icon || iconMap[nm]?.icon || '';
+      items.push({ val:p.n||p.name, label:p.n||p.name, icon, tag:'' });
+    });
+  }
+  bcOpenPicker(slotId, slotLabel, items, null);
+}
+
+function bcPopulateWeapons(){
+  // Weapon slots now use image pickers — no hidden selects to fill at startup
+  // Buttons are always enabled
 }
 
 function bcUpdateArmorDropdowns(){
-  const cls = document.getElementById('bc-class').value;
-  const slots = ['Helm','Arms','Chest','Legs','Class'];
-  const slotMap = {Helm:'Casco',Arms:'Brazos',Chest:'Pecho',Legs:'Piernas',Class:'Ítem de Clase'};
-  const destinySlot = {Helm:'Casco',Arms:'Brazos',Chest:'Pecho',Legs:'Piernas',Class:'Ítem de Clase'};
-  slots.forEach(sl=>{
-    const sel = document.getElementById('bc-a-'+sl.toLowerCase());
-    if(!sel) return;
-    sel.innerHTML = '<option value="">— '+slotMap[sl]+' —</option>';
-    if(!cls) return;
-    if(typeof EXOTIC_ARMOR !== 'undefined'){
-      EXOTIC_ARMOR.filter(a=>a.class===cls && a.slot===destinySlot[sl]).forEach(a=>{
-        const o=document.createElement('option'); o.value=a.n; o.textContent='★ '+a.n; sel.appendChild(o);
-      });
-    }
-    if(typeof ARMOR_SETS !== 'undefined'){
-      ARMOR_SETS.forEach(set=>{
-        const pieces = set.pieces ? set.pieces.filter(p=>p.slot===destinySlot[sl] && (!p.class||p.class===cls)) : [];
-        pieces.forEach(p=>{ const o=document.createElement('option'); o.value=p.name||p.n||set.name; o.textContent=(p.name||p.n||set.name)+' ('+set.name+')'; sel.appendChild(o); });
-        if(!pieces.length && set.slots && set.slots.includes(destinySlot[sl])){
-          const o=document.createElement('option'); o.value=set.name+' '+destinySlot[sl]; o.textContent=set.name+' — '+destinySlot[sl]; sel.appendChild(o);
-        }
-      });
-    }
-  });
+  // Armor slots now use image pickers — nothing to pre-fill
+  // The picker is populated dynamically when the user clicks the slot button
 }
 
 function bcUpdateBar(stat){
@@ -8185,13 +8606,27 @@ function bcUpdateBar(stat){
 function bcResetCreator(){
   document.getElementById('bc-name').value='';
   document.getElementById('bc-class').value='';
-  document.getElementById('bc-sub').innerHTML='<option value="">— Subclase —</option>';
+  document.getElementById('bc-sub').value='';
+  // Reset class buttons
+  document.querySelectorAll('.bc-class-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.bc-sub-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('bc-sub-btns').innerHTML='';
+  const subRow=document.getElementById('bc-sub-row');
+  if(subRow){subRow.style.opacity='.35';subRow.style.pointerEvents='none';}
   bcClearAbilities();
   bcUpdateGuardian();
   document.getElementById('bc-center-stage').className='bc-center';
   document.getElementById('bc-element-label').textContent='';
+  // Reset weapon/armor slots
   ['bc-w1','bc-w2','bc-w3','bc-a-helm','bc-a-arms','bc-a-chest','bc-a-legs','bc-a-class'].forEach(id=>{
-    const s=document.getElementById(id); if(s) s.selectedIndex=0;
+    const hidIn=document.getElementById(id); if(hidIn) hidIn.value='';
+    const nameEl=document.getElementById('name-'+id);
+    const imgEl=document.getElementById('img-'+id);
+    const btn=document.getElementById('btn-'+id);
+    const defaults={'bc-w1':'— Arma primaria —','bc-w2':'— Arma especial —','bc-w3':'— Arma pesada —','bc-a-helm':'— Casco —','bc-a-arms':'— Brazos —','bc-a-chest':'— Pecho —','bc-a-legs':'— Piernas —','bc-a-class':'— Ítem de Clase —'};
+    if(nameEl) nameEl.textContent=defaults[id]||'—';
+    if(imgEl){imgEl.src='';imgEl.style.display='none';}
+    if(btn){btn.classList.remove('has-val','exotic');}
   });
   ['mob','res','rec','dis','int','for'].forEach(k=>{
     const inp=document.getElementById('bc-stat-'+k);
@@ -8310,14 +8745,17 @@ function bcEditBuild(id){
     document.getElementById('bc-sub').value = b.sub||'';
     bcOnSubChange();
     setTimeout(()=>{
-      ['super','melee','grenade','frag1','frag2','frag3','frag4','aspect1','aspect2'].forEach(k=>{
-        const el=document.getElementById('bc-'+k); if(el&&b[k]) el.value=b[k];
+      // Restore ability slots
+      const abilityMap = {super:'super',melee:'melee',grenade:'grenade',frag1:'frag1',frag2:'frag2',frag3:'frag3',frag4:'frag4',aspect1:'aspect1',aspect2:'aspect2'};
+      Object.entries(abilityMap).forEach(([k,sid])=>{
+        if(b[k]) bcSetSlotFromSave('bc-'+sid, b[k]);
       });
-      const ca=document.getElementById('bc-class-ab'); if(ca&&b.classAb) ca.value=b.classAb;
-      const mv=document.getElementById('bc-movement'); if(mv&&b.movement) mv.value=b.movement;
-      ['w1','w2','w3'].forEach(k=>{ const s=document.getElementById('bc-'+k); if(s&&b[k]) s.value=b[k]; });
-      ['helm','arms','chest','legs'].forEach(k=>{ const s=document.getElementById('bc-a-'+k); if(s&&b[k]) s.value=b[k]; });
-      const ci=document.getElementById('bc-a-class'); if(ci&&b.classItem) ci.value=b.classItem;
+      if(b.classAb) bcSetSlotFromSave('bc-class-ab', b.classAb);
+      if(b.movement) bcSetSlotFromSave('bc-movement', b.movement);
+      // Restore weapon/armor slots
+      ['w1','w2','w3'].forEach(k=>{ if(b[k]) bcSetEquipFromSave('bc-'+k, b[k]); });
+      ['helm','arms','chest','legs'].forEach(k=>{ if(b[k]) bcSetEquipFromSave('bc-a-'+k, b[k]); });
+      if(b.classItem) bcSetEquipFromSave('bc-a-class', b.classItem);
       const notes=document.getElementById('bc-notes'); if(notes) notes.value=b.notes||'';
       const statsMap={mob:'mob',res:'res',rec:'rec',dis:'dis',int:'int',for:'for'};
       Object.entries(statsMap).forEach(([k,v])=>{
@@ -8329,6 +8767,29 @@ function bcEditBuild(id){
       bcSaveDb();
     },50);
   },50);
+}
+
+function bcSetSlotFromSave(id, val){
+  const hidIn = document.getElementById(id);
+  if(hidIn) hidIn.value = val;
+  const txtEl = document.getElementById('text-'+id);
+  if(txtEl){ txtEl.textContent = val; }
+  const btn = document.getElementById('btn-'+id);
+  if(btn && val) btn.classList.add('has-val');
+}
+
+function bcSetEquipFromSave(id, val){
+  const hidIn = document.getElementById(id);
+  if(hidIn) hidIn.value = val;
+  const nameEl = document.getElementById('name-'+id);
+  if(nameEl) nameEl.textContent = val;
+  // Try to find icon in iconMap
+  const ekey = val.toLowerCase();
+  const icon = iconMap[ekey]?.icon || iconMap['es:'+ekey]?.icon || '';
+  const imgEl = document.getElementById('img-'+id);
+  if(imgEl && icon){ imgEl.src=icon; imgEl.style.display=''; imgEl.classList.add('has-img'); }
+  const btn = document.getElementById('btn-'+id);
+  if(btn && val) btn.classList.add('has-val');
 }
 
 function bcDeleteBuild(id){
