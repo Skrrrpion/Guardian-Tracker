@@ -1151,6 +1151,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-class-btn.warlock.active{border-color:#a96fd6;color:#a96fd6;background:rgba(169,111,214,.08)}
 .bc-class-btn svg{opacity:.6;transition:opacity .18s}
 .bc-class-btn.active svg{opacity:1}
+.bc-class-btn img{opacity:.7;transition:opacity .18s;filter:drop-shadow(0 0 2px rgba(0,0,0,.8))}
+.bc-class-btn.active img{opacity:1}
 
 /* ── SUBCLASS ELEMENT BUTTONS ── */
 .bc-sub-row{display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap}
@@ -1197,18 +1199,22 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .bc-pick-header{padding:8px 12px;background:#111;border-bottom:1px solid #2a2a3a;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:#888;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .bc-pick-search{background:#0a0a12;border:1px solid #2a2a3a;color:#ccc;padding:4px 8px;font-size:.75rem;width:100%;outline:none;flex-shrink:0}
 .bc-pick-search:focus{border-color:#4a4a7a}
-.bc-pick-list{overflow-y:auto;flex:1;max-height:220px}
+.bc-pick-list{overflow-y:auto;max-height:320px;display:grid;grid-template-columns:repeat(6,1fr);gap:2px;padding:4px;align-content:start}
 .bc-pick-list::-webkit-scrollbar{width:4px}
 .bc-pick-list::-webkit-scrollbar-track{background:#0a0a12}
 .bc-pick-list::-webkit-scrollbar-thumb{background:#2a2a4a}
-.bc-pick-item{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;transition:background .12s;border-bottom:1px solid #141420}
-.bc-pick-item:hover,.bc-pick-item.focused{background:#1a1a2e}
-.bc-pick-item.selected{background:rgba(200,168,75,.08);border-left:2px solid #c8a84b}
-.bc-pick-item.selected:not(.eq-pick){padding-left:10px}
-.bc-pick-item .pi-img{width:32px;height:32px;border-radius:3px;object-fit:cover;flex-shrink:0;background:#0a0a15}
-.bc-pick-item .pi-name{flex:1;font-size:.76rem;color:#ccc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bc-pick-item .pi-tag{font-size:.6rem;color:#c8a84b;flex-shrink:0}
-.bc-pick-item .pi-type{font-size:.6rem;color:#666;flex-shrink:0}
+/* "Ninguno" clear row spans full width */
+.bc-pick-item:not(.eq-pick){grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:5px 8px;cursor:pointer;transition:background .12s;border-bottom:1px solid #1a1a2a;margin-bottom:2px}
+.bc-pick-item:not(.eq-pick):hover{background:#1a1a2e}
+/* Equip icon cells — icon only, name as tooltip */
+.bc-pick-item.eq-pick{display:flex;align-items:center;justify-content:center;padding:0;background:#0d0d1a;border:1px solid #1a1a28;cursor:pointer;height:54px;position:relative;transition:border-color .12s,background .12s}
+.bc-pick-item.eq-pick:hover{background:#1a1a2e;border-color:#3a3a5a}
+.bc-pick-item.eq-pick.selected{background:rgba(200,168,75,.15);border-color:#c8a84b;box-shadow:inset 0 0 0 1px #c8a84b}
+.bc-pick-item .pi-img{width:54px;height:54px;object-fit:cover;display:block}
+.bc-pick-item span.pi-img{display:flex;align-items:center;justify-content:center;background:#0a0a15;color:#333;font-size:14px;width:54px;height:54px}
+.bc-pick-item .pi-name{flex:1;font-size:.76rem;color:#555;font-style:italic}
+.bc-pick-item .pi-tag{position:absolute;top:1px;right:2px;font-size:8px;color:#c8a84b;line-height:1;pointer-events:none}
+.bc-pick-item .pi-type{display:none}
 .bc-pick-overlay{position:fixed;inset:0;z-index:8999}
 
 /* ── GUARDIAN AURA ANIMATION ── */
@@ -1684,15 +1690,18 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
           <span class="bc-top-label">Clase</span>
           <div class="bc-class-btns">
             <button class="bc-class-btn titan" onclick="bcSelectClass('Titán',this)" title="Titán">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="14" width="8" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><line x1="4" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1"/></svg>
+              <img id="class-icon-titan" src="" width="32" height="32" style="object-fit:contain;display:none" onerror="this.style.display='none'">
+              <svg id="class-svg-titan" width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="14" width="8" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><line x1="4" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1"/></svg>
               <span>Titán</span>
             </button>
             <button class="bc-class-btn hunter" onclick="bcSelectClass('Cazador',this)" title="Cazador">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><ellipse cx="11" cy="8" rx="5" ry="5" stroke="currentColor" stroke-width="1.5"/><path d="M4,18 Q7,13 11,12 Q15,13 18,18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6,8 Q4,6 5,4" stroke="currentColor" stroke-width="1" fill="none"/><path d="M16,8 Q18,6 17,4" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+              <img id="class-icon-hunter" src="" width="32" height="32" style="object-fit:contain;display:none" onerror="this.style.display='none'">
+              <svg id="class-svg-hunter" width="22" height="22" viewBox="0 0 22 22" fill="none"><ellipse cx="11" cy="8" rx="5" ry="5" stroke="currentColor" stroke-width="1.5"/><path d="M4,18 Q7,13 11,12 Q15,13 18,18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6,8 Q4,6 5,4" stroke="currentColor" stroke-width="1" fill="none"/><path d="M16,8 Q18,6 17,4" stroke="currentColor" stroke-width="1" fill="none"/></svg>
               <span>Cazador</span>
             </button>
             <button class="bc-class-btn warlock" onclick="bcSelectClass('Hechicero',this)" title="Hechicero">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M5,18 C5,14 17,14 17,18" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="17" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="21" cy="10" r="1.5" fill="currentColor"/></svg>
+              <img id="class-icon-warlock" src="" width="32" height="32" style="object-fit:contain;display:none" onerror="this.style.display='none'">
+              <svg id="class-svg-warlock" width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M5,18 C5,14 17,14 17,18" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="17" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="21" cy="10" r="1.5" fill="currentColor"/></svg>
               <span>Hechicero</span>
             </button>
           </div>
@@ -8384,7 +8393,7 @@ function bcOpenPicker(targetId, title, items, onSelect){
   const triggerBtn = document.getElementById('btn-'+targetId) || document.getElementById('btn-bc-'+targetId.replace('bc-',''));
   if(triggerBtn){
     const rect = triggerBtn.getBoundingClientRect();
-    const popW = 320;
+    const popW = 380;
     let left = rect.left;
     if(left + popW > window.innerWidth) left = window.innerWidth - popW - 8;
     if(left < 4) left = 4;
@@ -8417,10 +8426,11 @@ function bcRenderPickerList(items, currentVal){
     const tag = typeof item === 'object' ? item.tag : null;
     const el = document.createElement('div');
     el.className = 'bc-pick-item eq-pick' + (val===curVal?' selected':'');
+    el.title = label;
     let imgHtml = '';
-    if(icon) imgHtml = `<img class="pi-img" src="${icon}" onerror="this.style.display='none'">`;
-    else imgHtml = `<span class="pi-img" style="display:flex;align-items:center;justify-content:center;background:#0a0a15;border:1px solid #1e1e2e;color:#444;font-size:10px;border-radius:3px">⬡</span>`;
-    el.innerHTML = `${imgHtml}<span class="pi-name">${label}</span>${tag?`<span class="pi-tag">${tag}</span>`:''}`;
+    if(icon) imgHtml = `<img class="pi-img" src="${icon}" alt="${label}" onerror="this.style.display='none'">`;
+    else imgHtml = `<span class="pi-img">⬡</span>`;
+    el.innerHTML = `${imgHtml}${tag?`<span class="pi-tag">${tag}</span>`:''}`;
     el.onclick = ()=>{ bcPickerSelect(val, label, icon, tag); };
     listEl.appendChild(el);
   });
@@ -8812,7 +8822,7 @@ function init() {
 
 // =========== ICON LOADER (Bungie API) ===========
 const BNET = 'https://www.bungie.net';
-const ICON_CACHE_KEY = 'd2icons.v15';
+const ICON_CACHE_KEY = 'd2icons.v16';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
 let iconMap = {};
 
@@ -8827,6 +8837,7 @@ async function initIcons() {
       if (Date.now() - ts < ICON_CACHE_TTL) {
         iconMap = icons;
         applyAllIcons();
+        applyClassIcons();
         return;
       }
     }
@@ -8858,14 +8869,16 @@ async function fetchIcons(apiKey) {
     const litePath_en = paths_en.DestinyInventoryItemLiteDefinition || paths_en.DestinyInventoryItemDefinition;
     const litePath_es = paths_es.DestinyInventoryItemLiteDefinition || paths_es.DestinyInventoryItemDefinition;
     const statPath_en = paths_en.DestinyStatDefinition;
+    const classDefPath_en = paths_en.DestinyClassDefinition;
     if (status) status.textContent = 'Descargando datos de Bungie…';
-    // Fetch EN + ES + Stats in parallel
-    const [en_items, es_items, stat_defs] = await Promise.all([
+    // Fetch EN + ES + Stats + ClassDefs in parallel
+    const [en_items, es_items, stat_defs, class_defs] = await Promise.all([
       fetch(BNET + litePath_en).then(r => r.json()),
       litePath_es !== litePath_en
         ? fetch(BNET + litePath_es).then(r => r.json())
         : Promise.resolve(null),
-      statPath_en ? fetch(BNET + statPath_en).then(r => r.json()) : Promise.resolve(null)
+      statPath_en ? fetch(BNET + statPath_en).then(r => r.json()) : Promise.resolve(null),
+      classDefPath_en ? fetch(BNET + classDefPath_en).then(r => r.json()) : Promise.resolve(null)
     ]);
     // Build needed set — English names (weapons, armor, perks/traits)
     const needed = new Set();
@@ -9015,9 +9028,20 @@ async function fetchIcons(apiKey) {
         }
       }
     }
+    // Class icons from DestinyClassDefinition (classType: 0=Titan, 1=Hunter, 2=Warlock)
+    if (class_defs) {
+      const classMap = {0:'titan', 1:'hunter', 2:'warlock'};
+      for (const [hash, cls] of Object.entries(class_defs)) {
+        const t = cls.classType;
+        if (t in classMap && cls.displayProperties?.icon) {
+          icons['class:'+classMap[t]] = { icon: BNET + cls.displayProperties.icon };
+        }
+      }
+    }
     localStorage.setItem(ICON_CACHE_KEY, JSON.stringify({ts: Date.now(), icons}));
     iconMap = icons;
     applyAllIcons();
+    applyClassIcons();
     if (status) status.textContent = Object.keys(icons).length + ' nombres e iconos actualizados ✓';
     setTimeout(() => { if(status) status.textContent = ''; }, 4000);
   } catch(e) {
@@ -9058,6 +9082,18 @@ function applyAllIcons() {
       const next = img.nextElementSibling;
       if (next?.classList.contains('astat-fb')) next.style.display = 'none';
     }
+  });
+}
+
+function applyClassIcons() {
+  const classMap = {titan:'Titán', hunter:'Cazador', warlock:'Hechicero'};
+  ['titan','hunter','warlock'].forEach(cls => {
+    const entry = iconMap['class:'+cls];
+    if (!entry?.icon) return;
+    const img = document.getElementById('class-icon-'+cls);
+    const svg = document.getElementById('class-svg-'+cls);
+    if (img) { img.src = entry.icon; img.style.display = 'block'; }
+    if (svg) svg.style.display = 'none';
   });
 }
 
