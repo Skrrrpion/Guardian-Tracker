@@ -8467,6 +8467,8 @@ let iconMap = {};
 const BNET           = 'https://www.bungie.net';
 const ICON_CACHE_KEY = 'd2icons.v21';
 const ICON_CACHE_TTL = 24 * 60 * 60 * 1000;
+const BUNGIE_API_KEY  = '550b4880a3864f15babc4ee93ab3133b';
+const BUNGIE_CLIENT_ID = '52718';
 
 // ── Ranuras de fragmentos por aspecto (valores verificados en juego) ──
 // 3 slots: "al acecho" (On the Prowl), "acelerante de caos" (Chaos Accelerant)
@@ -8504,7 +8506,7 @@ function clearIconCache(){
 }
 
 function showApiKeyBanner(){
-  const b = document.getElementById('apikey-banner'); if(b) b.style.display='flex';
+  // Banner desactivado — credenciales hardcodeadas
 }
 function hideApiKeyBanner(){
   const b = document.getElementById('apikey-banner'); if(b) b.style.display='none';
@@ -8517,7 +8519,7 @@ function saveApiKey(){
   if(key) localStorage.setItem('d2apikey', key);
   if(id)  localStorage.setItem('d2clientid', id);
   // Pre-rellenar con valores guardados
-  if(inp && !key){ inp.value = localStorage.getItem('d2apikey')||''; }
+  if(inp && !key){ inp.value = BUNGIE_API_KEY; }
   if(cid && !id){ cid.value = localStorage.getItem('d2clientid')||''; }
   if(!key && !id) return;
   hideApiKeyBanner();
@@ -8540,13 +8542,7 @@ async function fetchIcons(){
     }
   } catch(e){}
 
-  const apiKey = localStorage.getItem('d2apikey') || '';
-  if(!apiKey){
-    iconMap['_aspectFragSlots'] = {};
-    _applyAspectSlotFallback(iconMap['_aspectFragSlots']);
-    showApiKeyBanner();
-    return;
-  }
+  const apiKey = BUNGIE_API_KEY;
 
   hideApiKeyBanner();
   if(status) status.textContent = 'Cargando iconos…';
@@ -8672,15 +8668,7 @@ function splashSkip(){
 }
 
 function bungieOAuthLogin(){
-  const clientId = localStorage.getItem('d2clientid')||'';
-  if(!clientId){
-    const errEl = document.getElementById('splash-error')||document.getElementById('login-modal-error');
-    if(errEl) errEl.textContent='Introduce tu Client ID de Bungie en el banner de API Key primero';
-    showApiKeyBanner();
-    return;
-  }
-  const redirectUri = encodeURIComponent(window.location.href.split('#')[0].split('?')[0]);
-  window.location.href = `${BNET}/en/OAuth/Authorize?client_id=${clientId}&response_type=token`;
+  window.location.href = `${BNET}/en/OAuth/Authorize?client_id=${BUNGIE_CLIENT_ID}&response_type=token`;
 }
 
 async function handleOAuthCallback(){
@@ -8695,7 +8683,7 @@ async function handleOAuthCallback(){
   history.replaceState(null,'', window.location.pathname + window.location.search);
   localStorage.setItem('d2token', token);
   localStorage.setItem('d2token_exp', Date.now() + expiresIn*1000);
-  const apiKey = localStorage.getItem('d2apikey')||'';
+  const apiKey = BUNGIE_API_KEY;
   try {
     // GetMembershipsForCurrentUser con el token
     const res = await fetch(`${BNET}/Platform/User/GetMembershipsForCurrentUser/`, {
@@ -8798,7 +8786,7 @@ function bcSaveBuild(){
   // Pre-rellenar inputs del banner con valores guardados
   const apiInp = document.getElementById('apikey-input');
   const cidInp = document.getElementById('clientid-input');
-  if(apiInp) apiInp.value = localStorage.getItem('d2apikey')||'';
+  if(apiInp) apiInp.value = BUNGIE_API_KEY;
   if(cidInp) cidInp.value = localStorage.getItem('d2clientid')||'';
 
   // 3. Cargar estado y renderizar
@@ -8911,11 +8899,7 @@ function initInventario(){
 async function loadInventario(){
   const statusEl = document.getElementById('inv-status');
   if(!currentUser){ initInventario(); return; }
-  const apiKey = localStorage.getItem('d2apikey')||'';
-  if(!apiKey){
-    if(statusEl){statusEl.style.display='';statusEl.textContent='Necesitas API Key';}
-    return;
-  }
+  const apiKey = BUNGIE_API_KEY;
   if(statusEl){statusEl.style.display='';statusEl.textContent='Cargando inventario…';}
   try {
     const res = await fetch(
@@ -8969,3 +8953,4 @@ function filterInventario(){ renderInventario(); }
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
