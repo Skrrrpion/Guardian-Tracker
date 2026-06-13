@@ -8549,7 +8549,8 @@ async function fetchIcons(){
       // Reconstruir URLs completas desde rutas relativas guardadas
       const raw = cached.data || {};
       Object.entries(raw).forEach(([k,v]) => {
-        if(v && typeof v === 'object' && v.icon && !v.icon.startsWith('http')) v.icon = BNET + v.icon;
+        if(typeof v === 'string') raw[k] = { icon: v.startsWith('http') ? v : BNET + v };
+        else if(v && typeof v === 'object' && v.icon && !v.icon.startsWith('http')) v.icon = BNET + v.icon;
       });
       iconMap = raw;
       if(!iconMap['_aspectFragSlots']) iconMap['_aspectFragSlots'] = {};
@@ -8666,10 +8667,29 @@ async function fetchIcons(){
         toCache[k] = { icon: v.icon.replace(BNET,''), hash: v.hash };
       }
     });
+    // Limpiar claves viejas de caché antes de guardar
+    try {
+      const keysToRemove = [];
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        if(k && k.startsWith('d2icons.') && k !== ICON_CACHE_KEY) keysToRemove.push(k);
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
+    } catch(e){}
     try {
       localStorage.setItem(ICON_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: toCache }));
     } catch(qe){
-      console.warn('[D2Icons] No se pudo guardar caché:', qe.message);
+      // Si aún falla, intentar guardar solo iconos sin hash
+      try {
+        const mini = {};
+        Object.entries(toCache).forEach(([k,v]) => {
+          if(k === '_aspectFragSlots'){ mini[k] = v; return; }
+          if(v?.icon) mini[k] = v.icon;
+        });
+        localStorage.setItem(ICON_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: mini }));
+      } catch(qe2){
+        console.warn('[D2Icons] No se pudo guardar caché:', qe2.message);
+      }
     }
 
     if(status) status.textContent = '';
@@ -8683,6 +8703,16 @@ async function fetchIcons(){
   }
 }
 
+function applyAllIcons(){
+  document.querySelectorAll('[data-wimg]').forEach(img => {
+    const url = iconMap[img.dataset.wimg]?.icon || '';
+    if(url){ img.src = url; img.style.display = ''; }
+  });
+  document.querySelectorAll('[data-pimg]').forEach(img => {
+    const url = iconMap[img.dataset.pimg]?.icon || '';
+    if(url){ img.src = url; img.style.display = ''; }
+  });
+}
 function onIconsReady(){
   document.querySelectorAll('[data-wimg]').forEach(img => {
     const url = iconMap[img.dataset.wimg]?.icon || '';
