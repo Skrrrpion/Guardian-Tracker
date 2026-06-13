@@ -41,6 +41,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 #progress-ring{width:44px;height:44px;flex-shrink:0}
 #progress-ring circle.bg{fill:none;stroke:var(--bg-card);stroke-width:4}
 #progress-ring circle.fg{fill:none;stroke:var(--accent-gold);stroke-width:4;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .4s ease}
+#btn-refresh-api{background:none;border:1px solid rgba(199,169,255,.25);border-radius:4px;color:rgba(199,169,255,.75);font-size:17px;padding:3px 8px;cursor:pointer;font-family:'Chakra Petch',sans-serif;transition:opacity .2s,transform .3s;opacity:.7}
+#btn-refresh-api:hover{opacity:1;transform:rotate(180deg)}
 #header-stats{display:flex;gap:10px;flex-wrap:wrap;align-items:center;flex:1;justify-content:center}
 .stat-chip{display:flex;flex-direction:column;align-items:center;background:var(--bg-card);border:1px solid var(--border);padding:4px 10px;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);min-width:64px}
 .stat-chip .label{font-family:'Chakra Petch',sans-serif;font-size:9px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px}
@@ -660,7 +662,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 .stat-chip .label{font-family:'Chakra Petch',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;opacity:.9}
 .stat-chip .value{font-family:'Chakra Petch',sans-serif;font-size:15px;font-weight:700;line-height:1}
 #progress-ring-wrap{display:flex;flex-direction:row;align-items:center;gap:10px;flex-shrink:0}
-#progress-ring{width:56px;height:56px}
+#progress-ring{width:44px;height:44px}
 #ring-label-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
 #pct-label{font-family:'Chakra Petch',sans-serif;font-size:28px;font-weight:700;color:var(--accent-gold-light);letter-spacing:1px;line-height:1}
 #ring-total-label{font-family:'Chakra Petch',sans-serif;font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px}
@@ -1358,7 +1360,18 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
 <!-- HEADER -->
 <header id="app-header">
   <div id="header-title">Guardian Collector</div>
-  <div id="header-stats"><button onclick="clearIconCache()" title="Actualizar datos de Bungie" style="background:none;border:1px solid rgba(199,169,255,.25);border-radius:4px;color:rgba(199,169,255,.6);font-size:11px;padding:2px 7px;cursor:pointer;font-family:'Chakra Petch',sans-serif;margin-right:4px;">🔄</button><span id="icon-status" style="font-size:11px;color:rgba(199,169,255,.55);padding:0 8px;font-family:'Chakra Petch',sans-serif;"></span>
+  <div id="header-stats">
+    <div id="progress-ring-wrap">
+      <svg id="progress-ring" viewBox="0 0 44 44">
+        <circle class="bg" cx="22" cy="22" r="18"/>
+        <circle class="fg" id="ring-fg" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+      </svg>
+      <div id="ring-label-wrap">
+        <span id="pct-label">0%</span>
+        <span id="ring-total-label">COLECCIÓN</span>
+      </div>
+    </div>
+    <span id="icon-status" style="font-size:11px;color:rgba(199,169,255,.55);padding:0 8px;font-family:'Chakra Petch',sans-serif;"></span>
     <div class="stat-chip wpurple" title="Armas legendarias obtenidas"><span class="label">⚔ Armas</span><span class="value" id="stat-armas">0</span></div>
     <div class="stat-chip wpurple" title="Piezas de armadura legendaria obtenidas"><span class="label">🛡 Armad.</span><span class="value" id="stat-armor-leg">0</span></div>
     <div class="stat-chip wpurple" title="Sets de armadura legendaria completos"><span class="label">📦 Sets</span><span class="value" id="stat-sets-leg">0</span></div>
@@ -1369,16 +1382,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Barlow',sa
     <div class="stat-chip wgold hunter-chip" title="Armaduras exóticas de Cazador"><span class="label">🏹 Cazador</span><span class="value" id="stat-hunter">0</span></div>
     <div class="stat-chip wgold warlock-chip" title="Armaduras exóticas de Hechicero"><span class="label">🔮 Hechicero</span><span class="value" id="stat-warlock">0</span></div>
   </div>
-  <div id="progress-ring-wrap">
-    <svg id="progress-ring" viewBox="0 0 44 44">
-      <circle class="bg" cx="22" cy="22" r="18"/>
-      <circle class="fg" id="ring-fg" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-    </svg>
-    <div id="ring-label-wrap">
-      <span id="pct-label">0%</span>
-      <span id="ring-total-label">COLECCIÓN</span>
-    </div>
-  </div>
+  <button id="btn-refresh-api" onclick="clearIconCache()" title="Actualizar datos de Bungie">🔄</button>
 
   <div id="login-area">
     <!-- Open modal button (shown when not logged in) -->
