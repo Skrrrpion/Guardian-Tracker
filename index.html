@@ -3613,6 +3613,19 @@ function updateHeader() {
   setTimeout(updateMobileStats, 0);
 }
 
+function updateMobileStats() {
+  const p = calcProgress();
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('mstat-armas',     p.armas);
+  set('mstat-armor-leg', p.armorLeg);
+  set('mstat-armor',     p.setsComplete);
+  set('mstat-exo',       p.exoArmas);
+  set('mstat-armor-exo', p.armorExo);
+  set('mstat-titan',     p.titan);
+  set('mstat-hunter',    p.cazador);
+  set('mstat-warlock',   p.hechicero);
+}
+
 // =========== TABS ===========
 let currentTab = 'armas-leg';
 function switchTab(tabName, btnEl) {
@@ -8667,31 +8680,69 @@ function splashSkip(){
   }
 }
 
-function bungieOAuthLogin(){
-  window.location.href = `${BNET}/en/OAuth/Authorize?client_id=${BUNGIE_CLIENT_ID}&response_type=token`;
+// ── PKCE helpers ──────────────────────────────────────────────
+function _pkceVerifier(){
+  const arr = new Uint8Array(96);
+  crypto.getRandomValues(arr);
+  return btoa(String.fromCharCode(...arr)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+async function _pkceChallenge(verifier){
+  const data = new TextEncoder().encode(verifier);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(hash))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+
+async function bungieOAuthLogin(){
+  const verifier   = _pkceVerifier();
+  const challenge  = await _pkceChallenge(verifier);
+  sessionStorage.setItem('pkce_verifier', verifier);
+  const params = new URLSearchParams({
+    client_id: BUNGIE_CLIENT_ID,
+    response_type: 'code',
+    code_challenge: challenge,
+    code_challenge_method: 'S256'
+  });
+  window.location.href = `${BNET}/en/OAuth/Authorize?${params}`;
 }
 
 async function handleOAuthCallback(){
-  const hash = window.location.hash;
-  if(!hash.includes('access_token=')) return false;
-  const params = new URLSearchParams(hash.slice(1));
-  const token      = params.get('access_token');
-  const memberId   = params.get('membership_id');
-  const expiresIn  = parseInt(params.get('expires_in')||'3600');
-  if(!token) return false;
-  // Limpiar hash de la URL
-  history.replaceState(null,'', window.location.pathname + window.location.search);
-  localStorage.setItem('d2token', token);
-  localStorage.setItem('d2token_exp', Date.now() + expiresIn*1000);
-  const apiKey = BUNGIE_API_KEY;
+  const urlParams = new URLSearchParams(window.location.search);
+  const code  = urlParams.get('code');
+  const error = urlParams.get('error');
+
+  if(error){
+    console.error('OAuth error:', error, urlParams.get('error_description'));
+    const errEl = document.getElementById('splash-error')||document.getElementById('login-modal-error');
+    if(errEl) errEl.textContent = 'Error Bungie: ' + (urlParams.get('error_description')||error);
+    history.replaceState(null,'', window.location.pathname);
+    return false;
+  }
+  if(!code) return false;
+
+  const verifier = sessionStorage.getItem('pkce_verifier')||'';
+  sessionStorage.removeItem('pkce_verifier');
+  history.replaceState(null,'', window.location.pathname);
+
   try {
-    // GetMembershipsForCurrentUser con el token
+    // Intercambiar code por token
+    const tokenRes = await fetch(`${BNET}/Platform/App/OAuth/Token/`, {
+      method: 'POST',
+      headers:{ 'Content-Type':'application/x-www-form-urlencoded', 'X-API-Key': BUNGIE_API_KEY },
+      body: new URLSearchParams({ grant_type:'authorization_code', code, client_id: BUNGIE_CLIENT_ID, code_verifier: verifier })
+    });
+    const tokenData = await tokenRes.json();
+    const token = tokenData.access_token;
+    if(!token) throw new Error('Token exchange failed: ' + JSON.stringify(tokenData));
+    const expiresIn = tokenData.expires_in||3600;
+    localStorage.setItem('d2token', token);
+    localStorage.setItem('d2token_exp', Date.now() + expiresIn*1000);
+
+    // Obtener perfil
     const res = await fetch(`${BNET}/Platform/User/GetMembershipsForCurrentUser/`, {
-      headers:{ 'X-API-Key':apiKey, 'Authorization':`Bearer ${token}` }
+      headers:{ 'X-API-Key': BUNGIE_API_KEY, 'Authorization':`Bearer ${token}` }
     });
     const data = await res.json();
     const dest = data.Response?.destinyMemberships||[];
-    // Preferir la plataforma principal
     const profile = data.Response?.primaryMembershipId
       ? dest.find(d=>d.membershipId===data.Response.primaryMembershipId)||dest[0]
       : dest[0];
@@ -8944,13 +8995,13 @@ function renderInventario(){
     const grid=document.getElementById(gridId); if(!grid) return;
     grid.insertAdjacentHTML('beforeend',`
       <div class="inv-card ${roll}">
-        ${item.icon?`<img class="inv-card-icon" src="${item.icon}" onerror="this.style.opacity='.3'">`:'<div class="inv-card-icon" style="background:#1a1a2a"></div>'}
+        ${item.icon?`<img class="inv-card-icon" src="${item.icon}" onerror="this.style.opacity='.3'">` :'<div class="inv-card-icon" style="background:#1a1a2a"></div>'}
         <div class="inv-card-name">${item.name||'#'+item.hash}</div>
       </div>`);
   });
 }
+
 function filterInventario(){ renderInventario(); }
 </script>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
