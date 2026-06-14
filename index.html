@@ -1652,7 +1652,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 <div id="tab-armas-leg" class="tab-panel active">
   <div class="filters-bar">
     <div class="filter-group">
-      <input type="search" class="filter-input" id="f-wleg-search" placeholder="Buscar arma o perk…" oninput="_dRLW()">
+      <input type="search" class="filter-input" id="f-wleg-search" placeholder="Buscar arma o perk…" oninput="renderLegWeapons()">
     </div>
     <div class="filter-group">
       <label>Elemento</label>
@@ -1729,7 +1729,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 <div id="tab-armas-exo" class="tab-panel">
   <div class="filters-bar">
     <div class="filter-group">
-      <input type="search" class="filter-input" id="f-wexo-search" placeholder="Buscar arma exótica…" oninput="_dREW()">
+      <input type="search" class="filter-input" id="f-wexo-search" placeholder="Buscar arma exótica…" oninput="renderExoWeapons()">
     </div>
     <div class="filter-group">
       <label>Elemento</label>
@@ -1817,7 +1817,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 <div id="tab-armor-exo" class="tab-panel">
   <div class="filters-bar">
     <div class="filter-group">
-      <input type="search" class="filter-input" id="f-aexo-search" placeholder="Buscar armadura exótica…" oninput="_dREA()">
+      <input type="search" class="filter-input" id="f-aexo-search" placeholder="Buscar armadura exótica…" oninput="renderExoArmor()">
     </div>
     <div class="filter-group">
       <label>Ranura</label>
@@ -4939,7 +4939,7 @@ function buildWeaponCard(w) {
     const statsBarHTML = BAR_STATS.filter(k=>stats[k]!=null && stats[k]>0).map(k=>`
       <div class="exo-stat-row">
         <div class="exo-stat-name">${STAT_LABELS[k]||k}</div>
-        <div class="exo-stat-bar-wrap"><div class="exo-stat-bar" style="width:${Math.min(stats[k],100)}%;background:${barColor(stats[k])}"></div></div>
+        <div class="exo-stat-bar-wrap"><div class="exo-stat-bar" style="width:${Math.min(stats[k],100)}%"></div></div>
         <div class="exo-stat-val">${stats[k]}</div>
       </div>`).join('');
     const statsFixedHTML = FIXED_STATS.filter(k=>stats[k]!=null && stats[k]>0).map(k=>`
