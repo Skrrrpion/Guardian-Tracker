@@ -236,7 +236,9 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 
 <style>
 /* ── CLEAN LOGIC CSS ── */
-.wcard{background:var(--bg-card);border:1px solid var(--border);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));transition:border-color .2s;position:relative;margin-bottom:0}
+.wscreenshot{width:100%;height:130px;background-size:cover;background-position:center top;flex-shrink:0;border-radius:8px 8px 0 0}
+.eflavor{font-style:italic;font-size:.82em;color:var(--text-secondary);padding:4px 0 0}
+.wcard{overflow:hidden;background:var(--bg-card);border:1px solid var(--border);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));transition:border-color .2s;position:relative;margin-bottom:0}
 .wleg{border-left:3px solid var(--accent-gold-dim)}
 .wexo{border-left:3px solid #ceae33}
 .wown .whdr{background:rgba(201,168,76,.04)}
@@ -4439,33 +4441,32 @@ function buildWeaponCard(w) {
         <button class="pchk ${ic?'on':''}" onclick="toggleIntrinsic('${w.id}')">✓</button>
         <div><strong>${w.intrinsic.n}</strong><br><small>${w.intrinsic.ef}</small></div>
       </div>`;
-    if (w.catalyst) exoticHTML += `<div class="erow">
+    if (w.catalyst && w.catalyst.n) exoticHTML += `<div class="erow">
       <div><span style="color:var(--accent-gold);font-weight:700">◉ Catalizador:</span> <strong>${w.catalyst.n}</strong><br><small style="color:var(--text-secondary)">${w.catalyst.ef}</small></div>
     </div>`;
     if (w.col2 && w.col2.length) {
       const rasgoNames = w.col2.map(pid => PERK_DEFS[pid] ? PERK_DEFS[pid].n : pid).join(' / ');
       exoticHTML += `<div class="erow"><div><strong>◈ Rasgo variable:</strong> <span style="color:var(--text-secondary)">${rasgoNames}</span></div></div>`;
     }
+    if (w.col3 && w.col3.length) {
+      const rasgo3Names = w.col3.map(pid => PERK_DEFS[pid] ? PERK_DEFS[pid].n : pid).join(' / ');
+      exoticHTML += `<div class="erow"><div><strong>◈ Rasgo variable 2:</strong> <span style="color:var(--text-secondary)">${rasgo3Names}</span></div></div>`;
+    }
+    if (w.flavorText) exoticHTML += `<div class="erow eflavor"><em>"${w.flavorText}"</em></div>`;
     exoticHTML += '</div>';
   }
 
-  const sugId = 'sg_'+w.id;
-  const sugHTML = (w.pvE||w.pvP) ? `<div class="sug">
-    <button class="sbtn" onclick="this.nextElementSibling.classList.toggle('open')">💡 Sugerir meta</button>
-    <div class="spanel" id="${sugId}">
-      ${w.pvE?`<div class="srow"><span class="slbl">PvE</span><span>${w.pvE}</span></div>`:''}
-      ${w.pvP?`<div class="srow"><span class="slbl">PvP</span><span>${w.pvP}</span></div>`:''}
-    </div>
-  </div>` : '';
+
 
   const godBanner = god ? '<div class="gbanner">★ GOD ROLL</div>' : '';
   const cardCls = `wcard ${exotic?'wexo':'wleg'} ${owned?'wown':''} ${god?'wgod':''}`;
   // wleg = purple accent, wexo = gold accent
 
   return `<div class="${cardCls}" id="wcard_${w.id}">
+    ${exotic && w.screenshot ? `<div class="wscreenshot" style="background-image:url('${w.screenshot}')"></div>` : ''}
     <div class="whdr">
       <div class="wtitle">
-        ${(()=>{const _e=(w.n||w.e).toLowerCase();const _u=(iconMap[_e]?.icon)||'';return _u?`<img class="wimg" src="${_u}" data-wimg="${_e}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`:`<img class="wimg" data-wimg="${_e}" src="" style="display:none;width:52px;height:52px;" onerror="this.style.display='none'">`;})()}
+        ${(()=>{const _e=(w.n||w.e).toLowerCase();const _u=exotic?(w.icon||''):((iconMap[_e]?.icon)||'');return _u?`<img class="wimg" src="${_u}" data-wimg="${_e}" style="width:52px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`:`<img class="wimg" data-wimg="${_e}" src="" style="display:none;width:52px;height:52px;" onerror="this.style.display='none'">`;})()}
         <span class="wname ${exotic?'wname-exo':''}" data-wkey="${(w.e||w.n).toLowerCase()}">${w.n}${(()=>{const g0=(w.col0||[]).some(pk=>ws.perks[pk]?.marker===1);const g1=(w.col1||[]).some(pk=>ws.perks[pk]?.marker===1);const g2=(w.col2||[]).some(pk=>ws.perks[pk]?.marker===1);const g3=(w.col3||[]).some(pk=>ws.perks[pk]?.marker===1);return `<span class="wname-godstar${g0&&g1&&g2&&g3?' active':''}" title="God Roll completo en los 4 slots">★</span>`;})()}</span>
 
       </div>
@@ -4480,8 +4481,6 @@ function buildWeaponCard(w) {
         ${w.craft?'<span class="tag tcraft">⚒ Fabricable</span>':''}
       </div>
       <div class="wact">
-        ${sugHTML}
-        <div class="wact-sep"></div>
         <div class="wact-own" style="display:flex;flex-direction:column;align-items:center;gap:6px">
           <button class="ownbtn ${owned?'on':''}" onclick="toggleOwned('${w.id}')">${owned?'✓ Obtenido':'Obtenido'}</button>
           ${godBanner}
