@@ -5107,8 +5107,8 @@ function renderLegWeapons() {
     if (w.exotic) return false;
     if (ammo && _wAmmoSlot(w) !== ammo) return false;
     if (search) {
-      const inName = w.n.toLowerCase().includes(search);
-      const inPerks = [...(w.col2||[]),...(w.col3||[])].some(pid => PERK_DEFS[pid] && PERK_DEFS[pid].n.toLowerCase().includes(search));
+      const inName  = w.n.toLowerCase().includes(search) || (w.e&&w.e.toLowerCase().includes(search));
+      const inPerks = [...(w.col2||[]),...(w.col3||[])].some(pid => PERK_DEFS[pid] && (PERK_DEFS[pid].n.toLowerCase().includes(search) || (PERK_DEFS[pid].ef||'').toLowerCase().includes(search)));
       if (!inName && !inPerks) return false;
     }
     if (elem   && w.elem !== elem) return false;
@@ -5135,7 +5135,13 @@ function renderExoWeapons() {
   const list = WEAPONS.filter(w => {
     if (!w.exotic) return false;
     if (ammo && _wAmmoSlot(w) !== ammo) return false;
-    if (search && !w.n.toLowerCase().includes(search) && !(w.e&&w.e.toLowerCase().includes(search))) return false;
+    if (search) {
+      const inName = w.n.toLowerCase().includes(search) || (w.e&&w.e.toLowerCase().includes(search));
+      const inIntr = (w.intrinsic?.n||'').toLowerCase().includes(search) || (w.intrinsic?.ef||'').toLowerCase().includes(search);
+      const inCat  = (w.catalyst?.n||'').toLowerCase().includes(search) || (w.catalyst?.ef||'').toLowerCase().includes(search);
+      const inPerks = [...(w.col2||[]),...(w.col3||[])].some(pid => PERK_DEFS[pid] && (PERK_DEFS[pid].n.toLowerCase().includes(search) || (PERK_DEFS[pid].ef||'').toLowerCase().includes(search)));
+      if (!inName && !inIntr && !inCat && !inPerks) return false;
+    }
     if (elem   && w.elem !== elem) return false;
     if (type   && !w.type.toLowerCase().includes(type.toLowerCase())) return false;
     if (champ  && detectChampion(w) !== champ) return false;
@@ -5469,7 +5475,11 @@ function renderExoArmor() {
   const cls    = get('f-aexo-class');
   let html = '';
   const exList = EXOTIC_ARMOR.filter(ea => {
-    if (search && !ea.n.toLowerCase().includes(search) && !ea.e.toLowerCase().includes(search)) return false;
+    if (search) {
+      const inName = ea.n.toLowerCase().includes(search) || (ea.e&&ea.e.toLowerCase().includes(search));
+      const inPerk = (ea.perk||'').toLowerCase().includes(search);
+      if (!inName && !inPerk) return false;
+    }
     if (cls  && ea.class !== cls) return false;
     if (slot && ea.slot  !== slot) return false;
     if (seas && ea.season !== seas) return false;
