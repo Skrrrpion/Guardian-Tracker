@@ -957,6 +957,13 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 .amk{flex-shrink:0}
 .archgrid{overflow:hidden}
 .aslot{overflow:hidden}
+/* ── Armor class-row accordion ── */
+.aclass-row-hdr{cursor:pointer;user-select:none;transition:background .15s}
+.aclass-row-hdr:hover{background:rgba(255,255,255,.04)}
+.aclass-toggle{display:inline-block;margin-right:7px;font-size:10px;transition:transform .18s;opacity:.55;flex-shrink:0}
+.aclass-row .aclass-slots{display:none}
+.aclass-row.aclass-open .aclass-slots{display:grid}
+.aclass-row.aclass-open .aclass-toggle{transform:rotate(90deg)}
 
 /* ── FARM BUTTON ── */
 .btn-group{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
@@ -4308,10 +4315,11 @@ function buildArmorSetCard(set) {
     const complete = isSetClassComplete(set, cls);
     const slots = set.slots.map(s => buildArmorSlotCard(set, s, cls)).join('');
     return `<div class="aclass-row">
-      <div class="aclass-row-hdr">
+      <div class="aclass-row-hdr" onclick="if(!event.target.closest('.aclass-markbtn'))toggleArmorClassRow(this)">
+        <span class="aclass-toggle">▶</span>
         <span class="aclass-icon">${CLS_ICON[cls]}</span>
         <span class="aclass-label ${CLS_LABEL[cls]}">${cls}</span>
-        <button class="aclass-markbtn ${complete?'on':''}" id="set-cls-btn-${set.id}-${cls}" onclick="toggleSetClassObtained('${set.id}','${cls}')">${complete?'✓ Completo':'Marcar '+cls}</button>
+        <button class="aclass-markbtn ${complete?'on':''}" id="set-cls-btn-${set.id}-${cls}" onclick="event.stopPropagation();toggleSetClassObtained('${set.id}','${cls}')">${complete?'✓ Completo':'Marcar '+cls}</button>
       </div>
       <div class="aclass-slots">${slots}</div>
     </div>`;
@@ -4326,6 +4334,10 @@ function buildArmorSetCard(set) {
     ${bonusBlock}
     <div class="aclass-rows">${classRows}</div>
   </div>`;
+}
+
+function toggleArmorClassRow(hdrEl) {
+  hdrEl.closest('.aclass-row')?.classList.toggle('aclass-open');
 }
 
 function buildExoticArmorCard(ea) {
