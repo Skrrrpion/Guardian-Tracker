@@ -1128,6 +1128,14 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 .bc-equip-label{color:#666;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:4px;width:58px;flex-shrink:0;line-height:1.2}
 .bc-ammo-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
 .ammo-primary{background:#78c878}
+.elem-icon-img{width:14px;height:14px;vertical-align:middle;margin-right:2px;flex-shrink:0}
+.wtype-icon-img{width:14px;height:14px;vertical-align:middle;margin-right:2px;flex-shrink:0;filter:invert(1) opacity(.7)}
+.elem-filter-btns,.champ-filter-btns{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+.elem-fb,.champ-fb{display:flex;align-items:center;justify-content:center;padding:3px 5px;border-radius:4px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);cursor:pointer;font-size:11px;color:var(--text-dim);transition:all .15s;min-width:26px;height:26px}
+.elem-fb img,.champ-fb img{width:16px;height:16px;object-fit:contain}
+.elem-fb.active,.champ-fb.active{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:#fff}
+.elem-fb:hover,.champ-fb:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3)}
+
 .ammo-special{background:#78a8f8}
 .ammo-heavy{background:#c87878}
 .bc-equip-select{background:#111;border:1px solid #2a2a3a;color:#ccc;padding:5px 8px;font-size:.78rem;width:100%;outline:none;cursor:pointer;transition:border-color .2s}
@@ -1656,11 +1664,16 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
     </div>
     <div class="filter-group">
       <label>Elemento</label>
-      <select class="filter-select" id="f-wleg-elem" onchange="renderLegWeapons()">
-        <option value="">Todos</option>
-        <option>Cinético</option><option>Arco</option><option>Solar</option>
-        <option>Vacío</option><option>Estasis</option><option>Hebra</option>
-      </select>
+      <div class="elem-filter-btns">
+        <button class="elem-fb active" data-elem="" onclick="setElemFilter('wleg',this)" title="Todos">·</button>
+        <button class="elem-fb" data-elem="Cinético" onclick="setElemFilter('wleg',this)" title="Cinético"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_3385a924fd3ccb92c343ade19f19a370.png"></button>
+        <button class="elem-fb" data-elem="Arco" onclick="setElemFilter('wleg',this)" title="Arco"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_092d066688b879c807c3b460afdd61e6.png"></button>
+        <button class="elem-fb" data-elem="Solar" onclick="setElemFilter('wleg',this)" title="Solar"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_2a1773e10968f2d088b97c22b22bba9e.png"></button>
+        <button class="elem-fb" data-elem="Vacío" onclick="setElemFilter('wleg',this)" title="Vacío"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_ceb2f6197dccf3958bb31cc783eb97a0.png"></button>
+        <button class="elem-fb" data-elem="Estasis" onclick="setElemFilter('wleg',this)" title="Estasis"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_530c4c3e7981dc2aefd24fd3293482bf.png"></button>
+        <button class="elem-fb" data-elem="Hebra" onclick="setElemFilter('wleg',this)" title="Hebra"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_b2fe51a94f3533f97079dfa0d27a4096.png"></button>
+      </div>
+      <input type="hidden" id="f-wleg-elem" value="">
     </div>
     
     <div class="filter-group">
@@ -1677,12 +1690,13 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
     </div>
           <div class="filter-group">
             <label class="filter-label">CAMPEÓN</label>
-            <select class="filter-select" id="f-wleg-champ" onchange="renderLegWeapons()">
-              <option value="">Todos</option>
-              <option value="unstoppable">Imparable</option>
-              <option value="barrier">Barrera</option>
-              <option value="overload">Sobrecarga</option>
-            </select>
+            <div class="champ-filter-btns">
+              <button class="champ-fb active" data-champ="" onclick="setChampFilter('wleg',this)" title="Todos">·</button>
+              <button class="champ-fb" data-champ="unstoppable" onclick="setChampFilter('wleg',this)" title="Imparable"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/stagger.svg"></button>
+              <button class="champ-fb" data-champ="barrier" onclick="setChampFilter('wleg',this)" title="Barrera"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/pierce.svg"></button>
+              <button class="champ-fb" data-champ="overload" onclick="setChampFilter('wleg',this)" title="Sobrecarga"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/overload.svg"></button>
+            </div>
+            <input type="hidden" id="f-wleg-champ" value="">
           </div>
     <div class="filter-group">
       <label>Arquetipo</label>
@@ -1708,9 +1722,9 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
       <label>Munición</label>
       <div class="ammo-filter-btns">
         <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wleg',this)">Todas</button>
-        <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-primary"></span>Primaria</button>
-        <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-special"></span>Especial</button>
-        <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wleg',this)"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</button>
+        <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wleg',this)"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-primary.svg" width="14" height="14" style="vertical-align:middle;margin-right:3px">Primaria</button>
+        <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wleg',this)"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-special.svg" width="14" height="14" style="vertical-align:middle;margin-right:3px">Especial</button>
+        <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wleg',this)"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-heavy.svg" width="14" height="14" style="vertical-align:middle;margin-right:3px">Pesada</button>
       </div>
     </div>
     <div id="f-wleg-missing" class="filter-toggle" onclick="toggleWLegMissing(this)">
@@ -1733,11 +1747,16 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
     </div>
     <div class="filter-group">
       <label>Elemento</label>
-      <select class="filter-select" id="f-wexo-elem" onchange="renderExoWeapons()">
-        <option value="">Todos</option>
-        <option>Cinético</option><option>Arco</option><option>Solar</option>
-        <option>Vacío</option><option>Estasis</option><option>Hebra</option>
-      </select>
+      <div class="elem-filter-btns">
+        <button class="elem-fb active" data-elem="" onclick="setElemFilter('wexo',this)" title="Todos">·</button>
+        <button class="elem-fb" data-elem="Cinético" onclick="setElemFilter('wexo',this)" title="Cinético"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_3385a924fd3ccb92c343ade19f19a370.png"></button>
+        <button class="elem-fb" data-elem="Arco" onclick="setElemFilter('wexo',this)" title="Arco"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_092d066688b879c807c3b460afdd61e6.png"></button>
+        <button class="elem-fb" data-elem="Solar" onclick="setElemFilter('wexo',this)" title="Solar"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_2a1773e10968f2d088b97c22b22bba9e.png"></button>
+        <button class="elem-fb" data-elem="Vacío" onclick="setElemFilter('wexo',this)" title="Vacío"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_ceb2f6197dccf3958bb31cc783eb97a0.png"></button>
+        <button class="elem-fb" data-elem="Estasis" onclick="setElemFilter('wexo',this)" title="Estasis"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_530c4c3e7981dc2aefd24fd3293482bf.png"></button>
+        <button class="elem-fb" data-elem="Hebra" onclick="setElemFilter('wexo',this)" title="Hebra"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_b2fe51a94f3533f97079dfa0d27a4096.png"></button>
+      </div>
+      <input type="hidden" id="f-wexo-elem" value="">
     </div>
     
     <div class="filter-group">
@@ -1754,20 +1773,21 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
     </div>
           <div class="filter-group">
             <label class="filter-label">CAMPEÓN</label>
-            <select class="filter-select" id="f-wexo-champ" onchange="renderExoWeapons()">
-              <option value="">Todos</option>
-              <option value="unstoppable">Imparable</option>
-              <option value="barrier">Barrera</option>
-              <option value="overload">Sobrecarga</option>
-            </select>
+            <div class="champ-filter-btns">
+              <button class="champ-fb active" data-champ="" onclick="setChampFilter('wexo',this)" title="Todos">·</button>
+              <button class="champ-fb" data-champ="unstoppable" onclick="setChampFilter('wexo',this)" title="Imparable"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/stagger.svg"></button>
+              <button class="champ-fb" data-champ="barrier" onclick="setChampFilter('wexo',this)" title="Barrera"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/pierce.svg"></button>
+              <button class="champ-fb" data-champ="overload" onclick="setChampFilter('wexo',this)" title="Sobrecarga"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/overload.svg"></button>
+            </div>
+            <input type="hidden" id="f-wexo-champ" value="">
           </div>
     <div class="filter-group">
       <label>Munición</label>
       <div class="ammo-filter-btns">
         <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wexo',this)">Todas</button>
-        <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-primary"></span>Primaria</button>
-        <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-special"></span>Especial</button>
-        <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wexo',this)"><span class="bc-ammo-dot ammo-heavy"></span>Pesada</button>
+        <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wexo',this)"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-primary.svg" width="14" height="14" style="vertical-align:middle;margin-right:3px">Primaria</button>
+        <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wexo',this)"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-special.svg" width="14" height="14" style="vertical-align:middle;margin-right:3px">Especial</button>
+        <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wexo',this)"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-heavy.svg" width="14" height="14" style="vertical-align:middle;margin-right:3px">Pesada</button>
       </div>
     </div>
     <div id="f-wexo-missing" class="filter-toggle" onclick="toggleWExoMissing(this)">
@@ -4355,7 +4375,38 @@ const EXOTIC_ARMOR = [
 
 // =========== ELEMENT / CLASS HELPERS ===========
 const ELEM_COLOR = {Solar:'var(--solar)',Arco:'var(--arc)',Vacío:'var(--void)',Estasis:'var(--stasis)',Hebra:'var(--strand)',Cinético:'var(--kinetic)'};
-const ELEM_ICON  = {Solar:'☀',Arco:'⚡',Vacío:'◆',Estasis:'❄',Hebra:'🌿',Cinético:'◎'};
+const ELEM_ICON = {
+  Solar:   `<img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_2a1773e10968f2d088b97c22b22bba9e.png" class="elem-icon-img" alt="Solar">`,
+  Arco:    `<img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_092d066688b879c807c3b460afdd61e6.png" class="elem-icon-img" alt="Arco">`,
+  Vacío:   `<img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_ceb2f6197dccf3958bb31cc783eb97a0.png" class="elem-icon-img" alt="Vacío">`,
+  Estasis: `<img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_530c4c3e7981dc2aefd24fd3293482bf.png" class="elem-icon-img" alt="Estasis">`,
+  Hebra:   `<img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_b2fe51a94f3533f97079dfa0d27a4096.png" class="elem-icon-img" alt="Hebra">`,
+  Cinético:`<img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_3385a924fd3ccb92c343ade19f19a370.png" class="elem-icon-img" alt="Cinético">`
+};
+
+const WTYPE_ICON = {
+  'Rifle automático':       'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/auto_rifle.svg',
+  'Cañón de mano':          'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/hand_cannon.svg',
+  'Fusil de pulsos':        'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/pulse_rifle.svg',
+  'Fusil de exploración':   'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/scout_rifle.svg',
+  'Pistola lateral':        'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sidearm.svg',
+  'Subfusil':               'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/smg.svg',
+  'Fusil de fusión':        'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/fusion_rifle.svg',
+  'FFL':                    'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/wire_rifle.svg',
+  'Fusil de fusión lineal': 'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/wire_rifle.svg',
+  'Escopeta':               'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/shotgun.svg',
+  'Fusil de francotirador': 'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sniper_rifle.svg',
+  'Lanzagranadas':          'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/grenade_launcher-field_forged.svg',
+  'Arco de combate':        'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg',
+  'Arco':                   'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg',
+  'Ballesta':               'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg',
+  'Fusil de rastreo':       'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/beam_weapon.svg',
+  'Traza':                  'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/beam_weapon.svg',
+  'Guadaña':                'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/glaive.svg',
+  'Lanzacohetes':           'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/rocket_launcher.svg',
+  'Ametralladora':          'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/machinegun.svg',
+  'Espada':                 'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sword_heavy.svg'
+};
 const ELEM_CLASS = {Solar:'solar',Arco:'arc',Vacío:'void',Estasis:'stasis',Hebra:'strand',Cinético:'kinetic'};
 const CLASS_ICON = {Titán:'🛡',Cazador:'🏹',Hechicero:'🔮'};
 
@@ -4979,7 +5030,7 @@ function buildWeaponCard(w) {
 
       </div>
       <div class="wtags">
-        <span class="tag ttype">${w.type}</span>
+        <span class="tag ttype">${WTYPE_ICON[w.type]?`<img src="${WTYPE_ICON[w.type]}" class="wtype-icon-img" onerror="this.style.display='none'">`:''}${w.type}</span>
 
         ${w.elem?`<span class="tag element ${ELEM_CLASS[w.elem]||''}">${ei} ${w.elem}</span>`:""}
 
@@ -5072,6 +5123,22 @@ function toggleALegMissing(el) { aLegMissing=!aLegMissing; el.classList.toggle('
 function toggleAExoMissing(el) { aExoMissing=!aExoMissing; el.classList.toggle('active',aExoMissing); renderExoArmor(); }
 
 // ── AMMO FILTER ──
+function setElemFilter(prefix, btn){
+  const elem = btn.dataset.elem;
+  document.getElementById('f-'+prefix+'-elem').value = elem;
+  btn.closest('.elem-filter-btns').querySelectorAll('.elem-fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(prefix==='wleg') renderLegWeapons();
+  else if(prefix==='wexo') renderExoWeapons();
+}
+function setChampFilter(prefix, btn){
+  const champ = btn.dataset.champ;
+  document.getElementById('f-'+prefix+'-champ').value = champ;
+  btn.closest('.champ-filter-btns').querySelectorAll('.champ-fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(prefix==='wleg') renderLegWeapons();
+  else if(prefix==='wexo') renderExoWeapons();
+}
 function setAmmoFilter(prefix, btn){
   const ammo = btn.dataset.ammo;
   document.getElementById('f-'+prefix+'-ammo').value = ammo;
@@ -9877,6 +9944,14 @@ function onIconsReady(){
   document.querySelectorAll('[data-pimg]').forEach(img => {
     const url = iconMap[img.dataset.pimg]?.icon || '';
     if(url){ img.src = url; img.style.display = ''; }
+  });
+  // Iconos estáticos de campeones (no necesitan API)
+  iconMap['champ:barrier']     = {icon:'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/pierce.svg'};
+  iconMap['champ:unstoppable'] = {icon:'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/stagger.svg'};
+  iconMap['champ:overload']    = {icon:'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/overload.svg'};
+  document.querySelectorAll('[data-pimg]').forEach(img => {
+    const url2 = iconMap[img.dataset.pimg]?.icon || '';
+    if(url2){ img.src = url2; img.style.display = ''; }
   });
 }
 
