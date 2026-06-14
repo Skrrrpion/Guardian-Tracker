@@ -23,6 +23,8 @@
   --border-bright: #2a3d52;
   --kinetic: #b8c8d8; --arc: #79c7e3; --solar: #f4a33d;
   --void: #b985e6; --stasis: #4d9ee8; --strand: #5ebd6a;
+  --accent-blue: #4a85cc;
+  --accent-blue-dim: #1e3a5f;
   --rarity-legendary: #8e67d8;
   --rarity-exotic: #ceae33;
   --craftable: #5ebd6a;
@@ -653,41 +655,53 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 
 
 /* ═══ EXOTIC CARD REDESIGN ═══ */
-.exo-layout{display:grid;grid-template-columns:1fr 200px;gap:12px}
+.exo-layout{display:grid;grid-template-columns:1fr 290px;gap:14px}
 .exo-left{display:flex;flex-direction:column;gap:10px}
-.exo-right{display:flex;flex-direction:column;gap:4px;border-left:1px solid rgba(255,255,255,.08);padding-left:12px}
+.exo-right{display:flex;flex-direction:column;gap:6px;border-left:1px solid rgba(255,255,255,.1);padding-left:14px}
 .exo-sec-label{font-family:'Chakra Petch',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-bottom:4px}
 .exo-perks-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.exo-perk-circle{width:48px;height:48px;border-radius:50%;border:2px solid rgba(74,133,204,.5);background:rgba(74,133,204,.1);overflow:hidden;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s}
-.exo-perk-circle:hover{border-color:rgba(74,133,204,.9)}
+.exo-perk-circle{width:52px;height:52px;border-radius:50%;border:2px solid rgba(74,133,204,.5);background:rgba(74,133,204,.1);overflow:hidden;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s,box-shadow .2s}
+.exo-perk-circle:hover{border-color:rgba(74,133,204,.9);box-shadow:0 0 10px rgba(74,133,204,.35)}
 .exo-perk-circle img{width:100%;height:100%;object-fit:cover}
-.exo-perk-circle .exo-perk-tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);min-width:180px;max-width:260px;background:var(--bg-card);border:1px solid var(--border-bright);padding:8px 10px;z-index:99;pointer-events:none;border-radius:2px}
+.exo-perk-circle .exo-perk-tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);min-width:200px;max-width:280px;background:var(--bg-card);border:1px solid var(--border-bright);padding:9px 12px;z-index:99;pointer-events:none;border-radius:2px;box-shadow:0 4px 16px rgba(0,0,0,.5)}
 .exo-perk-circle:hover .exo-perk-tooltip{display:block}
-.exo-perk-tooltip-name{font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:3px}
-.exo-perk-tooltip-ef{font-size:11px;color:var(--text-secondary);line-height:1.4}
-.exo-mods-row{display:flex;gap:8px}
-.exo-mod-sq{width:48px;height:48px;border:2px solid rgba(206,174,51,.4);background:rgba(206,174,51,.06);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--accent-gold);cursor:pointer;position:relative}
-.exo-mod-sq.cat-done{border-color:rgba(206,174,51,.8);background:rgba(206,174,51,.15)}
+.exo-perk-tooltip-name{font-weight:700;font-size:12.5px;color:var(--text-primary);margin-bottom:4px}
+.exo-perk-tooltip-ef{font-size:11.5px;color:var(--text-secondary);line-height:1.45}
+/* Catalizador */
+.exo-cat-row{display:flex;align-items:flex-start;gap:10px;background:rgba(206,174,51,.04);border:1px solid rgba(206,174,51,.2);padding:8px 10px}
+.exo-cat-row.cat-done{background:rgba(206,174,51,.1);border-color:rgba(206,174,51,.5)}
+.exo-cat-icon{width:46px;height:46px;flex-shrink:0;border:1px solid rgba(206,174,51,.4);background:rgba(206,174,51,.08);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.exo-cat-icon img{width:100%;height:100%;object-fit:cover}
+.exo-cat-info{flex:1;min-width:0}
+.exo-cat-name{font-weight:700;font-size:12.5px;color:var(--accent-gold);line-height:1.2;margin-bottom:2px}
+.exo-cat-ef{font-size:11px;color:var(--text-secondary);line-height:1.4}
+.exo-cat-check{display:flex;align-items:center;gap:5px;cursor:pointer;flex-shrink:0;margin-top:2px}
+.exo-cat-check input{display:none}
+.exo-cat-check-box{width:18px;height:18px;border:2px solid rgba(206,174,51,.5);background:rgba(206,174,51,.06);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent-gold);transition:all .2s}
+.exo-cat-row.cat-done .exo-cat-check-box{background:rgba(206,174,51,.25);border-color:var(--accent-gold)}
+.exo-cat-check-text{font-size:10px;color:rgba(255,255,255,.4);white-space:nowrap}
+.exo-cat-row.cat-done .exo-cat-check-text{color:var(--accent-gold)}
+/* Rasgo intrínseco */
 .exo-intrinsic-row{display:flex;align-items:flex-start;gap:10px;background:rgba(206,174,51,.04);border:1px solid rgba(206,174,51,.2);padding:8px 10px;position:relative}
 .exo-intrinsic-row.eck{background:rgba(206,174,51,.1);border-color:var(--accent-gold-dim)}
-.exo-intr-icon{width:44px;height:44px;flex-shrink:0;border:1px solid rgba(206,174,51,.4);background:rgba(206,174,51,.08);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.exo-intr-icon{width:46px;height:46px;flex-shrink:0;border:1px solid rgba(206,174,51,.4);background:rgba(206,174,51,.08);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .exo-intr-icon img{width:100%;height:100%;object-fit:cover}
-.exo-intr-icon-placeholder{font-size:22px;color:var(--accent-gold)}
 .exo-intr-text{flex:1;min-width:0}
 .exo-intr-name{font-weight:700;font-size:13px;color:var(--text-primary);display:flex;align-items:center;gap:6px;flex-wrap:wrap;line-height:1.3;margin-bottom:3px}
 .champ-inline{font-size:10px;font-weight:700;padding:2px 6px;letter-spacing:.5px}
 .exo-intr-ef{font-size:11.5px;color:var(--text-secondary);line-height:1.45}
 .exo-flavor{font-style:italic;font-size:11.5px;color:rgba(255,255,255,.35);padding:4px 0 0;border-top:1px solid rgba(255,255,255,.06);line-height:1.4}
-/* Stats panel */
-.exo-stat-row{display:flex;align-items:center;gap:6px;padding:1px 0}
-.exo-stat-name{font-size:10.5px;color:var(--text-secondary);flex:0 0 110px;text-align:right;white-space:nowrap}
-.exo-stat-bar-wrap{flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
-.exo-stat-bar{height:100%;background:var(--accent-blue);border-radius:2px;transition:width .3s}
-.exo-stat-val{font-size:10.5px;color:var(--text-primary);flex:0 0 24px;text-align:right;font-weight:600}
-.exo-stat-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:4px 0}
-.exo-stat-fixed{display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);padding:1px 0}
-.exo-stat-fixed span:last-child{color:var(--text-primary);font-weight:600}
-@media(max-width:700px){.exo-layout{grid-template-columns:1fr}.exo-right{border-left:none;padding-left:0;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}}
+/* Stats panel — más grande */
+.exo-stat-row{display:flex;align-items:center;gap:7px;padding:3px 0}
+.exo-stat-name{font-size:12px;color:var(--text-secondary);flex:0 0 118px;text-align:right;white-space:nowrap}
+.exo-stat-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;min-width:0}
+.exo-stat-bar{height:100%;background:linear-gradient(90deg,#3a6fa8,#5ba3e0);border-radius:4px;transition:width .4s ease}
+.exo-stat-val{font-size:12px;color:var(--text-primary);flex:0 0 28px;text-align:right;font-weight:700}
+.exo-stat-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:6px 0}
+.exo-stat-fixed{display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);padding:2px 0}
+.exo-stat-fixed span:last-child{color:var(--text-primary);font-weight:700}
+.exo-stats-title{font-family:'Chakra Petch',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:6px}
+@media(max-width:760px){.exo-layout{grid-template-columns:1fr}.exo-right{border-left:none;padding-left:0;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}}
 </style>
 
 </style>
@@ -4849,7 +4863,8 @@ function buildWeaponCard(w) {
   let exoticHTML = '';
   if (exotic && w.intrinsic) {
     const ic = ws.intrinsicChecked, cc = ws.catalystChecked;
-    // ─── NUEVA TARJETA EXÓTICA ───
+
+    // ─── PERKS (círculos con icono) ───────────────────────────────────────────
     const allPerkIds = [...new Set([...(w.col2||[]), ...(w.col3||[])])];
     const perksRowHTML = allPerkIds.length ? `
       <div class="exo-sec-label">VENTAJAS DE ARMA</div>
@@ -4861,7 +4876,7 @@ function buildWeaponCard(w) {
           const pef=pd?.ef||'';
           return `<div class="exo-perk-circle" title="">
             ${icon?`<img src="${icon}" alt="${pname}" onerror="this.parentElement.innerHTML='<span style=font-size:18px>◈</span>'">`:
-            `<span style="font-size:18px;color:var(--accent-blue)">◈</span>`}
+            `<span style="font-size:18px;color:#4a85cc">◈</span>`}
             <div class="exo-perk-tooltip">
               <div class="exo-perk-tooltip-name">${pname}</div>
               <div class="exo-perk-tooltip-ef">${pef}</div>
@@ -4870,48 +4885,76 @@ function buildWeaponCard(w) {
         }).join('')}
       </div>` : '';
 
+    // ─── CATALIZADOR con icono + checkbox ─────────────────────────────────────
+    const catPD = w.catalyst?.n ? Object.values(PERK_DEFS).find(p=>p.n===w.catalyst.n) : null;
+    const catIconUrl = catPD?.icon || '';
+    const catIconHTML = catIconUrl
+      ? `<img src="${catIconUrl}" alt="" onerror="this.style.display='none'">`
+      : `<span style="font-size:22px;color:var(--accent-gold)">◈</span>`;
     const catHTML = (w.catalyst && w.catalyst.n) ? `
-      <div class="exo-sec-label" style="margin-top:2px">MODIFICADORES DE ARMA</div>
-      <div class="exo-mods-row">
-        <div class="exo-mod-sq ${cc?'cat-done':''}" title="${w.catalyst.n}: ${w.catalyst.ef}">
-          ${cc?'◉':'○'}
+      <div class="exo-sec-label" style="margin-top:2px">CATALIZADOR</div>
+      <div class="exo-cat-row ${cc?'cat-done':''}" onclick="toggleCatalyst('${w.id}')" style="cursor:pointer">
+        <div class="exo-cat-icon">${catIconHTML}</div>
+        <div class="exo-cat-info">
+          <div class="exo-cat-name">${w.catalyst.n}</div>
+          ${w.catalyst.ef?`<div class="exo-cat-ef">${w.catalyst.ef}</div>`:''}
         </div>
-        <div style="font-size:12px;color:var(--text-secondary);flex:1;align-self:center">
-          <strong style="color:var(--accent-gold)">${w.catalyst.n}</strong>
-          ${w.catalyst.ef?`<br><span style="font-size:11px">${w.catalyst.ef}</span>`:''}
-        </div>
+        <label class="exo-cat-check" onclick="event.stopPropagation()">
+          <input type="checkbox" ${cc?'checked':''} onchange="toggleCatalyst('${w.id}')">
+          <div class="exo-cat-check-box">${cc?'✓':''}</div>
+          <span class="exo-cat-check-text">${cc?'Conseguido':'Conseguir'}</span>
+        </label>
       </div>` : '';
 
+    // ─── RASGO INTRÍNSECO con icono de Bungie ────────────────────────────────
     const ch=detectChampion(w);
     const champBadge=ch?`<span class="champ-inline tag champ-badge champ-${ch}">${CHAMP_LABEL[ch]}</span>`:'';
-    const intrIcon=w.intrinsicIcon?`<img src="${w.intrinsicIcon}" onerror="this.style.display='none'">`:
-                   `<div class="exo-intr-icon-placeholder">◆</div>`;
+    // Buscar icono en PERK_DEFS por nombre del intrínseco
+    const intrPD = w.intrinsic?.n ? Object.values(PERK_DEFS).find(p=>p.n===w.intrinsic.n) : null;
+    const intrIconUrl = intrPD?.icon || w.intrinsicIcon || '';
+    const intrIconBox = intrIconUrl
+      ? `<div class="exo-intr-icon"><img src="${intrIconUrl}" alt="" onerror="this.parentElement.style.display='none'"></div>`
+      : '';
     const intrinsicRowHTML = w.intrinsic ? `
-      <div class="exo-sec-label" style="margin-top:2px">RASGOS INTRÍNSECOS</div>
+      <div class="exo-sec-label" style="margin-top:2px">RASGO INTRÍNSECO</div>
       <div class="exo-intrinsic-row ${ic?'eck':''}">
         <button class="pchk ${ic?'on':''}" onclick="toggleIntrinsic('${w.id}')" style="flex-shrink:0">✓</button>
-        <div class="exo-intr-icon">${intrIcon}</div>
+        ${intrIconBox}
         <div class="exo-intr-text">
           <div class="exo-intr-name">${w.intrinsic.n} ${champBadge}</div>
           <div class="exo-intr-ef">${w.intrinsic.ef}</div>
         </div>
       </div>` : '';
 
-    // Stats panel
-    const STAT_LABELS = {impact:'Impacto',range:'Alcance',stability:'Estabilidad',handling:'Manejo',reload:'V. Recarga',aimAssist:'A. Apuntado',zoom:'Zoom',airborne:'Ef. Aire',rounds:'Disparos/min',magazine:'Cargador',recoil:'D. Retroceso',blastRadius:'Radio Expl.',velocity:'Velocidad',chargeTime:'T. Carga',drawTime:'T. Tensado',guardEfficiency:'G. Eficiencia',guardResistance:'G. Resistencia',shieldDuration:'Dur. Escudo'};
-    const BAR_STATS = ['impact','range','stability','handling','reload','aimAssist','zoom','airborne'];
+    // ─── PANEL DE ESTADÍSTICAS ────────────────────────────────────────────────
+    const STAT_LABELS = {
+      impact:'Impacto', range:'Alcance', stability:'Estabilidad', handling:'Manejo',
+      reload:'V. Recarga', aimAssist:'A. Apuntado', zoom:'Zoom', airborne:'Ef. Aire',
+      rounds:'Disparos/min', magazine:'Cargador', recoil:'D. Retroceso',
+      blastRadius:'Radio Expl.', velocity:'Velocidad', chargeTime:'T. Carga',
+      drawTime:'T. Tensado', guardEfficiency:'G. Eficiencia',
+      guardEndurance:'G. Resistencia', guardResistance:'G. Resist. Daño',
+      swingSpeed:'V. Swing', shieldDuration:'Dur. Escudo'
+    };
+    // Color de barra según valor
+    const barColor = v => v>=80?'linear-gradient(90deg,#2a7a4a,#4db87a)':
+                          v>=60?'linear-gradient(90deg,#3a6fa8,#5ba3e0)':
+                          v>=35?'linear-gradient(90deg,#7a5a28,#c9a84c)':
+                                'linear-gradient(90deg,#7a2828,#c95050)';
+    const BAR_STATS = ['impact','range','stability','handling','reload','aimAssist','zoom','airborne','guardEfficiency','guardEndurance','swingSpeed'];
     const FIXED_STATS = ['rounds','magazine','recoil','blastRadius','velocity','chargeTime','drawTime'];
     const stats = w.stats||{};
-    const statsBarHTML = BAR_STATS.filter(k=>stats[k]!=null).map(k=>`
+    const statsBarHTML = BAR_STATS.filter(k=>stats[k]!=null && stats[k]>0).map(k=>`
       <div class="exo-stat-row">
         <div class="exo-stat-name">${STAT_LABELS[k]||k}</div>
-        <div class="exo-stat-bar-wrap"><div class="exo-stat-bar" style="width:${Math.min(stats[k],100)}%"></div></div>
+        <div class="exo-stat-bar-wrap"><div class="exo-stat-bar" style="width:${Math.min(stats[k],100)}%;background:${barColor(stats[k])}"></div></div>
         <div class="exo-stat-val">${stats[k]}</div>
       </div>`).join('');
-    const statsFixedHTML = FIXED_STATS.filter(k=>stats[k]!=null).map(k=>`
+    const statsFixedHTML = FIXED_STATS.filter(k=>stats[k]!=null && stats[k]>0).map(k=>`
       <div class="exo-stat-fixed"><span>${STAT_LABELS[k]||k}</span><span>${stats[k]}</span></div>`).join('');
     const statsPanel = (statsBarHTML||statsFixedHTML) ? `
       <div class="exo-right">
+        <div class="exo-stats-title">ESTADÍSTICAS</div>
         ${statsBarHTML}
         ${statsFixedHTML?`<hr class="exo-stat-divider">${statsFixedHTML}`:''}
       </div>` : '';
