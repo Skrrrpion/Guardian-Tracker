@@ -678,6 +678,8 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 .exo-cat-check{display:flex;align-items:center;gap:5px;cursor:pointer;flex-shrink:0;margin-top:2px}
 .exo-cat-check input{display:none}
 .exo-cat-check-box{width:18px;height:18px;border:2px solid rgba(206,174,51,.5);background:rgba(206,174,51,.06);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent-gold);transition:all .2s}
+.exo-intr-check{width:18px;height:18px;border:2px solid rgba(206,174,51,.5);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--accent-gold);flex-shrink:0;cursor:pointer}
+.exo-intrinsic-row.eck .exo-intr-check{background:rgba(206,174,51,.2);border-color:var(--accent-gold)}
 .exo-cat-row.cat-done .exo-cat-check-box{background:rgba(206,174,51,.25);border-color:var(--accent-gold)}
 .exo-cat-check-text{font-size:10px;color:rgba(255,255,255,.4);white-space:nowrap}
 .exo-cat-row.cat-done .exo-cat-check-text{color:var(--accent-gold)}
@@ -695,7 +697,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 .exo-stat-row{display:flex;align-items:center;gap:7px;padding:3px 0}
 .exo-stat-name{font-size:12px;color:var(--text-secondary);flex:0 0 118px;text-align:right;white-space:nowrap}
 .exo-stat-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;min-width:0}
-.exo-stat-bar{height:100%;background:linear-gradient(90deg,#3a6fa8,#5ba3e0);border-radius:4px;transition:width .4s ease}
+.exo-stat-bar{height:100%;background:linear-gradient(90deg,#7a5c1a,#c9a84c);border-radius:4px;transition:width .4s ease}
 .exo-stat-val{font-size:12px;color:var(--text-primary);flex:0 0 28px;text-align:right;font-weight:700}
 .exo-stat-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:6px 0}
 .exo-stat-fixed{display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);padding:2px 0}
@@ -1660,12 +1662,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
         <option>Vacío</option><option>Estasis</option><option>Hebra</option>
       </select>
     </div>
-    <div class="filter-group">
-      <label>Temporada</label>
-      <select class="filter-select" id="f-wleg-season" onchange="renderLegWeapons()">
-        <option value="">Todas</option><option>T27</option><option>T28</option><option>T29</option>
-      </select>
-    </div>
+    
     <div class="filter-group">
       <label>Tipo</label>
       <select class="filter-select" id="f-wleg-type" onchange="renderLegWeapons()">
@@ -1678,6 +1675,15 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
         <option>Espada</option><option>Arco</option><option>Ballesta</option>
       </select>
     </div>
+          <div class="filter-group">
+            <label class="filter-label">CAMPEÓN</label>
+            <select class="filter-select" id="f-wleg-champ" onchange="renderLegWeapons()">
+              <option value="">Todos</option>
+              <option value="unstoppable">Imparable</option>
+              <option value="barrier">Barrera</option>
+              <option value="overload">Sobrecarga</option>
+            </select>
+          </div>
     <div class="filter-group">
       <label>Arquetipo</label>
       <select class="filter-select" id="f-wleg-arch" onchange="renderLegWeapons()">
@@ -1733,12 +1739,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
         <option>Vacío</option><option>Estasis</option><option>Hebra</option>
       </select>
     </div>
-    <div class="filter-group">
-      <label>Temporada</label>
-      <select class="filter-select" id="f-wexo-season" onchange="renderExoWeapons()">
-        <option value="">Todas</option><option>T27</option><option>T28</option><option>T29</option>
-      </select>
-    </div>
+    
     <div class="filter-group">
       <label>Tipo</label>
       <select class="filter-select" id="f-wexo-type" onchange="renderExoWeapons()">
@@ -1751,6 +1752,15 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
         <option>Espada</option><option>Arco</option><option>Ballesta</option>
       </select>
     </div>
+          <div class="filter-group">
+            <label class="filter-label">CAMPEÓN</label>
+            <select class="filter-select" id="f-wexo-champ" onchange="renderExoWeapons()">
+              <option value="">Todos</option>
+              <option value="unstoppable">Imparable</option>
+              <option value="barrier">Barrera</option>
+              <option value="overload">Sobrecarga</option>
+            </select>
+          </div>
     <div class="filter-group">
       <label>Munición</label>
       <div class="ammo-filter-btns">
@@ -4886,42 +4896,24 @@ function buildWeaponCard(w) {
       </div>` : '';
 
     // ─── CATALIZADOR con icono + checkbox ─────────────────────────────────────
-    const catPD = w.catalyst?.n ? Object.values(PERK_DEFS).find(p=>p.n===w.catalyst.n) : null;
-    const catIconUrl = catPD?.icon || '';
-    const catIconHTML = catIconUrl
-      ? `<img src="${catIconUrl}" alt="" onerror="this.style.display='none'">`
-      : `<span style="font-size:22px;color:var(--accent-gold)">◈</span>`;
     const catHTML = (w.catalyst && w.catalyst.n) ? `
       <div class="exo-sec-label" style="margin-top:2px">CATALIZADOR</div>
-      <div class="exo-cat-row ${cc?'cat-done':''}" onclick="toggleCatalyst('${w.id}')" style="cursor:pointer">
-        <div class="exo-cat-icon">${catIconHTML}</div>
+      <div class="exo-cat-row ${cc?'cat-done':''}" onclick="toggleCatalyst('${w.id}')" style="cursor:pointer" title="Clic para marcar catalizador conseguido">
+        <div class="exo-cat-icon"><span style="font-size:22px;color:var(--accent-gold)">◈</span></div>
         <div class="exo-cat-info">
           <div class="exo-cat-name">${w.catalyst.n}</div>
           ${w.catalyst.ef?`<div class="exo-cat-ef">${w.catalyst.ef}</div>`:''}
         </div>
-        <label class="exo-cat-check" onclick="event.stopPropagation()">
-          <input type="checkbox" ${cc?'checked':''} onchange="toggleCatalyst('${w.id}')">
-          <div class="exo-cat-check-box">${cc?'✓':''}</div>
-          <span class="exo-cat-check-text">${cc?'Conseguido':'Conseguir'}</span>
-        </label>
+        <div class="exo-cat-check-box" title="${cc?'Conseguido':'Conseguir'}">${cc?'✓':''}</div>
       </div>` : '';
 
-    // ─── RASGO INTRÍNSECO con icono de Bungie ────────────────────────────────
-    const ch=detectChampion(w);
-    const champBadge=ch?`<span class="champ-inline tag champ-badge champ-${ch}">${CHAMP_LABEL[ch]}</span>`:'';
-    // Buscar icono en PERK_DEFS por nombre del intrínseco
-    const intrPD = w.intrinsic?.n ? Object.values(PERK_DEFS).find(p=>p.n===w.intrinsic.n) : null;
-    const intrIconUrl = intrPD?.icon || w.intrinsicIcon || '';
-    const intrIconBox = intrIconUrl
-      ? `<div class="exo-intr-icon"><img src="${intrIconUrl}" alt="" onerror="this.parentElement.style.display='none'"></div>`
-      : '';
+    // ─── RASGO INTRÍNSECO ────────────────────────────────────────────────
     const intrinsicRowHTML = w.intrinsic ? `
       <div class="exo-sec-label" style="margin-top:2px">RASGO INTRÍNSECO</div>
-      <div class="exo-intrinsic-row ${ic?'eck':''}">
-        <button class="pchk ${ic?'on':''}" onclick="toggleIntrinsic('${w.id}')" style="flex-shrink:0">✓</button>
-        ${intrIconBox}
+      <div class="exo-intrinsic-row ${ic?'eck':''}" onclick="toggleIntrinsic('${w.id}')" style="cursor:pointer">
+        <div class="exo-intr-check">${ic?'✓':''}</div>
         <div class="exo-intr-text">
-          <div class="exo-intr-name">${w.intrinsic.n} ${champBadge}</div>
+          <div class="exo-intr-name">${w.intrinsic.n}</div>
           <div class="exo-intr-ef">${w.intrinsic.ef}</div>
         </div>
       </div>` : '';
@@ -5107,7 +5099,7 @@ function renderLegWeapons() {
   const get = id => { const e=document.getElementById(id); return e?e.value:''; };
   const search = get('f-wleg-search').toLowerCase();
   const elem   = get('f-wleg-elem');
-  const season = get('f-wleg-season');
+  const champ  = get('f-wleg-champ');
   const type   = get('f-wleg-type');
   const arch   = get('f-wleg-arch');
   const ammo   = get('f-wleg-ammo');
@@ -5120,8 +5112,8 @@ function renderLegWeapons() {
       if (!inName && !inPerks) return false;
     }
     if (elem   && w.elem !== elem) return false;
-    if (season && w.season !== season) return false;
     if (type   && !w.type.toLowerCase().includes(type.toLowerCase())) return false;
+    if (champ  && detectChampion(w) !== champ) return false;
     if (arch   && !translateFrame(w.frame).toLowerCase().includes(arch.toLowerCase())) return false;
     if (wLegMissing && state.weapons[w.id] && state.weapons[w.id].owned) return false;
     if (wLegCraft && !w.craft) return false;
@@ -5137,16 +5129,16 @@ function renderExoWeapons() {
   const get = id => { const e=document.getElementById(id); return e?e.value:''; };
   const search = get('f-wexo-search').toLowerCase();
   const elem   = get('f-wexo-elem');
-  const season = get('f-wexo-season');
   const type   = get('f-wexo-type');
   const ammo   = get('f-wexo-ammo');
+  const champ  = get('f-wexo-champ');
   const list = WEAPONS.filter(w => {
     if (!w.exotic) return false;
     if (ammo && _wAmmoSlot(w) !== ammo) return false;
-    if (search && !w.n.toLowerCase().includes(search) && !(w.e&&w.e.toLowerCase().includes(search)) && !((iconMap[(w.n||w.e).toLowerCase()]||{}).es||'').toLowerCase().includes(search)) return false;
+    if (search && !w.n.toLowerCase().includes(search) && !(w.e&&w.e.toLowerCase().includes(search))) return false;
     if (elem   && w.elem !== elem) return false;
-    if (season && w.season !== season) return false;
     if (type   && !w.type.toLowerCase().includes(type.toLowerCase())) return false;
+    if (champ  && detectChampion(w) !== champ) return false;
     if (wExoMissing && state.weapons[w.id] && state.weapons[w.id].owned) return false;
     return true;
   });
