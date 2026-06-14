@@ -5323,7 +5323,7 @@ function renderLegWeapons() {
   });
   list.sort((a,b) => a.n.localeCompare(b.n,'es'));
   const grid = document.getElementById('weapons-leg-grid');
-  if (grid) grid.innerHTML = list.length ? list.map(w=>buildWCatItem(w,'exo')).join('') : '<div class="empty-state">Sin resultados.</div>';
+  if (grid) grid.innerHTML = list.length ? list.map(w=>buildWCatItem(w,'leg')).join('') : '<div class="empty-state">Sin resultados.</div>';
   const cnt_wlegcount = document.getElementById('wleg-count'); if(cnt_wlegcount) cnt_wlegcount.innerHTML = list.length ? '<strong>'+list.length+'</strong>&nbsp;armas' : '';
   applyAllIcons();
 }
@@ -5400,7 +5400,7 @@ function renderExoWeapons() {
   });
   list.sort((a,b) => a.n.localeCompare(b.n,'es'));
   const grid = document.getElementById('weapons-exo-grid');
-  if (grid) grid.innerHTML = list.length ? list.map(w=>buildWCatItem(w,'leg')).join('') : '<div class="empty-state">Sin resultados.</div>';
+  if (grid) grid.innerHTML = list.length ? list.map(w=>buildWCatItem(w,'exo')).join('') : '<div class="empty-state">Sin resultados.</div>';
   const cnt_wexocount = document.getElementById('wexo-count'); if(cnt_wexocount) cnt_wexocount.innerHTML = list.length ? '<strong>'+list.length+'</strong>&nbsp;armas' : '';
   applyAllIcons();
 }
