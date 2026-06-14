@@ -87,7 +87,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 /* ── WEAPONS GRID ── */
 #weapons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 #weapons-leg-grid{display:grid;grid-template-columns:1fr;gap:10px}
-#weapons-exo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+#weapons-exo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.exo-cat-item{position:relative;cursor:pointer;border-radius:6px;overflow:hidden;aspect-ratio:16/9;background:#111;border:2px solid rgba(255,255,255,.08);transition:border-color .2s,transform .15s}.exo-cat-item:hover{border-color:var(--rarity-exotic);transform:scale(1.03)}.exo-cat-item.owned{border-color:rgba(201,168,76,.5)}.exo-cat-photo{width:100%;height:100%;object-fit:cover;display:block;background-size:cover;background-position:center}.exo-cat-photo-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .3s}.exo-cat-item:hover .exo-cat-photo-bg{transform:scale(1.07)}.exo-cat-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.1) 55%,transparent 100%)}.exo-cat-info{position:absolute;bottom:0;left:0;right:0;padding:8px 10px}.exo-cat-name{font-family:"Chakra Petch",sans-serif;font-size:12px;font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.03em}.exo-cat-tags{display:flex;gap:4px;align-items:center;margin-top:3px;flex-wrap:wrap}.exo-cat-tags img{width:14px;height:14px;object-fit:contain}.exo-cat-owned-badge{position:absolute;top:6px;right:6px;background:rgba(201,168,76,.85);color:#000;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;letter-spacing:.05em}.exo-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}.exo-modal-backdrop.hidden{display:none}.exo-modal-box{position:relative;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;border-radius:8px;background:var(--bg-card);border:1px solid var(--rarity-exotic);box-shadow:0 0 40px rgba(201,168,76,.25)}.exo-modal-close{position:sticky;top:0;z-index:10;float:right;margin:8px 8px 0 0;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:18px;width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}.exo-modal-box .wcard{clip-path:none!important;border:none!important;background:transparent!important;margin:0}.exo-modal-box .wscreenshot{height:180px;border-radius:8px 8px 0 0}
 .wexo .wcard-name{font-size:20px !important;letter-spacing:.5px}
 .wexo .tag{font-size:13px !important;padding:4px 11px !important}
 .wexo .ebadge{font-size:13px !important}
@@ -5261,10 +5261,58 @@ function renderLegWeapons() {
   });
   list.sort((a,b) => a.n.localeCompare(b.n,'es'));
   const grid = document.getElementById('weapons-leg-grid');
-  if (grid) grid.innerHTML = list.length ? list.map(buildWeaponCard).join('') : '<div class="empty-state">Sin resultados.</div>';
+  if (grid) grid.innerHTML = list.length ? list.map(buildExoCatalogItem).join('') : '<div class="empty-state">Sin resultados.</div>';
   const cnt_wlegcount = document.getElementById('wleg-count'); if(cnt_wlegcount) cnt_wlegcount.innerHTML = list.length ? '<strong>'+list.length+'</strong>&nbsp;armas' : '';
   applyAllIcons();
 }
+function buildExoCatalogItem(w) {
+  const owned = state.weapons[w.id]?.owned;
+  const elem = w.elem||'';
+  const ei = ELEM_ICON[elem]||'';
+  const ammoSlot = _wAmmoSlot(w);
+  const ammoSrc = {primary:'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-primary.svg',special:'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-special.svg',heavy:'https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-heavy.svg'}[ammoSlot]||'';
+  const typeSrc = WTYPE_ICON[w.type]||'';
+  const bg = w.screenshot || (w.icon ? `https://www.bungie.net${w.icon}` : '');
+  return `<div class="exo-cat-item${owned?' owned':''}" onclick="openExoModal('${w.id}')" title="${w.n}">
+    <div class="exo-cat-photo-bg" style="${bg?`background-image:url('${bg}')`:'background:#1a1a2e'}"></div>
+    <div class="exo-cat-overlay"></div>
+    ${owned?'<div class="exo-cat-owned-badge">✓ OBTENIDO</div>':''}
+    <div class="exo-cat-info">
+      <div class="exo-cat-name">${w.n}</div>
+      <div class="exo-cat-tags">
+        ${ei?`<span style="font-size:12px">${ei}</span>`:''}
+        ${typeSrc?`<img src="${typeSrc}" style="filter:invert(1) opacity(.8)">` : ''}
+        ${ammoSrc?`<img src="${ammoSrc}">` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function openExoModal(wid) {
+  const w = WEAPONS.find(x => x.id === wid);
+  if (!w) return;
+  let bd = document.getElementById('exo-modal-backdrop');
+  if (!bd) {
+    bd = document.createElement('div');
+    bd.id = 'exo-modal-backdrop';
+    bd.className = 'exo-modal-backdrop hidden';
+    bd.innerHTML = '<div class="exo-modal-box" id="exo-modal-box"></div>';
+    bd.addEventListener('click', function(e){ if(e.target===bd) closeExoModal(); });
+    document.body.appendChild(bd);
+  }
+  const box = document.getElementById('exo-modal-box');
+  box.innerHTML = '<button class="exo-modal-close" onclick="closeExoModal()">✕</button>' + buildWeaponCard(w);
+  bd.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  applyAllIcons();
+}
+
+function closeExoModal() {
+  const bd = document.getElementById('exo-modal-backdrop');
+  if (bd) bd.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
 function renderExoWeapons() {
   const get = id => { const e=document.getElementById(id); return e?e.value:''; };
   const search = get('f-wexo-search').toLowerCase();
