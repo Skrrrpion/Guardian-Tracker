@@ -937,10 +937,10 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 /* ── ARMOR STAT COMBO GRID (icon-only squares) ── */
 .armor-arch-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:9px;padding-top:9px;border-top:1px solid rgba(142,103,216,.18);}
 .ea-stats .armor-arch-grid{margin-top:0;padding-top:0;border-top:none;}
-.arch-cell{display:flex;align-items:center;justify-content:center;gap:2px;padding:5px 3px;border:1px solid var(--border);background:var(--bg-card);cursor:pointer;transition:all .18s;min-height:42px;aspect-ratio:1;}
+.arch-cell{display:flex;align-items:center;justify-content:center;padding:2px;aspect-ratio:1;border:1px solid var(--border);background:var(--bg-card);cursor:pointer;transition:all .18s;}
 .arch-cell:hover{border-color:rgba(142,103,216,.5);background:rgba(142,103,216,.06);}
-.arch-icons{display:flex;gap:2px;align-items:center;justify-content:center;}
-.arch-icons img{width:22px;height:22px;object-fit:contain;flex-shrink:0;border-radius:3px;}
+.arch-icons{display:flex;width:100%;height:100%;align-items:center;justify-content:center;}
+.arch-icons img{width:100%;height:100%;object-fit:contain;border-radius:3px;display:block;}
 .arch-fb{font-size:12px;color:var(--text-muted);}
 /* Godroll = gold */
 .arch-cell.a-god{border-color:var(--accent-gold) !important;background:rgba(201,168,76,.13) !important;box-shadow:0 0 7px rgba(201,168,76,.35) !important;}
@@ -4271,7 +4271,7 @@ function buildArmorSlotCard(set, slotDef, cls) {
     const stateCls = v===1 ? ' a-god' : v===2 ? ' a-semi' : '';
     return `<div class="arch-cell${stateCls}" id="lgod_${sid}_${a.id}" title="${a.n} — ${a.stat}" onclick="cycleArmorStat('${sid}','${a.id}')">
       <span class="arch-icons">
-        ${a.icon?`<img src="${a.icon}" style="width:22px;height:22px;object-fit:contain" onerror="this.style.opacity=0">`:'<span class="arch-fb">◈</span>'}</span>
+        ${a.icon?`<img src="${a.icon}" style="width:100%;height:100%;object-fit:contain;display:block" onerror="this.style.opacity=0">`:'<span class="arch-fb">◈</span>'}</span>
     </div>`;
   }).join('');
   // slot label: class item gets class-specific name
@@ -4355,7 +4355,7 @@ function buildExoticArmorCard(ea) {
     const stateCls = v===1 ? ' a-god' : v===2 ? ' a-semi' : '';
     return `<div class="arch-cell${stateCls}" id="egod_${ea.id}_${a.id}" title="${a.n} — ${a.stat}" onclick="cycleExoticStat('${ea.id}','${a.id}')">
       <span class="arch-icons">
-        ${a.icon?`<img src="${a.icon}" style="width:22px;height:22px;object-fit:contain" onerror="this.style.opacity=0">`:'<span class="arch-fb">◈</span>'}</span>
+        ${a.icon?`<img src="${a.icon}" style="width:100%;height:100%;object-fit:contain;display:block" onerror="this.style.opacity=0">`:'<span class="arch-fb">◈</span>'}</span>
     </div>`;
   }).join('');
   return `<div class="eacard ${obtained?'aobt':''}" id="eacard_${ea.id}">
