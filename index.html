@@ -5277,7 +5277,7 @@ function buildWCatItem(w, rarity) {
 }
 
 function openWeaponModal(wid, rarity) {
-  const w = WEAPONS.find(x => x.id === wid);
+  const w = WEAPONS.find(x => x != null && x.id === wid);
   if (!w) return;
   let bd = document.getElementById('wmodal-bd');
   if (!bd) {
