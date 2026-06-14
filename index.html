@@ -71,7 +71,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 .tab-panel{display:none;padding:16px}.tab-panel#tab-builds,.tab-panel#tab-builds-saved{padding:0;display:none;flex-direction:column;height:calc(100vh - 56px)}
 .tab-panel.active{display:block}.tab-panel#tab-builds.active,.tab-panel#tab-builds-saved.active{display:flex!important;flex-direction:column}
 /* ── FILTERS ── */
-.filters-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;padding:14px 0;margin-bottom:14px;border-bottom:1px solid var(--border)}
+.filters-bar{display:flex;flex-direction:column;gap:10px;padding:14px 0;margin-bottom:14px;border-bottom:1px solid var(--border)}.filter-row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}.filter-row-bottom{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:6px;border-top:1px solid rgba(255,255,255,.06)}.arch-filter-btns{display:flex;flex-wrap:wrap;gap:3px;align-items:center}.arch-fb{display:flex;align-items:center;justify-content:center;padding:4px;border-radius:5px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);cursor:pointer;color:var(--text-dim);transition:all .15s;min-width:34px;height:34px}.arch-fb img{width:22px;height:22px;object-fit:contain;filter:invert(1) opacity(.8)}.arch-fb.active{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:#fff}.arch-fb:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3)}
 .filter-group{display:flex;flex-direction:column;gap:5px}
 .filter-group label{font-family:'Chakra Petch',sans-serif;font-size:12px;color:var(--text-muted);text-transform:uppercase;white-space:nowrap;letter-spacing:.06em}
 .filter-input,.filter-select{background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);font-family:'Barlow',sans-serif;font-size:12px;padding:5px 8px;outline:none;transition:border-color .2s}
@@ -1143,7 +1143,7 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 .wtype-fb.active img{opacity:1}
 .wtype-fb:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25)}
 .wtype-fb-all{font-size:11px;color:var(--text-dim);padding:3px 6px}
-.card-ammo-icon{width:16px;height:16px;vertical-align:middle;margin-right:3px;flex-shrink:0}
+.card-ammo-icon{width:20px;height:20px;vertical-align:middle;margin-right:3px;flex-shrink:0}
 
 .ammo-special{background:#78a8f8}
 .ammo-heavy{background:#c87878}
@@ -1669,96 +1669,103 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 <!-- TAB: ARMAS LEGENDARIAS -->
 <div id="tab-armas-leg" class="tab-panel active">
   <div class="filters-bar">
-    <div class="filter-group">
+    <!-- Fila 1: Elemento + Arquetipo -->
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>Elemento</label>
+        <div class="elem-filter-btns">
+          <button class="elem-fb active" data-elem="" onclick="setElemFilter('wleg',this)" title="Todos">·</button>
+          <button class="elem-fb" data-elem="Cinético" onclick="setElemFilter('wleg',this)" title="Cinético"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_3385a924fd3ccb92c343ade19f19a370.png"></button>
+          <button class="elem-fb" data-elem="Arco" onclick="setElemFilter('wleg',this)" title="Arco"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_092d066688b879c807c3b460afdd61e6.png"></button>
+          <button class="elem-fb" data-elem="Solar" onclick="setElemFilter('wleg',this)" title="Solar"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_2a1773e10968f2d088b97c22b22bba9e.png"></button>
+          <button class="elem-fb" data-elem="Vacío" onclick="setElemFilter('wleg',this)" title="Vacío"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_ceb2f6197dccf3958bb31cc783eb97a0.png"></button>
+          <button class="elem-fb" data-elem="Estasis" onclick="setElemFilter('wleg',this)" title="Estasis"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_530c4c3e7981dc2aefd24fd3293482bf.png"></button>
+          <button class="elem-fb" data-elem="Hebra" onclick="setElemFilter('wleg',this)" title="Hebra"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_b2fe51a94f3533f97079dfa0d27a4096.png"></button>
+        </div>
+        <input type="hidden" id="f-wleg-elem" value="">
+      </div>
+      <div class="filter-group">
+        <label>Arquetipo</label>
+        <div class="arch-filter-btns">
+          <button class="arch-fb active" data-arch="" onclick="setArchFilter('wleg',this)" title="Todos">·</button>
+          <button class="arch-fb" data-arch="adaptativo" onclick="setArchFilter('wleg',this)" title="Adaptativo"><img src="https://www.bungie.net/common/destiny2_content/icons/967fb4abc6ab98f74639d6c08e5f56ee.png"></button>
+          <button class="arch-fb" data-arch="agresivo" onclick="setArchFilter('wleg',this)" title="Agresivo"><img src="https://www.bungie.net/common/destiny2_content/icons/64209c4fd20513b33109c374179d0958.png"></button>
+          <button class="arch-fb" data-arch="precisión" onclick="setArchFilter('wleg',this)" title="Precisión"><img src="https://www.bungie.net/common/destiny2_content/icons/e9dd736124e8ef94048901a279a5bb18.png"></button>
+          <button class="arch-fb" data-arch="cadencia" onclick="setArchFilter('wleg',this)" title="Cadencia rápida"><img src="https://www.bungie.net/common/destiny2_content/icons/801d62d1f9783bee81d5700c54c24fda.png"></button>
+          <button class="arch-fb" data-arch="ligero" onclick="setArchFilter('wleg',this)" title="Ligero"><img src="https://www.bungie.net/common/destiny2_content/icons/6db8cd21c2b3e6fffeb6f111d6c70dd2.png"></button>
+          <button class="arch-fb" data-arch="alto impacto" onclick="setArchFilter('wleg',this)" title="Alto impacto"><img src="https://www.bungie.net/common/destiny2_content/icons/34573143849cf910d2381554bb57a10d.png"></button>
+          <button class="arch-fb" data-arch="pesad" onclick="setArchFilter('wleg',this)" title="Pesado / Ráfaga pesada"><img src="https://www.bungie.net/common/destiny2_content/icons/5c4c7b8c580a97ede3981eceefb63540.png"></button>
+          <button class="arch-fb" data-arch="equilibrado" onclick="setArchFilter('wleg',this)" title="Marco equilibrado"><img src="https://www.bungie.net/common/destiny2_content/icons/b46e3f554098e175b34f6abe2b311c7c.png"></button>
+          <button class="arch-fb" data-arch="dinámico" onclick="setArchFilter('wleg',this)" title="Marco dinámico"><img src="https://www.bungie.net/common/destiny2_content/icons/4e065ecc7e8166279873c55b563b5311.png"></button>
+          <button class="arch-fb" data-arch="disrupción" onclick="setArchFilter('wleg',this)" title="Disrupción pesada"><img src="https://www.bungie.net/common/destiny2_content/icons/6f7531eb708f3aedfbfdaff774a479db.png"></button>
+          <button class="arch-fb" data-arch="vórtice" onclick="setArchFilter('wleg',this)" title="Marco de vórtice"><img src="https://www.bungie.net/common/destiny2_content/icons/23e50e126159f0f22983f73d6a246f0d.png"></button>
+          <button class="arch-fb" data-arch="onda" onclick="setArchFilter('wleg',this)" title="Marco de onda"><img src="https://www.bungie.net/common/destiny2_content/icons/00c13147258a00b339f472516328267f.png"></button>
+          <button class="arch-fb" data-arch="denegación" onclick="setArchFilter('wleg',this)" title="Denegación de área"><img src="https://www.bungie.net/common/destiny2_content/icons/d1c2cea4a7325962a493283c5615d260.png"></button>
+          <button class="arch-fb" data-arch="exótico" onclick="setArchFilter('wleg',this)" title="Exótico" style="font-size:10px;font-weight:bold;color:#e8c96a">EXO</button>
+        </div>
+        <input type="hidden" id="f-wleg-arch" value="">
+      </div>
+    </div>
+    <!-- Fila 2: Campeón + Munición + Tipo -->
+    <div class="filter-row">
+      <div class="filter-group">
+        <label class="filter-label">CAMPEÓN</label>
+        <div class="champ-filter-btns">
+          <button class="champ-fb active" data-champ="" onclick="setChampFilter('wleg',this)" title="Todos">·</button>
+          <button class="champ-fb" data-champ="unstoppable" onclick="setChampFilter('wleg',this)" title="Imparable"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/stagger.svg"></button>
+          <button class="champ-fb" data-champ="barrier" onclick="setChampFilter('wleg',this)" title="Barrera"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/pierce.svg"></button>
+          <button class="champ-fb" data-champ="overload" onclick="setChampFilter('wleg',this)" title="Sobrecarga"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/overload.svg"></button>
+        </div>
+        <input type="hidden" id="f-wleg-champ" value="">
+      </div>
+      <div class="filter-group">
+        <label>Munición</label>
+        <div class="ammo-filter-btns">
+          <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wleg',this)">Todas</button>
+          <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wleg',this)" title="Primaria"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-primary.svg"></button>
+          <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wleg',this)" title="Especial"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-special.svg"></button>
+          <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wleg',this)" title="Pesada"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-heavy.svg"></button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Tipo</label>
+        <div class="wtype-filter-btns">
+          <button class="wtype-fb wtype-fb-all active" data-type="" onclick="setTypeFilter('wleg',this)" title="Todos">·</button>
+          <button class="wtype-fb" data-type="Cañón de mano" onclick="setTypeFilter('wleg',this)" title="Cañón de mano"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/hand_cannon.svg"></button>
+          <button class="wtype-fb" data-type="Rifle automático" onclick="setTypeFilter('wleg',this)" title="Rifle automático"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/auto_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de pulsos" onclick="setTypeFilter('wleg',this)" title="Fusil de pulsos"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/pulse_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de exploración" onclick="setTypeFilter('wleg',this)" title="Fusil de exploración"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/scout_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Subfusil" onclick="setTypeFilter('wleg',this)" title="Subfusil"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/smg.svg"></button>
+          <button class="wtype-fb" data-type="Pistola lateral" onclick="setTypeFilter('wleg',this)" title="Pistola lateral"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sidearm.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de fusión" onclick="setTypeFilter('wleg',this)" title="Fusil de fusión"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/fusion_rifle.svg"></button>
+          <button class="wtype-fb" data-type="FFL" onclick="setTypeFilter('wleg',this)" title="FFL"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/wire_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Escopeta" onclick="setTypeFilter('wleg',this)" title="Escopeta"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/shotgun.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de francotirador" onclick="setTypeFilter('wleg',this)" title="Fusil de francotirador"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sniper_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de rastreo" onclick="setTypeFilter('wleg',this)" title="Fusil de rastreo"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/beam_weapon.svg"></button>
+          <button class="wtype-fb" data-type="Arco de combate" onclick="setTypeFilter('wleg',this)" title="Arco de combate"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
+          <button class="wtype-fb" data-type="Arco" onclick="setTypeFilter('wleg',this)" title="Arco"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
+          <button class="wtype-fb" data-type="Ballesta" onclick="setTypeFilter('wleg',this)" title="Ballesta"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
+          <button class="wtype-fb" data-type="Lanzagranadas" onclick="setTypeFilter('wleg',this)" title="Lanzagranadas"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/grenade_launcher-field_forged.svg"></button>
+          <button class="wtype-fb" data-type="Lanzacohetes" onclick="setTypeFilter('wleg',this)" title="Lanzacohetes"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/rocket_launcher.svg"></button>
+          <button class="wtype-fb" data-type="Ametralladora" onclick="setTypeFilter('wleg',this)" title="Ametralladora"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/machinegun.svg"></button>
+          <button class="wtype-fb" data-type="Guadaña" onclick="setTypeFilter('wleg',this)" title="Guadaña"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/glaive.svg"></button>
+          <button class="wtype-fb" data-type="Espada" onclick="setTypeFilter('wleg',this)" title="Espada"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sword_heavy.svg"></button>
+        </div>
+        <input type="hidden" id="f-wleg-type" value="">
+      </div>
+    </div>
+    <!-- Fila 3: Toggles + Búsqueda -->
+    <div class="filter-row filter-row-bottom">
+      <div id="f-wleg-craft" class="filter-toggle craft-toggle" onclick="toggleWLegCraft(this)">
+        <span class="dot"></span>⚒ Fabricables
+      </div>
+      <div id="f-wleg-missing" class="filter-toggle" onclick="toggleWLegMissing(this)">
+        <span class="dot"></span>Solo me falta
+      </div>
       <input type="search" class="filter-input" id="f-wleg-search" placeholder="Buscar arma o perk…" oninput="renderLegWeapons()">
+      <input type="hidden" id="f-wleg-ammo" value="">
+      <span id="wleg-count" class="results-count"></span>
     </div>
-    <div class="filter-group">
-      <label>Elemento</label>
-      <div class="elem-filter-btns">
-        <button class="elem-fb active" data-elem="" onclick="setElemFilter('wleg',this)" title="Todos">·</button>
-        <button class="elem-fb" data-elem="Cinético" onclick="setElemFilter('wleg',this)" title="Cinético"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_3385a924fd3ccb92c343ade19f19a370.png"></button>
-        <button class="elem-fb" data-elem="Arco" onclick="setElemFilter('wleg',this)" title="Arco"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_092d066688b879c807c3b460afdd61e6.png"></button>
-        <button class="elem-fb" data-elem="Solar" onclick="setElemFilter('wleg',this)" title="Solar"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_2a1773e10968f2d088b97c22b22bba9e.png"></button>
-        <button class="elem-fb" data-elem="Vacío" onclick="setElemFilter('wleg',this)" title="Vacío"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_ceb2f6197dccf3958bb31cc783eb97a0.png"></button>
-        <button class="elem-fb" data-elem="Estasis" onclick="setElemFilter('wleg',this)" title="Estasis"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_530c4c3e7981dc2aefd24fd3293482bf.png"></button>
-        <button class="elem-fb" data-elem="Hebra" onclick="setElemFilter('wleg',this)" title="Hebra"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_b2fe51a94f3533f97079dfa0d27a4096.png"></button>
-      </div>
-      <input type="hidden" id="f-wleg-elem" value="">
-    </div>
-    
-    <div class="filter-group">
-      <label>Tipo</label>
-      <div class="wtype-filter-btns">
-        <button class="wtype-fb wtype-fb-all active" data-type="" onclick="setTypeFilter('wleg',this)" title="Todos">·</button>
-        <button class="wtype-fb" data-type="Cañón de mano" onclick="setTypeFilter('wleg',this)" title="Cañón de mano"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/hand_cannon.svg"></button>
-        <button class="wtype-fb" data-type="Rifle automático" onclick="setTypeFilter('wleg',this)" title="Rifle automático"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/auto_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de pulsos" onclick="setTypeFilter('wleg',this)" title="Fusil de pulsos"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/pulse_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de exploración" onclick="setTypeFilter('wleg',this)" title="Fusil de exploración"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/scout_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Subfusil" onclick="setTypeFilter('wleg',this)" title="Subfusil"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/smg.svg"></button>
-        <button class="wtype-fb" data-type="Pistola lateral" onclick="setTypeFilter('wleg',this)" title="Pistola lateral"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sidearm.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de fusión" onclick="setTypeFilter('wleg',this)" title="Fusil de fusión"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/fusion_rifle.svg"></button>
-        <button class="wtype-fb" data-type="FFL" onclick="setTypeFilter('wleg',this)" title="FFL"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/wire_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Escopeta" onclick="setTypeFilter('wleg',this)" title="Escopeta"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/shotgun.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de francotirador" onclick="setTypeFilter('wleg',this)" title="Fusil de francotirador"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sniper_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de rastreo" onclick="setTypeFilter('wleg',this)" title="Fusil de rastreo"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/beam_weapon.svg"></button>
-        <button class="wtype-fb" data-type="Arco de combate" onclick="setTypeFilter('wleg',this)" title="Arco de combate"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
-        <button class="wtype-fb" data-type="Arco" onclick="setTypeFilter('wleg',this)" title="Arco"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
-        <button class="wtype-fb" data-type="Ballesta" onclick="setTypeFilter('wleg',this)" title="Ballesta"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
-        <button class="wtype-fb" data-type="Lanzagranadas" onclick="setTypeFilter('wleg',this)" title="Lanzagranadas"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/grenade_launcher-field_forged.svg"></button>
-        <button class="wtype-fb" data-type="Lanzacohetes" onclick="setTypeFilter('wleg',this)" title="Lanzacohetes"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/rocket_launcher.svg"></button>
-        <button class="wtype-fb" data-type="Ametralladora" onclick="setTypeFilter('wleg',this)" title="Ametralladora"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/machinegun.svg"></button>
-        <button class="wtype-fb" data-type="Guadaña" onclick="setTypeFilter('wleg',this)" title="Guadaña"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/glaive.svg"></button>
-        <button class="wtype-fb" data-type="Espada" onclick="setTypeFilter('wleg',this)" title="Espada"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sword_heavy.svg"></button>
-      </div>
-      <input type="hidden" id="f-wleg-type" value="">
-    </div>
-          <div class="filter-group">
-            <label class="filter-label">CAMPEÓN</label>
-            <div class="champ-filter-btns">
-              <button class="champ-fb active" data-champ="" onclick="setChampFilter('wleg',this)" title="Todos">·</button>
-              <button class="champ-fb" data-champ="unstoppable" onclick="setChampFilter('wleg',this)" title="Imparable"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/stagger.svg"></button>
-              <button class="champ-fb" data-champ="barrier" onclick="setChampFilter('wleg',this)" title="Barrera"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/pierce.svg"></button>
-              <button class="champ-fb" data-champ="overload" onclick="setChampFilter('wleg',this)" title="Sobrecarga"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/overload.svg"></button>
-            </div>
-            <input type="hidden" id="f-wleg-champ" value="">
-          </div>
-    <div class="filter-group">
-      <label>Arquetipo</label>
-      <select class="filter-select" id="f-wleg-arch" onchange="renderLegWeapons()">
-        <option value="">Todos</option>
-        <option value="adaptativo">Adaptativo</option>
-        <option value="agresivo">Agresivo</option>
-        <option value="precisión">Precisión</option>
-        <option value="cadencia">Cadencia rápida</option>
-        <option value="ligero">Ligero</option>
-        <option value="alto impacto">Alto impacto</option>
-        <option value="pesad">Pesado / Ráfaga pesada</option>
-        <option value="equilibrado">Marco equilibrado</option>
-        <option value="dinámico">Marco dinámico</option>
-        <option value="disrupción">Disrupción pesada</option>
-        <option value="vórtice">Marco de vórtice</option>
-        <option value="onda">Marco de onda</option>
-        <option value="denegación">Denegación de área</option>
-        <option value="exótico">Exótico</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label>Munición</label>
-      <div class="ammo-filter-btns">
-        <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wleg',this)">Todas</button>
-        <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wleg',this)" title="Primaria"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-primary.svg"></button>
-        <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wleg',this)" title="Especial"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-special.svg"></button>
-        <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wleg',this)" title="Pesada"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-heavy.svg"></button>
-      </div>
-    </div>
-    <div id="f-wleg-missing" class="filter-toggle" onclick="toggleWLegMissing(this)">
-      <span class="dot"></span>Solo me falta
-    </div>
-    <div id="f-wleg-craft" class="filter-toggle craft-toggle" onclick="toggleWLegCraft(this)">
-      <span class="dot"></span>⚒ Fabricables
-    </div>
-    <input type="hidden" id="f-wleg-ammo" value="">
-  <span id="wleg-count" class="results-count"></span>
   </div>
   <div id="weapons-leg-grid"></div>
 </div>
@@ -1766,73 +1773,79 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
 <!-- TAB: ARMAS EXÓTICAS -->
 <div id="tab-armas-exo" class="tab-panel">
   <div class="filters-bar">
-    <div class="filter-group">
+    <!-- Fila 1: Elemento -->
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>Elemento</label>
+        <div class="elem-filter-btns">
+          <button class="elem-fb active" data-elem="" onclick="setElemFilter('wexo',this)" title="Todos">·</button>
+          <button class="elem-fb" data-elem="Cinético" onclick="setElemFilter('wexo',this)" title="Cinético"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_3385a924fd3ccb92c343ade19f19a370.png"></button>
+          <button class="elem-fb" data-elem="Arco" onclick="setElemFilter('wexo',this)" title="Arco"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_092d066688b879c807c3b460afdd61e6.png"></button>
+          <button class="elem-fb" data-elem="Solar" onclick="setElemFilter('wexo',this)" title="Solar"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_2a1773e10968f2d088b97c22b22bba9e.png"></button>
+          <button class="elem-fb" data-elem="Vacío" onclick="setElemFilter('wexo',this)" title="Vacío"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_ceb2f6197dccf3958bb31cc783eb97a0.png"></button>
+          <button class="elem-fb" data-elem="Estasis" onclick="setElemFilter('wexo',this)" title="Estasis"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_530c4c3e7981dc2aefd24fd3293482bf.png"></button>
+          <button class="elem-fb" data-elem="Hebra" onclick="setElemFilter('wexo',this)" title="Hebra"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_b2fe51a94f3533f97079dfa0d27a4096.png"></button>
+        </div>
+        <input type="hidden" id="f-wexo-elem" value="">
+      </div>
+    </div>
+    <!-- Fila 2: Campeón + Munición + Tipo -->
+    <div class="filter-row">
+      <div class="filter-group">
+        <label class="filter-label">CAMPEÓN</label>
+        <div class="champ-filter-btns">
+          <button class="champ-fb active" data-champ="" onclick="setChampFilter('wexo',this)" title="Todos">·</button>
+          <button class="champ-fb" data-champ="unstoppable" onclick="setChampFilter('wexo',this)" title="Imparable"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/stagger.svg"></button>
+          <button class="champ-fb" data-champ="barrier" onclick="setChampFilter('wexo',this)" title="Barrera"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/pierce.svg"></button>
+          <button class="champ-fb" data-champ="overload" onclick="setChampFilter('wexo',this)" title="Sobrecarga"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/overload.svg"></button>
+        </div>
+        <input type="hidden" id="f-wexo-champ" value="">
+      </div>
+      <div class="filter-group">
+        <label>Munición</label>
+        <div class="ammo-filter-btns">
+          <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wexo',this)">Todas</button>
+          <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wexo',this)" title="Primaria"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-primary.svg"></button>
+          <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wexo',this)" title="Especial"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-special.svg"></button>
+          <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wexo',this)" title="Pesada"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-heavy.svg"></button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Tipo</label>
+        <div class="wtype-filter-btns">
+          <button class="wtype-fb wtype-fb-all active" data-type="" onclick="setTypeFilter('wexo',this)" title="Todos">·</button>
+          <button class="wtype-fb" data-type="Cañón de mano" onclick="setTypeFilter('wexo',this)" title="Cañón de mano"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/hand_cannon.svg"></button>
+          <button class="wtype-fb" data-type="Rifle automático" onclick="setTypeFilter('wexo',this)" title="Rifle automático"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/auto_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de pulsos" onclick="setTypeFilter('wexo',this)" title="Fusil de pulsos"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/pulse_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de exploración" onclick="setTypeFilter('wexo',this)" title="Fusil de exploración"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/scout_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Subfusil" onclick="setTypeFilter('wexo',this)" title="Subfusil"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/smg.svg"></button>
+          <button class="wtype-fb" data-type="Pistola lateral" onclick="setTypeFilter('wexo',this)" title="Pistola lateral"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sidearm.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de fusión" onclick="setTypeFilter('wexo',this)" title="Fusil de fusión"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/fusion_rifle.svg"></button>
+          <button class="wtype-fb" data-type="FFL" onclick="setTypeFilter('wexo',this)" title="FFL"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/wire_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Escopeta" onclick="setTypeFilter('wexo',this)" title="Escopeta"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/shotgun.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de francotirador" onclick="setTypeFilter('wexo',this)" title="Fusil de francotirador"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sniper_rifle.svg"></button>
+          <button class="wtype-fb" data-type="Fusil de rastreo" onclick="setTypeFilter('wexo',this)" title="Fusil de rastreo"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/beam_weapon.svg"></button>
+          <button class="wtype-fb" data-type="Arco de combate" onclick="setTypeFilter('wexo',this)" title="Arco de combate"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
+          <button class="wtype-fb" data-type="Arco" onclick="setTypeFilter('wexo',this)" title="Arco"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
+          <button class="wtype-fb" data-type="Ballesta" onclick="setTypeFilter('wexo',this)" title="Ballesta"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
+          <button class="wtype-fb" data-type="Lanzagranadas" onclick="setTypeFilter('wexo',this)" title="Lanzagranadas"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/grenade_launcher-field_forged.svg"></button>
+          <button class="wtype-fb" data-type="Lanzacohetes" onclick="setTypeFilter('wexo',this)" title="Lanzacohetes"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/rocket_launcher.svg"></button>
+          <button class="wtype-fb" data-type="Ametralladora" onclick="setTypeFilter('wexo',this)" title="Ametralladora"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/machinegun.svg"></button>
+          <button class="wtype-fb" data-type="Guadaña" onclick="setTypeFilter('wexo',this)" title="Guadaña"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/glaive.svg"></button>
+          <button class="wtype-fb" data-type="Espada" onclick="setTypeFilter('wexo',this)" title="Espada"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sword_heavy.svg"></button>
+        </div>
+        <input type="hidden" id="f-wexo-type" value="">
+      </div>
+    </div>
+    <!-- Fila 3: Controles -->
+    <div class="filter-row filter-row-bottom">
+      <div id="f-wexo-missing" class="filter-toggle" onclick="toggleWExoMissing(this)">
+        <span class="dot"></span>Solo me falta
+      </div>
       <input type="search" class="filter-input" id="f-wexo-search" placeholder="Buscar arma exótica…" oninput="renderExoWeapons()">
+      <input type="hidden" id="f-wexo-ammo" value="">
+      <span id="wexo-count" class="results-count"></span>
     </div>
-    <div class="filter-group">
-      <label>Elemento</label>
-      <div class="elem-filter-btns">
-        <button class="elem-fb active" data-elem="" onclick="setElemFilter('wexo',this)" title="Todos">·</button>
-        <button class="elem-fb" data-elem="Cinético" onclick="setElemFilter('wexo',this)" title="Cinético"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_3385a924fd3ccb92c343ade19f19a370.png"></button>
-        <button class="elem-fb" data-elem="Arco" onclick="setElemFilter('wexo',this)" title="Arco"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_092d066688b879c807c3b460afdd61e6.png"></button>
-        <button class="elem-fb" data-elem="Solar" onclick="setElemFilter('wexo',this)" title="Solar"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_2a1773e10968f2d088b97c22b22bba9e.png"></button>
-        <button class="elem-fb" data-elem="Vacío" onclick="setElemFilter('wexo',this)" title="Vacío"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_ceb2f6197dccf3958bb31cc783eb97a0.png"></button>
-        <button class="elem-fb" data-elem="Estasis" onclick="setElemFilter('wexo',this)" title="Estasis"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_530c4c3e7981dc2aefd24fd3293482bf.png"></button>
-        <button class="elem-fb" data-elem="Hebra" onclick="setElemFilter('wexo',this)" title="Hebra"><img src="https://www.bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_b2fe51a94f3533f97079dfa0d27a4096.png"></button>
-      </div>
-      <input type="hidden" id="f-wexo-elem" value="">
-    </div>
-    
-    <div class="filter-group">
-      <label>Tipo</label>
-      <div class="wtype-filter-btns">
-        <button class="wtype-fb wtype-fb-all active" data-type="" onclick="setTypeFilter('wexo',this)" title="Todos">·</button>
-        <button class="wtype-fb" data-type="Cañón de mano" onclick="setTypeFilter('wexo',this)" title="Cañón de mano"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/hand_cannon.svg"></button>
-        <button class="wtype-fb" data-type="Rifle automático" onclick="setTypeFilter('wexo',this)" title="Rifle automático"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/auto_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de pulsos" onclick="setTypeFilter('wexo',this)" title="Fusil de pulsos"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/pulse_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de exploración" onclick="setTypeFilter('wexo',this)" title="Fusil de exploración"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/scout_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Subfusil" onclick="setTypeFilter('wexo',this)" title="Subfusil"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/smg.svg"></button>
-        <button class="wtype-fb" data-type="Pistola lateral" onclick="setTypeFilter('wexo',this)" title="Pistola lateral"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sidearm.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de fusión" onclick="setTypeFilter('wexo',this)" title="Fusil de fusión"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/fusion_rifle.svg"></button>
-        <button class="wtype-fb" data-type="FFL" onclick="setTypeFilter('wexo',this)" title="FFL"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/wire_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Escopeta" onclick="setTypeFilter('wexo',this)" title="Escopeta"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/shotgun.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de francotirador" onclick="setTypeFilter('wexo',this)" title="Fusil de francotirador"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sniper_rifle.svg"></button>
-        <button class="wtype-fb" data-type="Fusil de rastreo" onclick="setTypeFilter('wexo',this)" title="Fusil de rastreo"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/beam_weapon.svg"></button>
-        <button class="wtype-fb" data-type="Arco de combate" onclick="setTypeFilter('wexo',this)" title="Arco de combate"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
-        <button class="wtype-fb" data-type="Arco" onclick="setTypeFilter('wexo',this)" title="Arco"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
-        <button class="wtype-fb" data-type="Ballesta" onclick="setTypeFilter('wexo',this)" title="Ballesta"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/bow.svg"></button>
-        <button class="wtype-fb" data-type="Lanzagranadas" onclick="setTypeFilter('wexo',this)" title="Lanzagranadas"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/grenade_launcher-field_forged.svg"></button>
-        <button class="wtype-fb" data-type="Lanzacohetes" onclick="setTypeFilter('wexo',this)" title="Lanzacohetes"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/rocket_launcher.svg"></button>
-        <button class="wtype-fb" data-type="Ametralladora" onclick="setTypeFilter('wexo',this)" title="Ametralladora"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/machinegun.svg"></button>
-        <button class="wtype-fb" data-type="Guadaña" onclick="setTypeFilter('wexo',this)" title="Guadaña"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/glaive.svg"></button>
-        <button class="wtype-fb" data-type="Espada" onclick="setTypeFilter('wexo',this)" title="Espada"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/weapons/sword_heavy.svg"></button>
-      </div>
-      <input type="hidden" id="f-wexo-type" value="">
-    </div>
-          <div class="filter-group">
-            <label class="filter-label">CAMPEÓN</label>
-            <div class="champ-filter-btns">
-              <button class="champ-fb active" data-champ="" onclick="setChampFilter('wexo',this)" title="Todos">·</button>
-              <button class="champ-fb" data-champ="unstoppable" onclick="setChampFilter('wexo',this)" title="Imparable"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/stagger.svg"></button>
-              <button class="champ-fb" data-champ="barrier" onclick="setChampFilter('wexo',this)" title="Barrera"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/pierce.svg"></button>
-              <button class="champ-fb" data-champ="overload" onclick="setChampFilter('wexo',this)" title="Sobrecarga"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/breaker_types/overload.svg"></button>
-            </div>
-            <input type="hidden" id="f-wexo-champ" value="">
-          </div>
-    <div class="filter-group">
-      <label>Munición</label>
-      <div class="ammo-filter-btns">
-        <button class="ammo-fb active" data-ammo="" onclick="setAmmoFilter('wexo',this)">Todas</button>
-        <button class="ammo-fb primary" data-ammo="primary" onclick="setAmmoFilter('wexo',this)" title="Primaria"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-primary.svg"></button>
-        <button class="ammo-fb special" data-ammo="special" onclick="setAmmoFilter('wexo',this)" title="Especial"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-special.svg"></button>
-        <button class="ammo-fb heavy" data-ammo="heavy" onclick="setAmmoFilter('wexo',this)" title="Pesada"><img src="https://raw.githubusercontent.com/justrealmilk/destiny-icons/master/general/ammo-heavy.svg"></button>
-      </div>
-    </div>
-    <div id="f-wexo-missing" class="filter-toggle" onclick="toggleWExoMissing(this)">
-      <span class="dot"></span>Solo me falta
-    </div>
-  <span id="wexo-count" class="results-count"></span>
-  <input type="hidden" id="f-wexo-ammo" value="">
   </div>
   <div id="weapons-exo-grid"></div>
 </div>
@@ -5181,6 +5194,14 @@ function setChampFilter(prefix, btn){
   const champ = btn.dataset.champ;
   document.getElementById('f-'+prefix+'-champ').value = champ;
   btn.closest('.champ-filter-btns').querySelectorAll('.champ-fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(prefix==='wleg') renderLegWeapons();
+  else if(prefix==='wexo') renderExoWeapons();
+}
+function setArchFilter(prefix, btn){
+  const arch = btn.dataset.arch;
+  document.getElementById('f-'+prefix+'-arch').value = arch;
+  btn.closest('.arch-filter-btns').querySelectorAll('.arch-fb').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   if(prefix==='wleg') renderLegWeapons();
   else if(prefix==='wexo') renderExoWeapons();
