@@ -727,10 +727,16 @@ body:has(#tab-builds.active){overflow:hidden;height:100vh}
   body.is-mobile .bc-center{min-height:200px}
   body.is-mobile .bc-panel-left,.bc-panel-right{max-height:300px}
 
-  /* ── Filters bar wrap ── */
-  body.is-mobile .filters-bar{gap:6px;padding:8px 0}
-  body.is-mobile .filter-input[type=search]{width:140px}
-  body.is-mobile .filter-select{font-size:12px}
+  /* ── Filters bar wrap — layout móvil en columna ── */
+  body.is-mobile .filters-bar{flex-direction:column!important;gap:8px!important;padding:8px 10px!important;align-items:stretch!important}
+  body.is-mobile .filters-bar>div[style*="width:1px"]{display:none!important}
+  body.is-mobile .filters-bar>div{min-width:0!important;width:100%!important;padding-right:0!important;box-sizing:border-box!important}
+  body.is-mobile .filter-rows-right{min-width:0!important;width:100%!important}
+  body.is-mobile .filters-bar>span.results-count{margin-left:0!important;padding-left:0!important;align-self:flex-start!important}
+  body.is-mobile .filter-input[type=search]{width:100%!important;max-width:100%!important;box-sizing:border-box}
+  body.is-mobile .filter-select{font-size:12px;width:100%!important;max-width:100%!important;box-sizing:border-box}
+  body.is-mobile .wtype-filter-btns,body.is-mobile .elem-filter-btns,body.is-mobile .ammo-filter-btns,body.is-mobile .champ-filter-btns{display:flex!important;flex-wrap:wrap!important}
+  body.is-mobile .filter-row{flex-wrap:wrap!important;gap:6px!important}
 
   /* ── Glosario ── */
   body.is-mobile #tab-glosario table{font-size:12px}
